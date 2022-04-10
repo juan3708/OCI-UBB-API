@@ -11,6 +11,20 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    protected $table = 'user';
+    public $timestamps = false;
+
+    //Relacion N
+
+    public function noticias(){
+        return $this -> hasMany(Noticia::class);
+    }
+
+    //Relacion 1
+
+    public function rol(){
+        return $this->belongsTo(Rol::class);
+    }
 
     /**
      * The attributes that are mass assignable.

@@ -66,12 +66,6 @@ Route::post('/rol/create',[RolController::class,'create']);
 Route::put('/rol/edit',[RolController::class,'edit']);
 Route::delete('/rol/delete',[RolController::class,'delete']);
 
-//Rutas Adjuntos  
-Route::get('/adjuntos/all',[AdjuntosController::class,'all']);
-Route::post('/adjuntos/create',[AdjuntosController::class,'create']);
-Route::put('/adjuntos/edit',[AdjuntosController::class,'edit']);
-Route::delete('/adjuntos/delete',[AdjuntosController::class,'delete']);
-
 //Rutas Establecimiento  
 Route::get('/establecimiento/all',[EstablecimientoController::class,'all']);
 Route::post('/establecimiento/create',[EstablecimientoController::class,'create']);

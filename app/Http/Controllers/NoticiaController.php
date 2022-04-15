@@ -23,7 +23,7 @@ class NoticiaController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'fecha' => 'required',
+                'fecha' => 'required|date_format:Y-m-d',
                 'titulo' => 'required',
                 'cuerpo' => 'required',
                 'ciclo_id' => 'required',
@@ -65,7 +65,7 @@ class NoticiaController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'fecha' => 'required',
+                'fecha' => 'required|date_format:Y-m-d',
                 'titulo' => 'required',
                 'cuerpo' => 'required',
                 'ciclo_id' => 'required',

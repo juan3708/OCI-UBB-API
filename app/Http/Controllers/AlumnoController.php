@@ -23,12 +23,11 @@ class AlumnoController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                     'nombre' => 'required',
-                    'rut' => 'required',
+                    'rut' => 'required|unique:alumno,rut',
                     'telefono' => 'required',
-                    'mail' => 'required',
-                    'fecha_nacimiento' => 'required',
+                    'email' => 'required|email:rfc,dns||unique:alumno,email',
+                    'fecha_nacimiento' => 'required|date_format:y-m-d',
                     'curso' => 'required',
-                    'participante' => 'required',
                     'direccion' => 'required',
                     'telefono_apoderado' => 'required',
                     'nombre_apoderado' => 'required',
@@ -49,14 +48,14 @@ class AlumnoController extends Controller
                         $alumno -> nombre = $request -> nombre;
                         $alumno -> rut = $request -> rut;
                         $alumno -> telefono = $request -> telefono;
-                        $alumno -> mail = $request -> mail;
+                        $alumno -> email = $request -> email;
                         $alumno -> fecha_nacimiento = $request -> fecha_nacimiento;
                         $alumno -> curso = $request -> curso;
                         $alumno -> participante = $request -> participante;
                         $alumno -> direccion = $request -> direccion;
                         $alumno -> telefono_apoderado = $request -> telefono_apoderado;
                         $alumno -> nombre_apoderado = $request -> nombre_apoderado;
-                        $alumno -> establecimient_id = $request -> establecimient_id;
+                        $alumno -> establecimiento_id = $request -> establecimiento_id;
                         $alumno ->save();
                         $data = [
                                 'code' => 200,
@@ -96,8 +95,8 @@ class AlumnoController extends Controller
                 'nombre' => 'required',
                 'rut' => 'required',
                 'telefono' => 'required',
-                'mail' => 'required',
-                'fecha_nacimiento' => 'required',
+                'email' => 'required',
+                'fecha_nacimiento' => 'required|date_format:y-m-d',
                 'curso' => 'required',
                 'participante' => 'required',
                 'direccion' => 'required',
@@ -119,14 +118,14 @@ class AlumnoController extends Controller
                         $alumno -> nombre = $request -> nombre;
                         $alumno -> rut = $request -> rut;
                         $alumno -> telefono = $request -> telefono;
-                        $alumno -> mail = $request -> mail;
+                        $alumno -> email = $request -> email;
                         $alumno -> fecha_nacimiento = $request -> fecha_nacimiento;
                         $alumno -> curso = $request -> curso;
                         $alumno -> participante = $request -> participante;
                         $alumno -> direccion = $request -> direccion;
                         $alumno -> telefono_apoderado = $request -> telefono_apoderado;
                         $alumno -> nombre_apoderado = $request -> nombre_apoderado;
-                        $alumno -> establecimient_id = $request -> establecimient_id;
+                        $alumno -> establecimiento_id = $request -> establecimiento_id;
                         $alumno ->save();
                         $data = [
                                     'code' => 200,

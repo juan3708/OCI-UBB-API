@@ -27,13 +27,12 @@ class CicloController extends Controller
                 'nombre' => 'required',
                 'periodo' => 'required',
                 'presupuesto' => 'required',
-                'coordinador_rut' => 'required'
+                'coordinador_id' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
                     'code' => 400,
                     'status' => 'error',
-                    'message' => 'Ingrese todos los datos porfavor',
                     'errors' => $validate ->errors()
                 ];
             } else {
@@ -44,7 +43,7 @@ class CicloController extends Controller
                     $ciclo -> nombre = $request -> nombre;
                     $ciclo -> periodo = $request -> periodo;
                     $ciclo -> presupuesto = $request -> presupuesto;
-                    $ciclo -> coordinador_rut =$request -> coordinador_rut;
+                    $ciclo -> coordinador_id =$request -> coordinador_id;
                     $ciclo ->save();
                     $data = [
                             'code' => 200,
@@ -84,7 +83,6 @@ class CicloController extends Controller
                 $data = [
                     'code' => 400,
                     'status' => 'error',
-                    'message' => 'Ingrese todos los datos porfavor',
                     'errors' => $validate ->errors()
                 ];
             } else {
@@ -94,6 +92,7 @@ class CicloController extends Controller
                     $ciclo -> nombre = $request -> nombre;
                     $ciclo -> periodo = $request -> periodo;
                     $ciclo -> presupuesto = $request -> presupuesto;
+                    $ciclo -> coordinador_id = $request -> coordinador_id;
                     $ciclo ->save();
                     $data = [
                             'code' => 200,

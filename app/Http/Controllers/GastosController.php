@@ -25,7 +25,7 @@ class GastosController extends Controller
             $validate = Validator::make($request ->all(), [
                 'valor' => 'required',
                 'tipo' => 'required',
-                'fecha' => 'required',
+                'fecha' => 'required|date_format:Y-m-d',
                 'ciclo_id' => 'required'
             ]);
             if ($validate ->fails()) {
@@ -65,7 +65,7 @@ class GastosController extends Controller
             $validate = Validator::make($request ->all(), [
                 'valor' => 'required',
                 'tipo' => 'required',
-                'fecha' => 'required',
+                'fecha' => 'required|date_format:Y-m-d',
                 'ciclo_id' => 'required'
             ]);
             if ($validate ->fails()) {

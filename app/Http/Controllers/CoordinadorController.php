@@ -27,14 +27,13 @@ class CoordinadorController extends Controller
             $validate = Validator::make($request ->all(), [
                 'nombre' => 'required',
                 'apellidos' => 'required',
-                'email' => 'required',
+                'email' => 'required|email:rfc,dns',
                 'rut' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
                     'code' => 400,
                     'status' => 'error',
-                    'message' => 'Ingrese todos los datos porfavor',
                     'errors' => $validate ->errors()
                 ];
             } else {
@@ -84,7 +83,7 @@ class CoordinadorController extends Controller
             $validate = Validator::make($request ->all(), [
                 'nombre' => 'required',
                 'apellidos' => 'required',
-                'email' => 'required',
+                'email' => 'required|email:rfc,dns',
                 'rut' => 'required',
                 'id' =>'required'
             ]);
@@ -92,7 +91,6 @@ class CoordinadorController extends Controller
                 $data = [
                     'code' => 400,
                     'status' => 'error',
-                    'message' => 'Ingrese todos los datos porfavor',
                     'errors' => $validate ->errors()
                 ];
             } else {

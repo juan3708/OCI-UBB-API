@@ -25,7 +25,7 @@ class AyudanteController extends Controller
             $validate = Validator::make($request ->all(), [
                 'nombre' => 'required',
                 'apellidos' => 'required',
-                'email' => 'required',
+                'email' => 'required|email:rfc,dns||unique:ayudante,email',
                 'rut' => 'required'
             ]);
             if ($validate ->fails()) {
@@ -82,7 +82,7 @@ class AyudanteController extends Controller
             $validate = Validator::make($request ->all(), [
                 'nombre' => 'required',
                 'apellidos' => 'required',
-                'email' => 'required',
+                'email' => 'required|email:rfc,dns||unique:ayudante,email',
                 'rut' => 'required',
                 'id' =>'required'
             ]);

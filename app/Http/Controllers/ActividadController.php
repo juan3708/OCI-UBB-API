@@ -23,7 +23,7 @@ class ActividadController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'fecha' => 'required',
+                'fecha' => 'required|date_format:Y-m-d',
                 'nombre' => 'required',
                 'descripcion' => 'required',
                 'ciclo_id' => 'required'
@@ -32,7 +32,6 @@ class ActividadController extends Controller
                 $data = [
                     'code' => 400,
                     'status' => 'error',
-                    'message' => 'Ingrese todos los datos porfavor',
                     'errors' => $validate ->errors()
                 ];
             } else {
@@ -71,7 +70,6 @@ class ActividadController extends Controller
                 $data = [
                     'code' => 400,
                     'status' => 'error',
-                    'message' => 'Ingrese todos los datos porfavor',
                     'errors' => $validate ->errors()
                 ];
             } else {

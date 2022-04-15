@@ -23,13 +23,10 @@ class EstablecimientoController extends Controller
             if (!empty($request ->all())) {
                 $validate = Validator::make($request ->all(), [
                     'nombre' => 'required',
-                    'telefono' => 'required',
-                    'mail' => 'required',
                     'nombre_profesor' => 'required',
-                    'mail_profesor' => 'required',
+                    'email_profesor' => 'required|email:rfc,dns||unique:establecimiento,email_profesor',
                     'telefono_profesor' => 'required',
                     'direccion' => 'required',
-                    'estado' => 'required',
                     'director' => 'required',
                 ]);
                 if ($validate ->fails()) {
@@ -48,7 +45,6 @@ class EstablecimientoController extends Controller
                     $establecimiento -> mail_profesor = $request -> mail_profesor;
                     $establecimiento -> telefono_profesor = $request -> telefono_profesor;
                     $establecimiento -> direccion = $request -> direccion;
-                    $establecimiento -> estado = $request -> estado;
                     $establecimiento -> director = $request -> director;                    
                     $establecimiento ->save();
                     $data = [
@@ -72,9 +68,12 @@ class EstablecimientoController extends Controller
         {
             if (!empty($request ->all())) {
                 $validate = Validator::make($request ->all(), [
-                    'fecha' => 'required',
                     'nombre' => 'required',
-                    'descripcion' => 'required'
+                    'nombre_profesor' => 'required',
+                    'email_profesor' => 'required|email:rfc,dns||unique:establecimiento,email_profesor',
+                    'telefono_profesor' => 'required',
+                    'direccion' => 'required',
+                    'director' => 'required',
                 ]);
                 if ($validate ->fails()) {
                     $data = [
@@ -88,12 +87,11 @@ class EstablecimientoController extends Controller
                     if (!empty($establecimiento)) {
                         $establecimiento -> nombre = $request -> nombre;
                         $establecimiento -> telefono = $request -> telefono;
-                        $establecimiento -> mail = $request -> mail;
+                        $establecimiento -> email = $request -> email;
                         $establecimiento -> nombre_profesor = $request -> nombre_profesor;
-                        $establecimiento -> mail_profesor = $request -> mail_profesor;
+                        $establecimiento -> email_profesor = $request -> email_profesor;
                         $establecimiento -> telefono_profesor = $request -> telefono_profesor;
                         $establecimiento -> direccion = $request -> direccion;
-                        $establecimiento -> estado = $request -> estado;
                         $establecimiento -> director = $request -> director;                    
                         $establecimiento ->save();
                         $data = [

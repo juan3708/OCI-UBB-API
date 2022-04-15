@@ -23,7 +23,7 @@ class CompetenciaController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'fecha_competencia' => 'required',
+                'fecha_competencia' => 'required|date_format:Y-m-d',
                 'tipo' => 'required',
                 'lugar' => 'required',
                 'ciclo_id' => 'required'
@@ -63,7 +63,7 @@ class CompetenciaController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'fecha_competencia' => 'required',
+                'fecha_competencia' => 'required|date_format:Y-m-d',
                 'tipo' => 'required',
                 'lugar' => 'required'
             ]);

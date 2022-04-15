@@ -26,7 +26,7 @@ class ProfesorController extends Controller
                 'nombre' => 'required',
                 'apellidos' => 'required',
                 'email' => 'required',
-                'rut' => 'required',
+                'rut' => 'required|email:rfc,dns||unique:profesor,email',
                 'facultad' => 'required',
                 'modalidad' => 'required',
             ]);
@@ -86,7 +86,7 @@ class ProfesorController extends Controller
             $validate = Validator::make($request ->all(), [
                 'nombre' => 'required',
                 'apellidos' => 'required',
-                'email' => 'required',
+                'email' => 'required|email:rfc,dns||unique:profesor,email',
                 'rut' => 'required',
                 'facultad' => 'required',
                 'modalidad' => 'required',

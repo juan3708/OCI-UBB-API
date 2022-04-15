@@ -23,7 +23,7 @@ class ClaseController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                     'contenido' => 'required',
-                    'fecha' => 'required',
+                    'fecha' => 'required|date_format:Y-m-d',
                     'ciclo_id' => 'required'
                 ]);
             if ($validate ->fails()) {
@@ -61,7 +61,7 @@ class ClaseController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'contenido' => 'required',
-                'fecha' => 'required',
+                'fecha' => 'required|date_format:Y-m-d',
                 'ciclo_id' => 'required'
                 ]);
             if ($validate ->fails()) {

@@ -25,7 +25,7 @@ class CicloController extends Controller
             $validate = Validator::make($request ->all(), [
                 'anio' => 'required',
                 'nombre' => 'required',
-                'periodo' => 'required',
+                'fecha_inicio' => 'required',
                 'presupuesto' => 'required',
                 'coordinador_id' => 'required'
             ]);
@@ -41,7 +41,8 @@ class CicloController extends Controller
                     $ciclo = new Ciclo();
                     $ciclo -> anio = $request -> anio;
                     $ciclo -> nombre = $request -> nombre;
-                    $ciclo -> periodo = $request -> periodo;
+                    $ciclo -> fecha_inicio = $request -> fecha_inicio;
+                    $ciclo -> fecha_termino = $request -> fecha_termino;
                     $ciclo -> presupuesto = $request -> presupuesto;
                     $ciclo -> coordinador_id =$request -> coordinador_id;
                     $ciclo ->save();
@@ -73,11 +74,12 @@ class CicloController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
+                'id' => 'required',
                 'anio' => 'required',
                 'nombre' => 'required',
-                'periodo' => 'required',
+                'fecha_inicio' => 'required',
                 'presupuesto' => 'required',
-                'id' =>'required'
+                'coordinador_id' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -90,7 +92,8 @@ class CicloController extends Controller
                 if (!empty($ciclo)) {
                     $ciclo -> anio = $request -> anio;
                     $ciclo -> nombre = $request -> nombre;
-                    $ciclo -> periodo = $request -> periodo;
+                    $ciclo -> fecha_inicio = $request -> fecha_inicio;
+                    $ciclo -> fecha_termino = $request -> fecha_termino;
                     $ciclo -> presupuesto = $request -> presupuesto;
                     $ciclo -> coordinador_id = $request -> coordinador_id;
                     $ciclo ->save();

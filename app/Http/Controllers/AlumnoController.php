@@ -23,6 +23,7 @@ class AlumnoController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                     'nombre' => 'required',
+                    'apellidos' => 'required',
                     'rut' => 'required|unique:alumno,rut',
                     'telefono' => 'required',
                     'email' => 'required|email:rfc,dns||unique:alumno,email',
@@ -46,6 +47,7 @@ class AlumnoController extends Controller
                     if (empty($alumno)) {
                         $alumno = new alumno();
                         $alumno -> nombre = $request -> nombre;
+                        $alumno -> apellidos = $request -> apellidos;
                         $alumno -> rut = $request -> rut;
                         $alumno -> telefono = $request -> telefono;
                         $alumno -> email = $request -> email;
@@ -93,6 +95,7 @@ class AlumnoController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'nombre' => 'required',
+                'apellidos' => 'required',
                 'rut' => 'required',
                 'telefono' => 'required',
                 'email' => 'required',
@@ -116,6 +119,7 @@ class AlumnoController extends Controller
                     $alumno = Alumno::find($request->id);
                     if (!empty($alumno)) {
                         $alumno -> nombre = $request -> nombre;
+                        $alumno -> apellidos = $request -> apellidos;
                         $alumno -> rut = $request -> rut;
                         $alumno -> telefono = $request -> telefono;
                         $alumno -> email = $request -> email;

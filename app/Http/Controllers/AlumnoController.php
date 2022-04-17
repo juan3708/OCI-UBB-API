@@ -11,11 +11,10 @@ class AlumnoController extends Controller
 {
     public function all()
     {
-
-        $alumno = DB::table('alumno as a')->select('a.rut','a.nombre','a.apellidos','a.telefono','a.email','a.curso','a.participante','a.direccion','a.telefono_apoderado','a.nombre_apoderado','a.establecimiento_id','a.id',DB::raw('DATE_FORMAT(a.fecha_nacimiento, "%d-%m-%Y") as fecha_nacimiento'))->get();
+        $alumno = DB::table('alumno')->select('*')->get();
         $data = [
             'code' => 200,
-            'alumnos' => $alumno
+            'alumno' => $alumno
         ];
         return response() ->json($data);
     }
@@ -28,7 +27,7 @@ class AlumnoController extends Controller
                     'rut' => 'required|unique:alumno,rut',
                     'telefono' => 'required',
                     'email' => 'required|email:rfc,dns||unique:alumno,email',
-                    'fecha_nacimiento' => 'required|date_format:d-m-Y',
+                    'fecha_nacimiento' => 'required|date_format:y-m-d',
                     'curso' => 'required',
                     'direccion' => 'required',
                     'telefono_apoderado' => 'required',
@@ -46,14 +45,13 @@ class AlumnoController extends Controller
                 if ($this ->valida_rut($request ->rut)) {
                     $alumno = Alumno::where('rut', $request ->rut)->first();
                     if (empty($alumno)) {
-                        $date = \Carbon\Carbon::parse($request ->fecha_nacimiento)->format('Y-m-d');
                         $alumno = new alumno();
                         $alumno -> nombre = $request -> nombre;
                         $alumno -> apellidos = $request -> apellidos;
                         $alumno -> rut = $request -> rut;
                         $alumno -> telefono = $request -> telefono;
                         $alumno -> email = $request -> email;
-                        $alumno -> fecha_nacimiento = $date;//$request -> fecha_nacimiento;
+                        $alumno -> fecha_nacimiento = $request -> fecha_nacimiento;
                         $alumno -> curso = $request -> curso;
                         $alumno -> participante = $request -> participante;
                         $alumno -> direccion = $request -> direccion;
@@ -67,7 +65,7 @@ class AlumnoController extends Controller
                                 'message' => 'Se ha creado correctamente el alumno',
                                 'alumno' => $alumno
                             ];
-                    } else {
+                    }else{
                         $data = [
                             'code' => 400,
                             'status' => 'error',
@@ -101,7 +99,7 @@ class AlumnoController extends Controller
                 'rut' => 'required',
                 'telefono' => 'required',
                 'email' => 'required',
-                'fecha_nacimiento' => 'required|date_format:d-m-y',
+                'fecha_nacimiento' => 'required|date_format:y-m-d',
                 'curso' => 'required',
                 'participante' => 'required',
                 'direccion' => 'required',
@@ -120,13 +118,12 @@ class AlumnoController extends Controller
                 if ($this -> valida_rut($request->rut)) {
                     $alumno = Alumno::find($request->id);
                     if (!empty($alumno)) {
-                        $date = \Carbon\Carbon::parse($request ->fecha_nacimiento)->format('Y-m-d');
                         $alumno -> nombre = $request -> nombre;
                         $alumno -> apellidos = $request -> apellidos;
                         $alumno -> rut = $request -> rut;
                         $alumno -> telefono = $request -> telefono;
                         $alumno -> email = $request -> email;
-                        $alumno -> fecha_nacimiento = $date;//$request -> fecha_nacimiento;
+                        $alumno -> fecha_nacimiento = $request -> fecha_nacimiento;
                         $alumno -> curso = $request -> curso;
                         $alumno -> participante = $request -> participante;
                         $alumno -> direccion = $request -> direccion;

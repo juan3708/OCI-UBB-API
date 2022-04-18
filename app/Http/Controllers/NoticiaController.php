@@ -11,10 +11,11 @@ class NoticiaController extends Controller
 {
     public function all()
     {
-        $noticia = DB::table('noticia')->select('*')->get();
+        $noticia = DB::table('noticia as n')->select('n.cuerpo',DB::raw('DATE_FORMAT(n.fecha, "%d-%m-%Y") as fecha')
+        ,'n.titulo','n.user_rut','n.ciclo_id','n.id')->get();
         $data = [
             'code' => 200,
-            'noticia' => $noticia
+            'noticias' => $noticia
         ];
         return response() ->json($data);
     }

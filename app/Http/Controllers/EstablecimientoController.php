@@ -14,7 +14,7 @@ class EstablecimientoController extends Controller
         $establecimiento = DB::table('establecimiento')->select('*')->get();
         $data = [
             'code' => 200,
-            'establecimiento' => $establecimiento
+            'establecimientos' => $establecimiento
         ];
         return response() ->json($data);
     }

@@ -14,7 +14,7 @@ class RolController extends Controller
         $rol = DB::table('rol')->select('*')->get();
         $data = [
             'code' => 200,
-            'rol' => $rol
+            'roles' => $rol
         ];
         return response() ->json($data);
     }

@@ -11,7 +11,9 @@ class ActividadController extends Controller
 {
     public function all()
     {
-        $actividad = DB::table('actividad')->select('*')->get();
+        $actividad = DB::table('actividad as a')->select('a.nombre','a.fecha','a.descripcion','a.id',
+        DB::raw('DATE_FORMAT(a.fecha, "%d-%m-%Y") as fecha'), 'a.ciclo_id')->get();
+
         $data = [
             'code' => 200,
             'actividades' => $actividad
@@ -62,7 +64,7 @@ class ActividadController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'fecha' => 'required',
+                'fecha' => 'required|date_format:Y-m-d',
                 'nombre' => 'required',
                 'descripcion' => 'required'
             ]);

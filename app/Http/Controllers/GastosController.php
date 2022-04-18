@@ -11,7 +11,9 @@ class GastosController extends Controller
 {
     public function all()
     {
-        $gastos = DB::table('gastos')->select('*')->get();
+        $gastos = DB::table('gastos as g')->select('g.id','g.valor','g.tipo',
+        DB::raw('DATE_FORMAT(g.fecha, "%d-%m-%Y") as fecha'),
+        'g.ciclo_id','g.actividad_id','g.competencia_id')->get();
         $data = [
             'code' => 200,
             'gastos' => $gastos

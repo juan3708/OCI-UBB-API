@@ -11,7 +11,11 @@ class CicloController extends Controller
 {
     public function all()
     {
-        $ciclo = DB::table('ciclo')->select('*')->get();
+        $ciclo = DB::table('ciclo as c')->select('a.id', 'a.anio', 'a.nombre', 'a.presupuesto',
+        DB::raw('DATE_FORMAT(c.fecha_inicio, "%d-%m-%Y") as fecha_inicio'), 
+        DB::raw('DATE_FORMAT(c.fecha_termino, "%d-%m-%Y") as fecha_termino'),
+        'c.coordinador_id')->get();
+
         $data = [
             'code' => 200,
             'ciclos' => $ciclo
@@ -25,7 +29,7 @@ class CicloController extends Controller
             $validate = Validator::make($request ->all(), [
                 'anio' => 'required',
                 'nombre' => 'required',
-                'fecha_inicio' => 'required',
+                'fecha_inicio' => 'required|date_format:Y-m-d',
                 'presupuesto' => 'required',
                 'coordinador_id' => 'required'
             ]);
@@ -77,7 +81,7 @@ class CicloController extends Controller
                 'id' => 'required',
                 'anio' => 'required',
                 'nombre' => 'required',
-                'fecha_inicio' => 'required',
+                'fecha_inicio' => 'required|date_format:Y-m-d',
                 'presupuesto' => 'required',
                 'coordinador_id' => 'required'
             ]);

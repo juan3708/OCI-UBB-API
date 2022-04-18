@@ -16,7 +16,7 @@ class CoordinadorController extends Controller
         $coordinador = DB::table('coordinador')->select('*')->get();
         $data = [
             'code' => 200,
-            'Coordinadores' => $coordinador
+            'coordinadores' => $coordinador
         ];
         return response() ->json($data);
     }

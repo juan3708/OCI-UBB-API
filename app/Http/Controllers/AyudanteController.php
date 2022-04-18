@@ -14,7 +14,7 @@ class AyudanteController extends Controller
         $ayudante = DB::table('ayudante')->select('*')->get();
         $data = [
             'code' => 200,
-            'ayudantees' => $ayudante
+            'ayudantes' => $ayudante
         ];
         return response() ->json($data);
     }

@@ -57,14 +57,14 @@ class ProfesorController extends Controller
                         ];
                     } else {
                         $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'Ya existe el profesor'
                         ];
                     }
                 } else {
                     $data = [
-                        'code' => 400,
+                        'code' => 401,
                         'status' => 'error',
                         'message' => 'rut invalido'
                     ];
@@ -72,7 +72,7 @@ class ProfesorController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al crear el profesor'
             ];
@@ -118,14 +118,14 @@ class ProfesorController extends Controller
                         ];
                     } else {
                         $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'No existe el profesor'
                         ];
                     }
                 } else {
                     $data = [
-                        'code' => 400,
+                        'code' => 401,
                         'status' => 'error',
                         'message' => 'rut invalido'
                     ];
@@ -133,7 +133,7 @@ class ProfesorController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al editar el profesor',
                 'request' => $request
@@ -144,36 +144,66 @@ class ProfesorController extends Controller
 
     public function delete(Request $request)
     {
-        if ($request->rut == '') {
+        if ($request->id == '') {
             $data = [
                 'code' =>400,
                 'status' => 'error',
-                'mensaje' => 'Debe ingresar un RUT de un profesor'
+                'message' => 'Debe ingresar un profesor'
             ];
         } else {
-            if ($this -> valida_rut($request ->rut)) {
-                $profesor = Profesor::where('rut', $request ->rut)->first();
+                $profesor = Profesor::find($request->id);
                 if (empty($profesor)) {
                     $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'mensaje' => 'No se encontro el profesor asociado al rut'
+                    'message' => 'No se encontro el profesor asociado al rut'
                 ];
                 } else {
                     $profesor -> delete();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'mensaje' => 'Se ha eliminado correctamente'
+                    'message' => 'Se ha eliminado correctamente'
                 ];
                 }
-            } else {
+        }
+        return response() -> json($data);
+    }
+
+    public function getById(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'id' =>'required'
+            ]);
+            if ($validate ->fails()) {
                 $data = [
                     'code' => 400,
                     'status' => 'error',
-                    'message' => 'rut invalido'
+                    'errors' => $validate ->errors()
                 ];
+            } else {
+                $profesor = Profesor::find($request ->id);
+                if (empty($profesor)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el profesor asociado al id'
+                ];
+                } else {
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'profesor' => $profesor
+                ];
+                }
             }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar el profesor'
+            ];
         }
         return response() -> json($data);
     }

@@ -86,7 +86,7 @@ class DetallesController extends Controller
                             ];
                 } else {
                     $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'No existe un detalle asociadado'
                         ];
@@ -94,7 +94,7 @@ class DetallesController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al editar el detalle'
             ];
@@ -108,7 +108,7 @@ class DetallesController extends Controller
             $data = [
                 'code' =>400,
                 'status' => 'error',
-                'mensaje' => 'Debe ingresar un detalle'
+                'message' => 'Debe ingresar un detalle'
             ];
         } else {
             $detalles = Detalles::find($request->id);
@@ -116,16 +116,54 @@ class DetallesController extends Controller
                 $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'mensaje' => 'No se encontro un detalle asociada al ID'
+                    'message' => 'No se encontro un detalle'
                 ];
             } else {
                 $detalles ->delete();
                 $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'mensaje' => 'Se ha eliminado correctamente'
+                    'message' => 'Se ha eliminado correctamente'
                 ];
             }
+        }
+        return response() -> json($data);
+    }
+
+    public function getById(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $detalles = Detalles::find($request ->id);
+                if (empty($detalles)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el detalle asociado al id'
+                ];
+                } else {
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'detalles' => $detalles
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar el coordinador'
+            ];
         }
         return response() -> json($data);
     }

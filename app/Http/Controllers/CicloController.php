@@ -58,7 +58,7 @@ class CicloController extends Controller
                         ];
                 } else {
                     $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'Ya existe un ciclo con ese nombre'
                         ];
@@ -66,7 +66,7 @@ class CicloController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al crear el ciclo'
             ];
@@ -109,7 +109,7 @@ class CicloController extends Controller
                         ];
                 } else {
                     $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'No existe un ciclo asociado'
                         ];
@@ -117,7 +117,7 @@ class CicloController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al editar el ciclo'
             ];
@@ -131,7 +131,7 @@ class CicloController extends Controller
             $data = [
                 'code' =>400,
                 'status' => 'error',
-                'mensaje' => 'Debe ingresar un ID de un ciclo'
+                'message' => 'Debe ingresar un ciclo'
             ];
         } else {
             $ciclo = Ciclo::find($request->id);
@@ -139,16 +139,54 @@ class CicloController extends Controller
                 $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'mensaje' => 'No se encontro un ciclo asociada al ID'
+                    'message' => 'No se encontro un ciclo'
                 ];
             } else {
                 $ciclo ->delete();
                 $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'mensaje' => 'Se ha eliminado correctamente'
+                    'message' => 'Se ha eliminado correctamente'
                 ];
             }
+        }
+        return response() -> json($data);
+    }
+
+        public function getById(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $ciclo = Ciclo::find($request ->id);
+                if (empty($ciclo)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el ciclo asociado al id'
+                ];
+                } else {
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'ciclo' => $ciclo
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar el ciclo'
+            ];
         }
         return response() -> json($data);
     }

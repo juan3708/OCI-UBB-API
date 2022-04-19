@@ -54,7 +54,7 @@ class NoticiaController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al crear la noticia'
             ];
@@ -96,7 +96,7 @@ class NoticiaController extends Controller
                             ];
                 } else {
                     $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'No existe una noticia asociada'
                         ];
@@ -104,7 +104,7 @@ class NoticiaController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al editar la noticia'
             ];
@@ -118,7 +118,7 @@ class NoticiaController extends Controller
             $data = [
                 'code' =>400,
                 'status' => 'error',
-                'mensaje' => 'Debe ingresar un ID de una noticia'
+                'message' => 'Debe ingresar un ID de una noticia'
             ];
         } else {
             $noticia = Noticia::find($request->id);
@@ -126,16 +126,54 @@ class NoticiaController extends Controller
                 $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'mensaje' => 'No se encontro una noticia asociada al ID'
+                    'message' => 'No se encontro una noticia asociada al ID'
                 ];
             } else {
                 $noticia ->delete();
                 $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'mensaje' => 'Se ha eliminado correctamente'
+                    'message' => 'Se ha eliminado correctamente'
                 ];
             }
+        }
+        return response() -> json($data);
+    }
+
+    public function getById(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $noticia = Noticia::find($request ->id);
+                if (empty($noticia)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la noticia asociado al id'
+                ];
+                } else {
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'noticia' => $noticia
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar la noticia'
+            ];
         }
         return response() -> json($data);
     }

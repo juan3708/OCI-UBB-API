@@ -49,7 +49,7 @@ class ClaseController extends Controller
             }
         } else {
             $data = [
-                    'code' => 400,
+                    'code' => 401,
                     'status' => 'error',
                     'message' => 'Error al crear la clase'
                 ];
@@ -87,7 +87,7 @@ class ClaseController extends Controller
                                 ];
                 } else {
                     $data = [
-                                'code' => 400,
+                                'code' => 401,
                                 'status' => 'error',
                                 'message' => 'No existe una clase asociado'
                             ];
@@ -95,7 +95,7 @@ class ClaseController extends Controller
             }
         } else {
             $data = [
-                    'code' => 400,
+                    'code' => 401,
                     'status' => 'error',
                     'message' => 'Error al editar la clase'
                 ];
@@ -109,7 +109,7 @@ class ClaseController extends Controller
             $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'mensaje' => 'Debe ingresar una clase'
+                    'message' => 'Debe ingresar una clase'
                 ];
         } else {
             $clase = Clase::find($request->id);
@@ -117,16 +117,54 @@ class ClaseController extends Controller
                 $data = [
                         'code' =>400,
                         'status' => 'error',
-                        'mensaje' => 'No se encontro la clase'
+                        'message' => 'No se encontro la clase'
                     ];
             } else {
                 $clase ->delete();
                 $data = [
                         'code' =>200,
                         'status' => 'success',
-                        'mensaje' => 'Se ha eliminado correctamente'
+                        'message' => 'Se ha eliminado correctamente'
                     ];
             }
+        }
+        return response() -> json($data);
+    }
+
+    public function getById(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase asociada al id'
+                ];
+                } else {
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clase' => $clase
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar la clase'
+            ];
         }
         return response() -> json($data);
     }

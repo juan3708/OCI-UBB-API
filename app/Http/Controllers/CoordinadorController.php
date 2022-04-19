@@ -54,14 +54,14 @@ class CoordinadorController extends Controller
                         ];
                     } else {
                         $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'Ya existe el coordinador'
                         ];
                     }
                 } else {
                     $data = [
-                        'code' => 400,
+                        'code' => 401,
                         'status' => 'error',
                         'message' => 'rut invalido'
                     ];
@@ -69,7 +69,7 @@ class CoordinadorController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al crear el Coordinador'
             ];
@@ -110,22 +110,22 @@ class CoordinadorController extends Controller
                         ];
                     } else {
                         $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'No existe el coordinador asociado a ese rut'
                         ];
                     }
                 } else {
                     $data = [
-                        'code' => 400,
+                        'code' => 401,
                         'status' => 'error',
-                        'message' => 'rut invalido'
+                        'message' => 'Rut inválido'
                     ];
                 }
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al editar el Coordinador',
                 'request' => $request
@@ -136,36 +136,66 @@ class CoordinadorController extends Controller
 
     public function delete(Request $request)
     {
-        if ($request->rut == '') {
+        if ($request->id == '') {
             $data = [
                 'code' =>400,
                 'status' => 'error',
-                'mensaje' => 'Debe ingresar un RUT de un Coordinador'
+                'message' => 'Debe seleccionar un coordinador'
             ];
         } else {
-            if ($this -> valida_rut($request ->rut)) {
-                $coordinador = Coordinador::where('rut', $request ->rut)->first();
+            $coordinador = Coordinador::find($request ->id);
+            if (empty($coordinador)) {
+                $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el coordinador asociado al id'
+                ];
+            } else {
+                $coordinador -> delete();
+                $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'message' => 'Se ha eliminado correctamente'
+                ];
+            }
+        }
+        return response() -> json($data);
+    }
+
+    public function getById(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $coordinador = Coordinador::find($request ->id);
                 if (empty($coordinador)) {
                     $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'mensaje' => 'No se encontro el coordinador asociado al rut'
+                    'message' => 'No se encontro el coordinador asociado al id'
                 ];
                 } else {
-                    $coordinador -> delete();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'mensaje' => 'Se ha eliminado correctamente'
+                    'coordinador' => $coordinador
                 ];
                 }
-            } else {
-                $data = [
-                    'code' => 400,
-                    'status' => 'error',
-                    'message' => 'rut invalido'
-                ];
             }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar el coordinador'
+            ];
         }
         return response() -> json($data);
     }

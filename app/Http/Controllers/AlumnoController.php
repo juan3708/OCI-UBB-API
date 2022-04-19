@@ -71,14 +71,14 @@ class AlumnoController extends Controller
                             ];
                     } else {
                         $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'Ya existe el alumno'
                         ];
                     }
                 } else {
                     $data = [
-                        'code' => 400,
+                        'code' => 401,
                         'status' => 'error',
                         'message' => 'rut invalido'
                     ];
@@ -86,7 +86,7 @@ class AlumnoController extends Controller
             }
         } else {
             $data = [
-                    'code' => 400,
+                    'code' => 401,
                     'status' => 'error',
                     'message' => 'Error al crear el alumno'
                 ];
@@ -144,14 +144,14 @@ class AlumnoController extends Controller
                                 ];
                     } else {
                         $data = [
-                                'code' => 400,
+                                'code' => 401,
                                 'status' => 'error',
                                 'message' => 'No existe un alumno asociado'
                             ];
                     }
                 } else {
                     $data = [
-                        'code' => 400,
+                        'code' => 401,
                         'status' => 'error',
                         'message' => 'rut invalido'
                     ];
@@ -159,7 +159,7 @@ class AlumnoController extends Controller
             }
         } else {
             $data = [
-                    'code' => 400,
+                    'code' => 401,
                     'status' => 'error',
                     'message' => 'Error al editar la alumno'
                 ];
@@ -173,7 +173,7 @@ class AlumnoController extends Controller
             $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'mensaje' => 'Debe ingresar un alumno'
+                    'message' => 'Debe ingresar un alumno'
                 ];
         } else {
             $alumno = Alumno::find($request->id);
@@ -181,16 +181,54 @@ class AlumnoController extends Controller
                 $data = [
                         'code' =>400,
                         'status' => 'error',
-                        'mensaje' => 'No se encontro el alumno'
+                        'message' => 'No se encontro el alumno'
                     ];
             } else {
                 $alumno ->delete();
                 $data = [
                         'code' =>200,
                         'status' => 'success',
-                        'mensaje' => 'Se ha eliminado correctamente'
+                        'message' => 'Se ha eliminado correctamente'
                     ];
             }
+        }
+        return response() -> json($data);
+    }
+
+    public function getById(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $alumno = Alumno::find($request ->id);
+                if (empty($alumno)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el alumno asociado al id'
+                ];
+                } else {
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'alumno' => $alumno
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar el alumno'
+            ];
         }
         return response() -> json($data);
     }

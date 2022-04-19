@@ -52,7 +52,7 @@ class ActividadController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al crear la actividad'
             ];
@@ -89,7 +89,7 @@ class ActividadController extends Controller
                             ];
                 } else {
                     $data = [
-                            'code' => 400,
+                            'code' => 401,
                             'status' => 'error',
                             'message' => 'No existe una actividades asociado'
                         ];
@@ -97,7 +97,7 @@ class ActividadController extends Controller
             }
         } else {
             $data = [
-                'code' => 400,
+                'code' => 401,
                 'status' => 'error',
                 'message' => 'Error al editar la actividad'
             ];
@@ -111,7 +111,7 @@ class ActividadController extends Controller
             $data = [
                 'code' =>400,
                 'status' => 'error',
-                'mensaje' => 'Debe ingresar un ID de una actividad'
+                'message' => 'Debe ingresar un ID de una actividad'
             ];
         } else {
             $actividad = Actividad::find($request->id);
@@ -119,16 +119,53 @@ class ActividadController extends Controller
                 $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'mensaje' => 'No se encontro una actividad asociada al ID'
+                    'message' => 'No se encontro una actividad asociada al ID'
                 ];
             } else {
                 $actividad ->delete();
                 $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'mensaje' => 'Se ha eliminado correctamente'
+                    'message' => 'Se ha eliminado correctamente'
                 ];
             }
+        }
+        return response() -> json($data);
+    }
+    public function getById(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $actividad = Actividad::find($request ->id);
+                if (empty($actividad)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la actividad asociado al id'
+                ];
+                } else {
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'actividad' => $actividad
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar la actividad'
+            ];
         }
         return response() -> json($data);
     }

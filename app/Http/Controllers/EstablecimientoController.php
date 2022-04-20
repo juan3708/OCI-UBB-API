@@ -70,7 +70,7 @@ class EstablecimientoController extends Controller
             $validate = Validator::make($request ->all(), [
                     'nombre' => 'required',
                     'nombre_profesor' => 'required',
-                    'email_profesor' => 'required|email:rfc,dns||unique:establecimiento,email_profesor',
+                    'email_profesor' => 'required|email:rfc,dns',
                     'telefono_profesor' => 'required',
                     'direccion' => 'required',
                     'director' => 'required',

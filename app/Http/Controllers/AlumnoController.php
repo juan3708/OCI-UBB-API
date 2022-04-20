@@ -57,7 +57,7 @@ class AlumnoController extends Controller
                         $alumno -> email = $request -> email;
                         $alumno -> fecha_nacimiento = $request -> fecha_nacimiento;
                         $alumno -> curso = $request -> curso;
-                        $alumno -> participante = $request -> participante;
+                        //$alumno -> participante = $request -> participante;
                         $alumno -> direccion = $request -> direccion;
                         $alumno -> telefono_apoderado = $request -> telefono_apoderado;
                         $alumno -> nombre_apoderado = $request -> nombre_apoderado;
@@ -105,7 +105,6 @@ class AlumnoController extends Controller
                 'email' => 'required',
                 'fecha_nacimiento' => 'required|date_format:Y-m-d',
                 'curso' => 'required',
-                'participante' => 'required',
                 'direccion' => 'required',
                 'telefono_apoderado' => 'required',
                 'nombre_apoderado' => 'required',

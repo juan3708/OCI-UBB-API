@@ -105,7 +105,6 @@ class AlumnoController extends Controller
                 'email' => 'required',
                 'fecha_nacimiento' => 'required|date_format:Y-m-d',
                 'curso' => 'required',
-                'participante' => 'required',
                 'direccion' => 'required',
                 'telefono_apoderado' => 'required',
                 'nombre_apoderado' => 'required',

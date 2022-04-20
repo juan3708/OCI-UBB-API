@@ -40,9 +40,9 @@ class EstablecimientoController extends Controller
                 $establecimiento = new establecimiento();
                 $establecimiento -> nombre = $request -> nombre;
                 $establecimiento -> telefono = $request -> telefono;
-                $establecimiento -> mail = $request -> mail;
+                $establecimiento -> email = $request -> email;
                 $establecimiento -> nombre_profesor = $request -> nombre_profesor;
-                $establecimiento -> mail_profesor = $request -> mail_profesor;
+                $establecimiento -> email_profesor = $request -> email_profesor;
                 $establecimiento -> telefono_profesor = $request -> telefono_profesor;
                 $establecimiento -> direccion = $request -> direccion;
                 $establecimiento -> director = $request -> director;

@@ -11,7 +11,8 @@ class ProfesorController extends Controller
 {
     public function all()
     {
-        $profesor = DB::table('profesor')->select('*')->get();
+        //$profesor = DB::table('profesor')->select('*')->get();
+        $profesor = Profesor::all();
         $data = [
             'code' => 200,
             'profesores' => $profesor

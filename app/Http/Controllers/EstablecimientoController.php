@@ -11,7 +11,8 @@ class EstablecimientoController extends Controller
 {
     public function all()
     {
-        $establecimiento = DB::table('establecimiento')->select('*')->get();
+        //$establecimiento = DB::table('establecimiento')->select('*')->get();
+        $establecimiento = Establecimiento::all();
         $data = [
             'code' => 200,
             'establecimientos' => $establecimiento

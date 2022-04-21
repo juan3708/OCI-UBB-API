@@ -11,8 +11,9 @@ class ClaseController extends Controller
 {
     public function all()
     {
-        $clase = DB::table('clase as c')->select('c.id','c.contenido',
-        DB::raw('DATE_FORMAT(c.fecha, "%d-%m-%Y") as fecha'),'c.ciclo_id')->get();
+        /*$clase = DB::table('clase as c')->select('c.id','c.contenido',
+        DB::raw('DATE_FORMAT(c.fecha, "%d-%m-%Y") as fecha'),'c.ciclo_id')->get();*/
+        $clase = Clase::all();
         $data = [
             'code' => 200,
             'clases' => $clase

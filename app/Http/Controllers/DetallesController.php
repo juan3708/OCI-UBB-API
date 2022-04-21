@@ -11,7 +11,8 @@ class DetallesController extends Controller
 {
     public function all()
     {
-        $detalles = DB::table('detalles')->select('*')->get();
+        //$detalles = DB::table('detalles')->select('*')->get();
+        $detalles=Detalles::all();
         $data = [
             'code' => 200,
             'detalles' => $detalles

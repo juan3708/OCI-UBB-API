@@ -11,7 +11,8 @@ class AyudanteController extends Controller
 {
     public function all()
     {
-        $ayudante = DB::table('ayudante')->select('*')->get();
+       /* $ayudante = DB::table('ayudante')->select('*')->get();*/
+       $ayudante = Ayudante::all();
         $data = [
             'code' => 200,
             'ayudantes' => $ayudante

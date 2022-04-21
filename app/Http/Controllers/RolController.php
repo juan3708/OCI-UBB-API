@@ -11,7 +11,8 @@ class RolController extends Controller
 {
     public function all()
     {
-        $rol = DB::table('rol')->select('*')->get();
+        //$rol = DB::table('rol')->select('*')->get();
+        $rol = Rol::all();
         $data = [
             'code' => 200,
             'roles' => $rol

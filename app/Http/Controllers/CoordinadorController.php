@@ -13,7 +13,8 @@ class CoordinadorController extends Controller
 
     public function all()
     {
-        $coordinador = DB::table('coordinador')->select('*')->get();
+       // $coordinador = DB::table('coordinador')->select('*')->get();
+       $coordinador = Coordinador::all();
         $data = [
             'code' => 200,
             'coordinadores' => $coordinador

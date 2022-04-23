@@ -13,7 +13,7 @@ class CompetenciaController extends Controller
     {
        /* $competencia = DB::table('competencia as c')->select('c.id','c.tipo',
         DB::raw('DATE_FORMAT(c.fecha, "%d-%m-%Y") as fecha'),'c.ciclo_id')->get();*/
-        $competencia = Competencia::all();
+        $competencia = Competencia::with('gastos','ciclo')->get();
         $data = [
             'code' => 200,
             'competencias' => $competencia

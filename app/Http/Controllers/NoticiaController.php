@@ -13,7 +13,7 @@ class NoticiaController extends Controller
     {
         /*$noticia = DB::table('noticia as n')->select('n.cuerpo',DB::raw('DATE_FORMAT(n.fecha, "%d-%m-%Y") as fecha')
         ,'n.titulo','n.user_rut','n.ciclo_id','n.id')->get();*/
-        $noticia = Noticia::all();
+        $noticia = Noticia::with('ciclo','user')->all();
         $data = [
             'code' => 200,
             'noticias' => $noticia

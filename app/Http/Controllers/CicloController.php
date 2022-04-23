@@ -15,7 +15,7 @@ class CicloController extends Controller
         DB::raw('DATE_FORMAT(c.fecha_inicio, "%d-%m-%Y") as fecha_inicio'), 
         DB::raw('DATE_FORMAT(c.fecha_termino, "%d-%m-%Y") as fecha_termino'),
         'coordinador.nombre as nombre_coordinador','coordinador.apellidos as apellidos_coordinador')->join('coordinador','coordinador.id','=','c.coordinador_id')->get();*/
-        $ciclo = Ciclo::all();
+        $ciclo = Ciclo::with('coordinador')->get();
         $data = [
             'code' => 200,
             'ciclos' => $ciclo

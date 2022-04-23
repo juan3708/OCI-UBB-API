@@ -14,7 +14,7 @@ class ActividadController extends Controller
        /* $actividad = DB::table('actividad as a')->select('a.nombre','a.fecha','a.descripcion','a.id',
         DB::raw('DATE_FORMAT(a.fecha, "%d-%m-%Y") as fecha'), 'a.ciclo_id')->get();*/
 
-        $actividad = Actividad::all();
+        $actividad = Actividad::with('ciclo','gastos')->get();
 
         $data = [
             'code' => 200,

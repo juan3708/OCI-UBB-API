@@ -12,7 +12,7 @@ class DetallesController extends Controller
     public function all()
     {
         //$detalles = DB::table('detalles')->select('*')->get();
-        $detalles=Detalles::all();
+        $detalles=Detalles::with('gastos')->get();
         $data = [
             'code' => 200,
             'detalles' => $detalles

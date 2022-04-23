@@ -23,6 +23,6 @@ class Alumno extends Model
     //Relacion 1
 
     public function establecimiento(){
-        return $this->belongsTo(Ciclo::class);
+        return $this->belongsTo(Establecimiento::class);
     }
 }

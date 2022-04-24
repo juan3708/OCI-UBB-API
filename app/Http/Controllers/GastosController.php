@@ -27,7 +27,6 @@ class GastosController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'valor' => 'required',
-                'tipo' => 'required',
                 'fecha' => 'required|date_format:Y-m-d',
                 'ciclo_id' => 'required'
             ]);
@@ -41,7 +40,6 @@ class GastosController extends Controller
             } else {
                 $gastos = new Gastos();
                 $gastos -> valor = $request -> valor;
-                $gastos -> tipo = $request -> tipo;
                 $gastos -> fecha = $request -> fecha;
                 $gastos -> ciclo_id = $request -> ciclo_id;
                 $gastos ->save();
@@ -67,7 +65,6 @@ class GastosController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'valor' => 'required',
-                'tipo' => 'required',
                 'fecha' => 'required|date_format:Y-m-d',
                 'ciclo_id' => 'required'
             ]);
@@ -82,7 +79,6 @@ class GastosController extends Controller
                 $gastos = Gastos::find($request->id);
                 if (!empty($gastos)) {
                     $gastos -> fecha = $request -> fecha;
-                    $gastos -> tipo = $request -> tipo;
                     $gastos -> valor = $request -> valor;
                     $gastos ->save();
                     $data = [

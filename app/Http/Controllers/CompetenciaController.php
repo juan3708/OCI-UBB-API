@@ -25,7 +25,7 @@ class CompetenciaController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'fecha_competencia' => 'required|date_format:Y-m-d',
+                'fecha' => 'required|date_format:Y-m-d',
                 'tipo' => 'required',
                 'lugar' => 'required',
                 'ciclo_id' => 'required'
@@ -39,7 +39,7 @@ class CompetenciaController extends Controller
                 ];
             } else {
                 $competencia = new Competencia();
-                $competencia -> fecha_competencia = $request -> fecha_competencia;
+                $competencia -> fecha = $request -> fecha;
                 $competencia -> tipo = $request -> tipo;
                 $competencia -> lugar = $request -> lugar;
                 $competencia -> ciclo_id = $request -> ciclo_id;
@@ -65,7 +65,7 @@ class CompetenciaController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'fecha_competencia' => 'required|date_format:Y-m-d',
+                'fecha' => 'required|date_format:Y-m-d',
                 'tipo' => 'required',
                 'lugar' => 'required'
             ]);
@@ -79,7 +79,7 @@ class CompetenciaController extends Controller
             } else {
                 $competencia = competencia::find($request->id);
                 if (!empty($competencia)) {
-                    $competencia -> fecha_competencia = $request -> fecha_competencia;
+                    $competencia -> fecha = $request -> fecha;
                     $competencia -> tipo = $request -> tipo;
                     $competencia -> lugar = $request -> lugar;
                     $competencia ->save();

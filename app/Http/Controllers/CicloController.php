@@ -15,7 +15,7 @@ class CicloController extends Controller
         DB::raw('DATE_FORMAT(c.fecha_inicio, "%d-%m-%Y") as fecha_inicio'), 
         DB::raw('DATE_FORMAT(c.fecha_termino, "%d-%m-%Y") as fecha_termino'),
         'coordinador.nombre as nombre_coordinador','coordinador.apellidos as apellidos_coordinador')->join('coordinador','coordinador.id','=','c.coordinador_id')->get();*/
-        $ciclo = Ciclo::with('coordinador')->get();
+        $ciclo = Ciclo::with('coordinador','competencias','actividades')->get();
         $data = [
             'code' => 200,
             'ciclos' => $ciclo
@@ -166,7 +166,7 @@ class CicloController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $ciclo = Ciclo::find($request ->id);
+                $ciclo = Ciclo::with('coordinador','competencias','actividades','gastos','clases')->firstwhere('id',$request ->id);
                 if (empty($ciclo)) {
                     $data = [
                     'code' =>400,

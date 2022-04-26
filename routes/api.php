@@ -69,9 +69,9 @@ Route::post('/gastos/getbyid', [GastosController::class,'getById']);
 
 //Rutas Detalle
 Route::get('/detalle/all', [DetallesController::class,'all']);
-Route::post('/detalle/create', [DetalleController::class,'create']);
-Route::put('/detalle/edit', [DetalleController::class,'edit']);
-Route::post('/detalle/delete', [DetalleController::class,'delete']);
+Route::post('/detalle/create', [DetallesController::class,'create']);
+Route::put('/detalle/edit', [DetallesController::class,'edit']);
+Route::post('/detalle/delete', [DetallesController::class,'delete']);
 Route::post('/detalle/getbyid', [DetallesController::class,'getById']);
 
 //Rutas Noticia

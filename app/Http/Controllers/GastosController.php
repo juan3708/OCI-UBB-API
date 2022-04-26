@@ -42,6 +42,9 @@ class GastosController extends Controller
                 $gastos -> valor = $request -> valor;
                 $gastos -> fecha = $request -> fecha;
                 $gastos -> ciclo_id = $request -> ciclo_id;
+                $gastos -> actividad_id = $request -> actividad_id;
+                $gastos -> competencia_id = $request -> competencia_id;
+
                 $gastos ->save();
                 $data = [
                             'code' => 200,
@@ -146,7 +149,7 @@ class GastosController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $gastos = Gastos::find($request ->id);
+                $gastos = Gastos::with(['detalles'])->firstwhere('id',$request ->id);
                 if (empty($gastos)) {
                     $data = [
                     'code' =>400,

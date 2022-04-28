@@ -32,6 +32,11 @@ class Ciclo extends Model
         return $this->hasMany(Clase::class);
     }
 
+    public function niveles(){
+        return $this->hasMany(Nivel::class);
+    }
+
+
     //Relaciones 1
 
     public function coordinador(){

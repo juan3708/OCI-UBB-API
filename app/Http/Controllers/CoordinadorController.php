@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Coordinador;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CoordinadorController extends Controller
@@ -28,7 +27,7 @@ class CoordinadorController extends Controller
             $validate = Validator::make($request ->all(), [
                 'nombre' => 'required',
                 'apellidos' => 'required',
-                'email' => 'required|email:rfc,dns',
+                'email' => 'required|email:rfc,dns|unique:coordinador,email',
                 'rut' => 'required'
             ]);
             if ($validate ->fails()) {

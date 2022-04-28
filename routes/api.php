@@ -10,6 +10,7 @@ use App\Http\Controllers\CoordinadorController;
 use App\Http\Controllers\DetallesController;
 use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\GastosController;
+use App\Http\Controllers\NivelController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\RolController;
@@ -122,3 +123,10 @@ Route::post('/profesor/create', [ProfesorController::class,'create']);
 Route::put('/profesor/edit', [ProfesorController::class,'edit']);
 Route::post('/profesor/delete', [ProfesorController::class,'delete']);
 Route::post('/profesor/getbyid', [ProfesorController::class,'getById']);
+
+//Rutas Nivel
+Route::get('/nivel/all', [NivelController::class,'all']);
+Route::post('/nivel/create', [NivelController::class,'create']);
+Route::put('/nivel/edit', [NivelController::class,'edit']);
+Route::post('/nivel/delete', [NivelController::class,'delete']);
+Route::post('/nivel/getbyid', [NivelController::class,'getById']);

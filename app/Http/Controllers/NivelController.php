@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ciclo;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Nivel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
-class CicloController extends Controller
+class NivelController extends Controller
 {
     public function all()
     {
-        /*$ciclo = DB::table('ciclo as c')->select('c.id', 'c.anio', 'c.nombre', 'c.presupuesto',
-        DB::raw('DATE_FORMAT(c.fecha_inicio, "%d-%m-%Y") as fecha_inicio'), 
-        DB::raw('DATE_FORMAT(c.fecha_termino, "%d-%m-%Y") as fecha_termino'),
-        'coordinador.nombre as nombre_coordinador','coordinador.apellidos as apellidos_coordinador')->join('coordinador','coordinador.id','=','c.coordinador_id')->get();*/
-        $ciclo = Ciclo::with('coordinador','competencias','actividades')->get();
+    
+        $nivel = Nivel::with('clases','ciclo')->get();
         $data = [
             'code' => 200,
-            'ciclos' => $ciclo
+            'niveles' => $nivel
         ];
         return response() ->json($data);
     }
@@ -26,13 +22,10 @@ class CicloController extends Controller
     public function create(Request $request)
     {
         if (!empty($request ->all())) {
+            
             $validate = Validator::make($request ->all(), [
-                'anio' => 'required',
                 'nombre' => 'required',
-                'fecha_inicio' => 'required|date_format:Y-m-d',
-                'fecha_termino' => 'required|date_format:Y-m-d|after:fecha_inicio',
-                'presupuesto' => 'required',
-                'coordinador_id' => 'required'
+                'ciclo_id' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -41,27 +34,23 @@ class CicloController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $ciclo = Ciclo::where('nombre', $request ->nombre)->first();
-                if (empty($ciclo)) {
-                    $ciclo = new Ciclo();
-                    $ciclo -> anio = $request -> anio;
-                    $ciclo -> nombre = $request -> nombre;
-                    $ciclo -> fecha_inicio = $request -> fecha_inicio;
-                    $ciclo -> fecha_termino = $request -> fecha_termino;
-                    $ciclo -> presupuesto = $request -> presupuesto;
-                    $ciclo -> coordinador_id =$request -> coordinador_id;
-                    $ciclo ->save();
+                $nivel = Nivel::where('nombre', $request ->nombre)->first();
+                if (empty($nivel)) {
+                    $nivel = new Nivel();
+                    $nivel -> nombre = $request -> nombre;
+                    $nivel -> ciclo_id = $request -> ciclo_id;
+                    $nivel ->save();
                     $data = [
                             'code' => 200,
                             'status' => 'success',
-                            'message' => 'Se ha creado correctamente el ciclo',
-                            'ciclo' => $ciclo
+                            'message' => 'Se ha creado correctamente el nivel',
+                            'nivel' => $nivel
                         ];
                 } else {
                     $data = [
                             'code' => 401,
                             'status' => 'error',
-                            'message' => 'Ya existe un ciclo con ese nombre'
+                            'message' => 'Ya existe un nivel con ese nombre'
                         ];
                 }
             }
@@ -69,7 +58,7 @@ class CicloController extends Controller
             $data = [
                 'code' => 401,
                 'status' => 'error',
-                'message' => 'Error al crear el ciclo'
+                'message' => 'Error al crear el nivel'
             ];
         }
         return response() ->json($data);
@@ -80,11 +69,8 @@ class CicloController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'id' => 'required',
-                'anio' => 'required',
+                'ciclo_id' => 'required',
                 'nombre' => 'required',
-                'fecha_inicio' => 'required|date_format:Y-m-d',
-                'presupuesto' => 'required',
-                'coordinador_id' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -93,26 +79,22 @@ class CicloController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $ciclo = Ciclo::find($request->id);
-                if (!empty($ciclo)) {
-                    $ciclo -> anio = $request -> anio;
-                    $ciclo -> nombre = $request -> nombre;
-                    $ciclo -> fecha_inicio = $request -> fecha_inicio;
-                    $ciclo -> fecha_termino = $request -> fecha_termino;
-                    $ciclo -> presupuesto = $request -> presupuesto;
-                    $ciclo -> coordinador_id = $request -> coordinador_id;
-                    $ciclo ->save();
+                $nivel = Nivel::find($request->id);
+                if (!empty($nivel)) {
+                    $nivel -> nombre = $request -> nombre;
+                    $nivel -> ciclo_id = $request -> ciclo_id;
+                    $nivel ->save();
                     $data = [
                             'code' => 200,
                             'status' => 'success',
-                            'message' => 'Se ha editado correctamente el ciclo',
-                            'ciclo' => $ciclo
+                            'message' => 'Se ha editado correctamente el nivel',
+                            'nivel' => $nivel
                         ];
                 } else {
                     $data = [
                             'code' => 401,
                             'status' => 'error',
-                            'message' => 'No existe un ciclo asociado'
+                            'message' => 'No existe un nivel asociado'
                         ];
                 }
             }
@@ -120,7 +102,7 @@ class CicloController extends Controller
             $data = [
                 'code' => 401,
                 'status' => 'error',
-                'message' => 'Error al editar el ciclo'
+                'message' => 'Error al editar el nivel'
             ];
         }
         return response() ->json($data);
@@ -132,18 +114,18 @@ class CicloController extends Controller
             $data = [
                 'code' =>400,
                 'status' => 'error',
-                'message' => 'Debe ingresar un ciclo'
+                'message' => 'Debe ingresar un nivel'
             ];
         } else {
-            $ciclo = Ciclo::find($request->id);
-            if (empty($ciclo)) {
+            $nivel = Nivel::find($request->id);
+            if (empty($nivel)) {
                 $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'message' => 'No se encontro un ciclo'
+                    'message' => 'No se encontro el nivel'
                 ];
             } else {
-                $ciclo ->delete();
+                $nivel ->delete();
                 $data = [
                     'code' =>200,
                     'status' => 'success',
@@ -167,18 +149,18 @@ class CicloController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $ciclo = Ciclo::with('coordinador','competencias','actividades','gastos','clases')->firstwhere('id',$request ->id);
-                if (empty($ciclo)) {
+                $nivel = Nivel::with('clases','ciclo')->firstwhere('id',$request ->id);
+                if (empty($nivel)) {
                     $data = [
                     'code' =>400,
                     'status' => 'error',
-                    'message' => 'No se encontro el ciclo asociado al id'
+                    'message' => 'No se encontro el nivel asociado al id'
                 ];
                 } else {
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'ciclo' => $ciclo
+                    'nivel' => $nivel
                 ];
                 }
             }
@@ -186,7 +168,7 @@ class CicloController extends Controller
             $data = [
                 'code' =>400,
                 'status' => 'error',
-                'message' => 'Error al buscar el ciclo'
+                'message' => 'Error al buscar el nivel'
             ];
         }
         return response() -> json($data);

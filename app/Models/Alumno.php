@@ -20,6 +20,10 @@ class Alumno extends Model
         return $this->belongsToMany(Competencia::class)->withPivot('puntaje');
     }
 
+    public function niveles(){
+        return $this->belongsToMany(Nivel::class);
+    }
+
     //Relacion 1
 
     public function establecimiento(){

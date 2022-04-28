@@ -27,7 +27,8 @@ class ClaseController extends Controller
             $validate = Validator::make($request ->all(), [
                     'contenido' => 'required',
                     'fecha' => 'required|date_format:Y-m-d',
-                    'ciclo_id' => 'required'
+                    'ciclo_id' => 'required',
+                    'nivel_id' => 'required'
                 ]);
             if ($validate ->fails()) {
                 $data = [
@@ -41,6 +42,8 @@ class ClaseController extends Controller
                 $clase -> contenido = $request -> contenido;
                 $clase -> fecha = $request -> fecha;
                 $clase -> ciclo_id = $request -> ciclo_id;
+                $clase -> nivel_id = $request -> nivel_id;
+
                 $clase ->save();
                 $data = [
                                 'code' => 200,
@@ -65,7 +68,8 @@ class ClaseController extends Controller
             $validate = Validator::make($request ->all(), [
                 'contenido' => 'required',
                 'fecha' => 'required|date_format:Y-m-d',
-                'ciclo_id' => 'required'
+                'ciclo_id' => 'required',
+                'nivel_id' => 'required'
                 ]);
             if ($validate ->fails()) {
                 $data = [
@@ -80,6 +84,7 @@ class ClaseController extends Controller
                     $clase -> contenido = $request -> contenido;
                     $clase -> fecha = $request -> fecha;
                     $clase -> ciclo_id = $request -> ciclo_id;
+                    $clase -> nivel_id = $request -> nivel_id;
                     $clase ->save();
                     $data = [
                                     'code' => 200,

@@ -13,7 +13,7 @@ class ClaseController extends Controller
     {
         /*$clase = DB::table('clase as c')->select('c.id','c.contenido',
         DB::raw('DATE_FORMAT(c.fecha, "%d-%m-%Y") as fecha'),'c.ciclo_id')->get();*/
-        $clase = Clase::with('ciclo')->get();
+        $clase = Clase::with('ciclo','nivel')->get();
         
         $data = [
             'code' => 200,
@@ -151,7 +151,7 @@ class ClaseController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $clase = Clase::find($request ->id);
+                $clase = Clase::with('ciclo','nivel')->firstwhere('id',$request ->id);
                 if (empty($clase)) {
                     $data = [
                     'code' =>400,

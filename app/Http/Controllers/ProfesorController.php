@@ -12,7 +12,7 @@ class ProfesorController extends Controller
     public function all()
     {
         //$profesor = DB::table('profesor')->select('*')->get();
-        $profesor = Profesor::with('clases')->get();
+        $profesor = Profesor::all();
         $data = [
             'code' => 200,
             'profesores' => $profesor
@@ -184,7 +184,7 @@ class ProfesorController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $profesor = Profesor::with('clases')->firstwhere('id',$request ->id);
+                $profesor = Profesor::find($request ->id);
                 if (empty($profesor)) {
                     $data = [
                     'code' =>400,

@@ -12,7 +12,7 @@ class ProfesorController extends Controller
     public function all()
     {
         //$profesor = DB::table('profesor')->select('*')->get();
-        $profesor = Profesor::with('clase');
+        $profesor = Profesor::with('clase')->get();
         $data = [
             'code' => 200,
             'profesores' => $profesor

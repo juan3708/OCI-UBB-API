@@ -83,6 +83,9 @@ class GastosController extends Controller
                 if (!empty($gastos)) {
                     $gastos -> fecha = $request -> fecha;
                     $gastos -> valor = $request -> valor;
+                    $gastos -> ciclo_id = $request -> ciclo_id;
+                    $gastos -> actividad_id = $request -> actividad_id;
+                    $gastos -> competencia_id = $request -> competencia_id;
                     $gastos ->save();
                     $data = [
                                 'code' => 200,

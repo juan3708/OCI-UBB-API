@@ -12,7 +12,7 @@ class EstablecimientoController extends Controller
     public function all()
     {
         //$establecimiento = DB::table('establecimiento')->select('*')->get();
-        $establecimiento = Establecimiento::all();
+        $establecimiento = Establecimiento::with('alumnos')->get();
         $data = [
             'code' => 200,
             'establecimientos' => $establecimiento
@@ -128,7 +128,7 @@ class EstablecimientoController extends Controller
                     'message' => 'Debe ingresar un establecimiento'
                 ];
         } else {
-            $establecimiento = establecimiento::find($request->id);
+            $establecimiento = Establecimiento::find($request->id);
             if (empty($establecimiento)) {
                 $data = [
                         'code' =>400,
@@ -159,7 +159,7 @@ class EstablecimientoController extends Controller
                         'errors' => $validate ->errors()
                     ];
             } else {
-                $establecimiento = Establecimiento::find($request ->id);
+                $establecimiento = Establecimiento::with('alumnos')->firstwhere('id',$request ->id);
                 if (empty($establecimiento)) {
                     $data = [
                         'code' =>400,

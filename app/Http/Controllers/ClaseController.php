@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clase;
+use Countable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -13,7 +14,7 @@ class ClaseController extends Controller
     {
         /*$clase = DB::table('clase as c')->select('c.id','c.contenido',
         DB::raw('DATE_FORMAT(c.fecha, "%d-%m-%Y") as fecha'),'c.ciclo_id')->get();*/
-        $clase = Clase::with('ciclo','nivel')->get();
+        $clase = Clase::with('ciclo', 'nivel')->get();
         
         $data = [
             'code' => 200,
@@ -112,28 +113,43 @@ class ClaseController extends Controller
 
     public function delete(Request $request)
     {
-        if ($request->id == '') {
-            $data = [
-                    'code' =>400,
-                    'status' => 'error',
-                    'message' => 'Debe ingresar una clase'
-                ];
-        } else {
-            $clase = Clase::find($request->id);
-            if (empty($clase)) {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' => 'required'
+                ]);
+            if ($validate ->fails()) {
                 $data = [
+                        'code' => 400,
+                        'status' => 'error',
+                        'message' => 'Ingrese todos los datos porfavor',
+                        'errors' => $validate ->errors()
+                    ];
+            } else {
+                $clase = Clase::find($request->clase_id);
+                if (empty($clase)) {
+                    $data = [
                         'code' =>400,
                         'status' => 'error',
                         'message' => 'No se encontro la clase'
                     ];
-            } else {
-                $clase ->delete();
-                $data = [
+                } else {
+                    if ($request ->alumnos_id!=null) {
+                        $clase ->alumnos()->detach($request -> alumnos_id);
+                    }
+                    $clase ->delete();
+                    $data = [
                         'code' =>200,
                         'status' => 'success',
                         'message' => 'Se ha eliminado correctamente'
                     ];
+                }
             }
+        } else {
+            $data = [
+                    'code' => 401,
+                    'status' => 'error',
+                    'message' => 'Error al eliminar la clase'
+                ];
         }
         return response() -> json($data);
     }
@@ -151,7 +167,7 @@ class ClaseController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $clase = Clase::with('ciclo','nivel')->firstwhere('id',$request ->id);
+                $clase = Clase::with('ciclo', 'nivel', 'alumnos')->firstwhere('id', $request ->id);
                 if (empty($clase)) {
                     $data = [
                     'code' =>400,
@@ -174,5 +190,90 @@ class ClaseController extends Controller
             ];
         }
         return response() -> json($data);
+    }
+
+    public function LessonHasStudents(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' =>'required',
+                'alumnos_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->clase_id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase'
+                ];
+                } else {
+                    $clase -> alumnos()->attach($request -> alumnos_id, ['asistencia'=>false]);
+                    $clase = clase::with('alumnos')->firstwhere('id', $request->clase_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clase' => $clase
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar clase con alumnos'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    public function UpdateListLesson(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' =>'required',
+                'alumnos_id' => 'required',
+                "asistencias" => 'required',
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->clase_id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase'
+                ];
+                } else {
+                    foreach ($request->alumnos_id as $key => $alumno) {
+                        $clase->alumnos()->updateExistingPivot($alumno, ['asistencia' =>$request->asistencias[$key]]);
+                    }
+                    $clase = clase::with('alumnos')->firstwhere('id', $request->clase_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clase' => $clase
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar clase con alumnos'
+            ];
+        }
+        return response()-> json($data);
     }
 }

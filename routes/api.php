@@ -109,6 +109,8 @@ Route::post('/clase/create', [ClaseController::class,'create']);
 Route::put('/clase/edit', [ClaseController::class,'edit']);
 Route::post('/clase/delete', [ClaseController::class,'delete']);
 Route::post('/clase/getbyid', [ClaseController::class,'getById']);
+Route::post('/clase/chargestudents', [ClaseController::class,'LessonHasStudents']);
+Route::post('/clase/updatelistlesson', [ClaseController::class,'UpdateListLesson']);
 
 //Rutas Ayudante
 Route::get('/ayudante/all', [AyudanteController::class,'all']);
@@ -130,3 +132,5 @@ Route::post('/nivel/create', [NivelController::class,'create']);
 Route::put('/nivel/edit', [NivelController::class,'edit']);
 Route::post('/nivel/delete', [NivelController::class,'delete']);
 Route::post('/nivel/getbyid', [NivelController::class,'getById']);
+Route::post('/nivel/levelassociate', [NivelController::class,'alumnoHasLevel']);
+

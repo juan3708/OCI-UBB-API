@@ -149,7 +149,7 @@ class NivelController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $nivel = Nivel::with('clases','ciclo')->firstwhere('id',$request ->id);
+                $nivel = Nivel::with('clases','ciclo','alumnos')->firstwhere('id',$request ->id);
                 if (empty($nivel)) {
                     $data = [
                     'code' =>400,
@@ -172,5 +172,45 @@ class NivelController extends Controller
             ];
         }
         return response() -> json($data);
+    }
+    
+    public function alumnoHasLevel( Request $request){
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'nivel_id' =>'required',
+                'alumnos_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $nivel = Nivel::find($request ->nivel_id);
+                if (empty($nivel)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el nivel'
+                ];
+                } else {
+                    $nivel -> alumnos()->attach($request -> alumnos_id);
+                    $nivel = Nivel::with('alumnos')->firstwhere('id',$request->nivel_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'nivel' => $nivel
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar nivel con clase'
+            ];
+        }
+        return response()-> json($data);
     }
 }

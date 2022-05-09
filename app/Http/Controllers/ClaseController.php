@@ -192,6 +192,8 @@ class ClaseController extends Controller
         return response() -> json($data);
     }
 
+// ------------------------ METODOS RELACION ESTUDIANTE CLASE ------------------------------
+
     public function LessonHasStudents(Request $request)
     {
         if (!empty($request ->all())) {
@@ -272,6 +274,215 @@ class ClaseController extends Controller
                 'code' =>400,
                 'status' => 'error',
                 'message' => 'Error al asociar clase con alumnos'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    public function deleteStudentPerLesson(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' =>'required',
+                'alumnos_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->clase_id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase'
+                ];
+                } else {
+                    $clase -> alumnos()->detach($request -> alumnos_id);
+                    $clase = clase::with('alumnos')->firstwhere('id', $request->clase_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clase' => $clase
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar clase con alumnos'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    // ------------------------ METODOS RELACION PROFESOR CLASE ------------------------------
+    
+    public function LessonHasTeachers(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' =>'required',
+                'profesores_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->clase_id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase'
+                ];
+                } else {
+                    $clase -> profesores()->attach($request -> profesores_id);
+                    $clase = Clase::with('profesores')->firstwhere('id', $request->clase_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clase' => $clase
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar clase con profesores'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    public function deleteTeachersPerLesson(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' =>'required',
+                'profesores_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->clase_id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase'
+                ];
+                } else {
+                    $clase -> profesores()->detach($request -> profesores_id);
+                    $clase = Clase::with('profesores')->firstwhere('id', $request->clase_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clase' => $clase
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al eliminar profesor relacionado con clase'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    // ------------------------ METODOS RELACION AYUDANTE CLASE ------------------------------
+
+    public function LessonHasAssistants(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' =>'required',
+                'ayudantes_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->clase_id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase'
+                ];
+                } else {
+                    $clase -> ayudantes()->attach($request -> ayudantes_id);
+                    $clase = Clase::with('ayudantes')->firstwhere('id', $request->clase_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clase' => $clase
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar clase con ayudantes'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    public function deleteAssistansPerLesson(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' =>'required',
+                'ayudantes_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->clase_id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase'
+                ];
+                } else {
+                    $clase -> ayudantes()->detach($request -> ayudantes_id);
+                    $clase = clase::with('ayudantes')->firstwhere('id', $request->clase_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clase' => $clase
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al eliminar relacion ayudante con clase'
             ];
         }
         return response()-> json($data);

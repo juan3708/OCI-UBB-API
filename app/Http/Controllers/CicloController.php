@@ -191,4 +191,134 @@ class CicloController extends Controller
         }
         return response() -> json($data);
     }
+
+//  ------------------------------ RELACION CICLO ESTABLECIMIENTO --------------------------------
+
+public function CycleHasEstablishments (Request $request)
+{
+    if (!empty($request ->all())) {
+        $validate = Validator::make($request ->all(), [
+            'ciclo_id' =>'required',
+            'establecimientos_id' => 'required',
+            'cupos' => 'required'
+        ]);
+        if ($validate ->fails()) {
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'errors' => $validate ->errors()
+            ];
+        } else {
+            $ciclo = Ciclo::find($request ->ciclo_id);
+            if (empty($ciclo)) {
+                $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro la ciclo'
+            ];
+            } else {
+                $ciclo -> establecimientos()->attach($request -> establecimientos_id, ['cupos'=>0]);
+                $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
+                $data = [
+                'code' =>200,
+                'status' => 'success',
+                'ciclo' => $ciclo
+            ];
+            }
+        }
+    } else {
+        $data = [
+            'code' =>400,
+            'status' => 'error',
+            'message' => 'Error al asociar ciclo con establecimientos'
+        ];
+    }
+    return response()-> json($data);
+}
+
+public function UpdateEstablishments(Request $request)
+{
+    if (!empty($request ->all())) {
+        $validate = Validator::make($request ->all(), [
+            'ciclo_id' =>'required',
+            'establecimientos_id' => 'required',
+            "cupos" => 'required',
+        ]);
+        if ($validate ->fails()) {
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'errors' => $validate ->errors()
+            ];
+        } else {
+            $ciclo = Ciclo::find($request ->ciclo_id);
+            if (empty($ciclo)) {
+                $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro la ciclo'
+            ];
+            } else {
+                foreach ($request->establecimientos_id as $key => $establecimiento) {
+                    $ciclo->establecimientos()->updateExistingPivot($establecimiento, ['cupos' =>$request->cupos[$key]]);
+                }
+                $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
+                $data = [
+                'code' =>200,
+                'status' => 'success',
+                'ciclo' => $ciclo
+            ];
+            }
+        }
+    } else {
+        $data = [
+            'code' =>400,
+            'status' => 'error',
+            'message' => 'Error al asociar ciclo con establecimientos'
+        ];
+    }
+    return response()-> json($data);
+}
+
+public function deleteEstablishmentPerCycle(Request $request)
+{
+    if (!empty($request ->all())) {
+        $validate = Validator::make($request ->all(), [
+            'ciclo_id' =>'required',
+            'establecimientos_id' => 'required'
+        ]);
+        if ($validate ->fails()) {
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'errors' => $validate ->errors()
+            ];
+        } else {
+            $ciclo = Ciclo::find($request ->ciclo_id);
+            if (empty($ciclo)) {
+                $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro la ciclo'
+            ];
+            } else {
+                $ciclo -> establecimientos()->detach($request -> establecimientos_id);
+                $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
+                $data = [
+                'code' =>200,
+                'status' => 'success',
+                'ciclo' => $ciclo
+            ];
+            }
+        }
+    } else {
+        $data = [
+            'code' =>400,
+            'status' => 'error',
+            'message' => 'Error al asociar ciclo con establecimientos'
+        ];
+    }
+    return response()-> json($data);
+}
+
 }

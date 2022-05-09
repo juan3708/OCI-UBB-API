@@ -11,9 +11,9 @@ class CompetenciaController extends Controller
 {
     public function all()
     {
-       /* $competencia = DB::table('competencia as c')->select('c.id','c.tipo',
-        DB::raw('DATE_FORMAT(c.fecha, "%d-%m-%Y") as fecha'),'c.ciclo_id')->get();*/
-        $competencia = Competencia::with('gastos','ciclo')->get();
+        /* $competencia = DB::table('competencia as c')->select('c.id','c.tipo',
+         DB::raw('DATE_FORMAT(c.fecha, "%d-%m-%Y") as fecha'),'c.ciclo_id')->get();*/
+        $competencia = Competencia::with('gastos', 'ciclo')->get();
         $data = [
             'code' => 200,
             'competencias' => $competencia
@@ -124,6 +124,9 @@ class CompetenciaController extends Controller
                     'message' => 'No se encontro una competencia'
                 ];
             } else {
+                if ($request ->alumnos_id!=null) {
+                    $competencia ->alumnos()->detach($request -> alumnos_id);
+                }
                 $competencia ->delete();
                 $data = [
                     'code' =>200,
@@ -170,5 +173,131 @@ class CompetenciaController extends Controller
             ];
         }
         return response() -> json($data);
+    }
+
+    public function competitionHasStudent(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'competicion_id' =>'required',
+                'alumnos_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $competencia = Competencia::find($request ->competencia_id);
+                if (empty($competencia)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la competencia'
+                ];
+                } else {
+                    $competencia -> alumnos()->attach($request -> alumnos_id);
+                    $competencia = competencia::with('alumnos')->firstwhere('id', $request->competencia_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'competencia' => $competencia
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar competencia con alumnos'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    public function deleteStudentsPerCompetition(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'competicion_id' =>'required',
+                'alumnos_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $competencia = Competencia::find($request ->competencia_id);
+                if (empty($competencia)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la competencia'
+                ];
+                } else {
+                    $competencia -> alumnos()->detach($request -> alumnos_id);
+                    $competencia = competencia::with('alumnos')->firstwhere('id', $request->competencia_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'competencia' => $competencia
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar competencia con alumnos'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    public function editScorePerStudent(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'competencia_id' =>'required',
+                'alumnos_id' => 'required',
+                "puntajes" => 'required',
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $competencia = competencia::find($request ->competencia_id);
+                if (empty($competencia)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la competencia'
+                ];
+                } else {
+                    foreach ($request->alumnos_id as $key => $alumno) {
+                        $competencia->alumnos()->updateExistingPivot($alumno, ['puntaje' =>$request->puntajes[$key]]);
+                    }
+                    $competencia = Competencia::with('alumnos')->firstwhere('id', $request->competencia_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'competencia' => $competencia
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asignar puntaje a alumno'
+            ];
+        }
+        return response()-> json($data);
     }
 }

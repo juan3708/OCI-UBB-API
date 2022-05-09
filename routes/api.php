@@ -46,6 +46,10 @@ Route::post('/ciclo/create', [CicloController::class,'create']);
 Route::put('/ciclo/edit', [CicloController::class,'edit']);
 Route::post('/ciclo/delete', [CicloController::class,'delete']);
 Route::post('/ciclo/getbyid', [CicloController::class,'getById']);
+Route::post('/clase/chargecycles', [CicloController::class,'CycleHasEstablishments']);
+Route::post('/clase/updatefeecompetition', [CicloController::class,'UpdateEstablishments']);
+Route::post('/clase/deletecompetitions', [CicloController::class,'deleteEstablishmentPerCycle']);
+
 
 //Rutas Actividad
 Route::get('/actividad/all', [ActividadController::class,'all']);
@@ -60,6 +64,9 @@ Route::post('/competencia/create', [CompetenciaController::class,'create']);
 Route::put('/competencia/edit', [CompetenciaController::class,'edit']);
 Route::post('/competencia/delete', [CompetenciaController::class,'delete']);
 Route::post('/competencia/getbyid', [CompetenciaController::class,'getById']);
+Route::post('/competencia/attach', [CompetenciaController::class,'competitionHasStudent']);
+Route::post('/competencia/detach', [CompetenciaController::class,'deleteStudentsPerCompetition']);
+Route::post('/competencia/updatePivot', [CompetenciaController::class,'editScorePerStudent']);
 
 //Rutas Gastos
 Route::get('/gastos/all', [GastosController::class,'all']);
@@ -111,6 +118,11 @@ Route::post('/clase/delete', [ClaseController::class,'delete']);
 Route::post('/clase/getbyid', [ClaseController::class,'getById']);
 Route::post('/clase/chargestudents', [ClaseController::class,'LessonHasStudents']);
 Route::post('/clase/updatelistlesson', [ClaseController::class,'UpdateListLesson']);
+Route::post('/clase/deletestudents', [ClaseController::class,'deleteStudentPerLesson']);
+Route::post('/clase/chargeteachers', [ClaseController::class,'LessonHasTeachers']);
+Route::post('/clase/deleteteachers', [ClaseController::class,'deleteTeachersPerLesson']);
+Route::post('/clase/chargeassistans', [ClaseController::class,'LessonHasAssistants']);
+Route::post('/clase/deleteassistans', [ClaseController::class,'deleteAssistansPerLesson']);
 
 //Rutas Ayudante
 Route::get('/ayudante/all', [AyudanteController::class,'all']);

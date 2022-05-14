@@ -24,6 +24,10 @@ class Alumno extends Model
         return $this->belongsToMany(Nivel::class);
     }
 
+    public function ciclos(){
+        return $this->belongsToMany(Alumno::class)->withPivot('inscrito', 'participante');
+    }
+
     //Relacion 1
 
     public function establecimiento(){

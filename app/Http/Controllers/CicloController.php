@@ -12,10 +12,10 @@ class CicloController extends Controller
     public function all()
     {
         /*$ciclo = DB::table('ciclo as c')->select('c.id', 'c.anio', 'c.nombre', 'c.presupuesto',
-        DB::raw('DATE_FORMAT(c.fecha_inicio, "%d-%m-%Y") as fecha_inicio'), 
+        DB::raw('DATE_FORMAT(c.fecha_inicio, "%d-%m-%Y") as fecha_inicio'),
         DB::raw('DATE_FORMAT(c.fecha_termino, "%d-%m-%Y") as fecha_termino'),
         'coordinador.nombre as nombre_coordinador','coordinador.apellidos as apellidos_coordinador')->join('coordinador','coordinador.id','=','c.coordinador_id')->get();*/
-        $ciclo = Ciclo::with('coordinador','competencias','actividades','clases','niveles')->get();
+        $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'clases', 'niveles')->get();
         $data = [
             'code' => 200,
             'ciclos' => $ciclo
@@ -154,7 +154,7 @@ class CicloController extends Controller
         return response() -> json($data);
     }
 
-        public function getById(Request $request)
+    public function getById(Request $request)
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
@@ -167,7 +167,7 @@ class CicloController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $ciclo = Ciclo::with('coordinador','competencias','actividades','gastos','clases','niveles')->firstwhere('id',$request ->id);
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles')->firstwhere('id', $request ->id);
                 if (empty($ciclo)) {
                     $data = [
                     'code' =>400,
@@ -192,150 +192,324 @@ class CicloController extends Controller
         return response() -> json($data);
     }
 
-//  ------------------------------ RELACION CICLO ESTABLECIMIENTO --------------------------------
+    public function getCyclePerFinishDate(Request $request)
+    {
+        if ($request -> fecha_termino  == '') {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+            ];
+        } else {
+            $ciclo = DB::table('ciclo')->where('fecha_termino', '>=', $request -> fecha_termino) ->orWhere('id', '=', DB::table('ciclo')->max('id'))->limit(1)->get();
+            $data = [
+                'code' =>200,
+                'status' => 'success',
+                'ciclo' => $ciclo
+            ];
+        }
+        return response()->json($data);
+    }
 
-public function CycleHasEstablishments (Request $request)
-{
-    if (!empty($request ->all())) {
-        $validate = Validator::make($request ->all(), [
+    //  ------------------------------ RELACION CICLO ESTABLECIMIENTO --------------------------------
+
+    public function CycleHasEstablishments(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
             'ciclo_id' =>'required',
             'establecimientos_id' => 'required',
             'cupos' => 'required'
         ]);
-        if ($validate ->fails()) {
-            $data = [
+            if ($validate ->fails()) {
+                $data = [
                 'code' => 400,
                 'status' => 'error',
                 'errors' => $validate ->errors()
             ];
-        } else {
-            $ciclo = Ciclo::find($request ->ciclo_id);
-            if (empty($ciclo)) {
-                $data = [
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
                 'code' =>400,
                 'status' => 'error',
                 'message' => 'No se encontro la ciclo'
             ];
-            } else {
-                $ciclo -> establecimientos()->attach($request -> establecimientos_id, ['cupos'=>0]);
-                $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
-                $data = [
+                } else {
+                    $ciclo -> establecimientos()->attach($request -> establecimientos_id, ['cupos'=>0]);
+                    $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
+                    $data = [
                 'code' =>200,
                 'status' => 'success',
                 'ciclo' => $ciclo
             ];
+                }
             }
-        }
-    } else {
-        $data = [
+        } else {
+            $data = [
             'code' =>400,
             'status' => 'error',
             'message' => 'Error al asociar ciclo con establecimientos'
         ];
+        }
+        return response()-> json($data);
     }
-    return response()-> json($data);
-}
 
-public function UpdateEstablishments(Request $request)
-{
-    if (!empty($request ->all())) {
-        $validate = Validator::make($request ->all(), [
+    public function UpdateEstablishments(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
             'ciclo_id' =>'required',
             'establecimientos_id' => 'required',
             "cupos" => 'required',
         ]);
-        if ($validate ->fails()) {
-            $data = [
+            if ($validate ->fails()) {
+                $data = [
                 'code' => 400,
                 'status' => 'error',
                 'errors' => $validate ->errors()
             ];
-        } else {
-            $ciclo = Ciclo::find($request ->ciclo_id);
-            if (empty($ciclo)) {
-                $data = [
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
                 'code' =>400,
                 'status' => 'error',
                 'message' => 'No se encontro la ciclo'
             ];
-            } else {
-                foreach ($request->establecimientos_id as $key => $establecimiento) {
-                    $ciclo->establecimientos()->updateExistingPivot($establecimiento, ['cupos' =>$request->cupos[$key]]);
-                }
-                $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
-                $data = [
+                } else {
+                    foreach ($request->establecimientos_id as $key => $establecimiento) {
+                        $ciclo->establecimientos()->updateExistingPivot($establecimiento, ['cupos' =>$request->cupos[$key]]);
+                    }
+                    $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
+                    $data = [
                 'code' =>200,
                 'status' => 'success',
                 'ciclo' => $ciclo
             ];
+                }
             }
-        }
-    } else {
-        $data = [
+        } else {
+            $data = [
             'code' =>400,
             'status' => 'error',
             'message' => 'Error al asociar ciclo con establecimientos'
         ];
+        }
+        return response()-> json($data);
     }
-    return response()-> json($data);
-}
 
-public function deleteEstablishmentPerCycle(Request $request)
-{
-    if (!empty($request ->all())) {
-        $validate = Validator::make($request ->all(), [
+    public function deleteEstablishmentPerCycle(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
             'ciclo_id' =>'required',
             'establecimientos_id' => 'required'
         ]);
-        if ($validate ->fails()) {
-            $data = [
+            if ($validate ->fails()) {
+                $data = [
                 'code' => 400,
                 'status' => 'error',
                 'errors' => $validate ->errors()
             ];
-        } else {
-            $ciclo = Ciclo::find($request ->ciclo_id);
-            if (empty($ciclo)) {
-                $data = [
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
                 'code' =>400,
                 'status' => 'error',
                 'message' => 'No se encontro la ciclo'
             ];
-            } else {
-                $ciclo -> establecimientos()->detach($request -> establecimientos_id);
-                $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
-                $data = [
+                } else {
+                    $ciclo -> establecimientos()->detach($request -> establecimientos_id);
+                    $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
+                    $data = [
                 'code' =>200,
                 'status' => 'success',
                 'ciclo' => $ciclo
             ];
+                }
             }
-        }
-    } else {
-        $data = [
+        } else {
+            $data = [
             'code' =>400,
             'status' => 'error',
             'message' => 'Error al asociar ciclo con establecimientos'
         ];
+        }
+        return response()-> json($data);
     }
-    return response()-> json($data);
-}
 
-public function getCyclePerFinishDate(Request $request){
-    if($request -> fecha_termino  == ''){
-        $data = [
+
+    //---------------------------------------------- RELACION CICLO ALUMNO ------------------------------------------------------------
+
+
+    public function CycleHasStudents(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+            'ciclo_id' =>'required',
+            'alumnos_id' => 'required'
+        ]);
+            if ($validate ->fails()) {
+                $data = [
+                'code' => 400,
+                'status' => 'error',
+                'errors' => $validate ->errors()
+            ];
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro la ciclo'
+            ];
+                } else {
+                    $ciclo -> alumnos()->attach($request -> alumnos_id, ['inscrito'=>true, 'participante' => false]);
+                    $ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
+                    $data = [
+                'code' =>200,
+                'status' => 'success',
+                'ciclo' => $ciclo
+            ];
+                }
+            }
+        } else {
+            $data = [
             'code' =>400,
             'status' => 'error',
+            'message' => 'Error al asociar ciclo con alumnos'
         ];
-    }else{
-        $ciclo = DB::table('ciclo')->where('fecha_termino','>=',$request -> fecha_termino) ->orWhere('id', '=', DB::table('ciclo')->max('id'))->limit(1)->get();
-        $data = [
-            'code' =>200,
-            'status' => 'success',
-            'ciclo' => $ciclo
-        ];
+        }
+        return response()-> json($data);
     }
-    return response()->json($data);
-}
 
+    public function UpdateCandidates(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+            'ciclo_id' =>'required',
+            'alumnos_id' => 'required',
+            'participante' => 'required',
+        ]);
+            if ($validate ->fails()) {
+                $data = [
+                'code' => 400,
+                'status' => 'error',
+                'errors' => $validate ->errors()
+            ];
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro la ciclo'
+            ];
+                } else {
+                    foreach ($request->alumnos_id as $key => $alumno) {
+                        $ciclo->alumnos()->updateExistingPivot($alumno, ['participante' =>$request->participante[$key]]);
+                    }
+                    $ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
+                    $data = [
+                'code' =>200,
+                'status' => 'success',
+                'ciclo' => $ciclo
+            ];
+                }
+            }
+        } else {
+            $data = [
+            'code' =>400,
+            'status' => 'error',
+            'message' => 'Error al asociar ciclo con alumnos'
+        ];
+        }
+        return response()-> json($data);
+    }
+
+    public function Updateenrolled(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+            'ciclo_id' =>'required',
+            'alumnos_id' => 'required',
+            'inscrito' => 'required',
+        ]);
+            if ($validate ->fails()) {
+                $data = [
+                'code' => 400,
+                'status' => 'error',
+                'errors' => $validate ->errors()
+            ];
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro la ciclo'
+            ];
+                } else {
+                    foreach ($request->alumnos_id as $key => $establecimiento) {
+                        $ciclo->alumnos()->updateExistingPivot($establecimiento, ['inscrito' =>$request->inscrito[$key]]);
+                    }
+                    $ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
+                    $data = [
+                'code' =>200,
+                'status' => 'success',
+                'ciclo' => $ciclo
+            ];
+                }
+            }
+        } else {
+            $data = [
+            'code' =>400,
+            'status' => 'error',
+            'message' => 'Error al asociar ciclo con alumnos'
+        ];
+        }
+        return response()-> json($data);
+    }
+
+    public function deleteStudentsPerCycle(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+            'ciclo_id' =>'required',
+            'alumnos_id' => 'required'
+        ]);
+            if ($validate ->fails()) {
+                $data = [
+                'code' => 400,
+                'status' => 'error',
+                'errors' => $validate ->errors()
+            ];
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro la ciclo'
+            ];
+                } else {
+                    $ciclo -> alumnos()->detach($request -> alumnos_id);
+                    $ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
+                    $data = [
+                'code' =>200,
+                'status' => 'success',
+                'ciclo' => $ciclo
+            ];
+                }
+            }
+        } else {
+            $data = [
+            'code' =>400,
+            'status' => 'error',
+            'message' => 'Error al asociar ciclo con alumnos'
+        ];
+        }
+        return response()-> json($data);
+    }
 }

@@ -192,7 +192,7 @@ class ClaseController extends Controller
         return response() -> json($data);
     }
 
-// ------------------------ METODOS RELACION ESTUDIANTE CLASE ------------------------------
+// ------------------------ METODOS RELACION ALUMNO CLASE ------------------------------
 
     public function LessonHasStudents(Request $request)
     {

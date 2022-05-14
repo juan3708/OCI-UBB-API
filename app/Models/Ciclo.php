@@ -49,4 +49,8 @@ class Ciclo extends Model
         return $this->belongsToMany(Establecimiento::class)->withPivot('cupos');
     }
 
+    public function alumnos(){
+        return $this->belongsToMany(Alumno::class)->withPivot('inscrito', 'participante');
+    }
+
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\CoordinadorController;
 use App\Http\Controllers\DetallesController;
 use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\GastosController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\NivelController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\ProfesorController;
@@ -49,6 +50,7 @@ Route::post('/ciclo/getbyid', [CicloController::class,'getById']);
 Route::post('/clase/chargecycles', [CicloController::class,'CycleHasEstablishments']);
 Route::post('/clase/updatefeecompetition', [CicloController::class,'UpdateEstablishments']);
 Route::post('/clase/deletecompetitions', [CicloController::class,'deleteEstablishmentPerCycle']);
+Route::post('/ciclo/getbyfinishdate', [CicloController::class,'getCyclePerFinishDate']);
 
 
 //Rutas Actividad
@@ -145,4 +147,8 @@ Route::put('/nivel/edit', [NivelController::class,'edit']);
 Route::post('/nivel/delete', [NivelController::class,'delete']);
 Route::post('/nivel/getbyid', [NivelController::class,'getById']);
 Route::post('/nivel/levelassociate', [NivelController::class,'alumnoHasLevel']);
+
+// Rutas Email
+
+Route::post('/mail/inv', [MailController::class,'invitations']);
 

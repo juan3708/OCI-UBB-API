@@ -321,4 +321,21 @@ public function deleteEstablishmentPerCycle(Request $request)
     return response()-> json($data);
 }
 
+public function getCyclePerFinishDate(Request $request){
+    if($request -> fecha_termino  == ''){
+        $data = [
+            'code' =>400,
+            'status' => 'error',
+        ];
+    }else{
+        $ciclo = DB::table('ciclo')->where('fecha_termino','>=',$request -> fecha_termino) ->orWhere('id', '=', DB::table('ciclo')->max('id'))->limit(1)->get();
+        $data = [
+            'code' =>200,
+            'status' => 'success',
+            'ciclo' => $ciclo
+        ];
+    }
+    return response()->json($data);
+}
+
 }

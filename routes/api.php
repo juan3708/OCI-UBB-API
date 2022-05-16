@@ -108,6 +108,7 @@ Route::post('/establecimiento/create', [EstablecimientoController::class,'create
 Route::put('/establecimiento/edit', [EstablecimientoController::class,'edit']);
 Route::post('/establecimiento/delete', [EstablecimientoController::class,'delete']);
 Route::post('/establecimiento/getbyid', [EstablecimientoController::class,'getById']);
+Route::post('/establecimiento/chargestudents', [EstablecimientoController::class,'chargeStudentPerForm']);
 
 //Rutas Alumno
 Route::get('/alumno/all', [AlumnoController::class,'all']);

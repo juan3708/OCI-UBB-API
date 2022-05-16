@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\StudentsImport;
 use App\Models\Establecimiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpParser\Node\Stmt\TryCatch;
 
 class EstablecimientoController extends Controller
 {
@@ -39,7 +42,7 @@ class EstablecimientoController extends Controller
                     ];
             } else {
                 $establecimiento = new establecimiento();
-                $establecimiento -> nombre = $request -> nombre;
+                $establecimiento -> nombre =  strtoupper($request -> nombre);
                 $establecimiento -> telefono = $request -> telefono;
                 $establecimiento -> email = $request -> email;
                 $establecimiento -> nombre_profesor = $request -> nombre_profesor;
@@ -86,7 +89,7 @@ class EstablecimientoController extends Controller
             } else {
                 $establecimiento = Establecimiento::find($request->id);
                 if (!empty($establecimiento)) {
-                    $establecimiento -> nombre = $request -> nombre;
+                    $establecimiento -> nombre = strtoupper($request -> nombre);
                     $establecimiento -> telefono = $request -> telefono;
                     $establecimiento -> email = $request -> email;
                     $establecimiento -> nombre_profesor = $request -> nombre_profesor;
@@ -159,7 +162,7 @@ class EstablecimientoController extends Controller
                         'errors' => $validate ->errors()
                     ];
             } else {
-                $establecimiento = Establecimiento::with('alumnos')->firstwhere('id',$request ->id);
+                $establecimiento = Establecimiento::with('alumnos')->firstwhere('id', $request ->id);
                 if (empty($establecimiento)) {
                     $data = [
                         'code' =>400,
@@ -179,6 +182,54 @@ class EstablecimientoController extends Controller
                     'code' =>400,
                     'status' => 'error',
                     'message' => 'Error al buscar el establecimiento'
+                ];
+        }
+        return response() -> json($data);
+    }
+
+    public function chargeStudentPerForm(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                    'file' =>'required',
+                    'ciclo_id' => 'required'
+                ]);
+            if ($validate ->fails()) {
+                $data = [
+                        'code' => 400,
+                        'status' => 'error',
+                    ];
+            } else {
+                $file = $request -> file;
+                try {
+                    var_dump('pre Excel');
+                    Excel::import(new StudentsImport($request -> ciclo_id), $file);
+                    $data = [
+                        'code' =>200,
+                        'status' => 'success',
+                    ];
+                } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+                    $failures = $e->failures();
+                    foreach ($failures as $failure) {
+                        var_dump("Rows", $failure->row());// row that went wrong
+                        var_dump("Attribute", $failure->attribute()); // either heading key (if using heading row concern) or column index
+                        var_dump("Errors", $failure->errors());// Actual error messages from Laravel validator
+                        var_dump("Values Wrongs", $failure->values()); // The values of the row that has failed.
+                    }
+
+                    $data = [
+                        'code' =>400,
+                        'status' => 'error',
+                        'msg' => 'Error al guardar'
+                    ];
+                    return response() -> json($data);
+                }
+            }
+        } else {
+            $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'msg' => 'Error en el request'
                 ];
         }
         return response() -> json($data);

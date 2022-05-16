@@ -95,10 +95,6 @@ class AlumnoController extends Controller
         return response() ->json($data);
     }
 
-    public function chargeStudentPerForm(Request $request){
-        
-    }
-
     public function edit(Request $request)
     {
         if (!empty($request ->all())) {

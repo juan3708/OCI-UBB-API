@@ -208,7 +208,7 @@ class AlumnoController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $alumno = Alumno::find($request ->id);
+                $alumno = Alumno::with('establecimiento')->firstwhere('id', $request ->id);
                 if (empty($alumno)) {
                     $data = [
                     'code' =>400,

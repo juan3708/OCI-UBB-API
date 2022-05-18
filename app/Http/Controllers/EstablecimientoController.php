@@ -191,18 +191,20 @@ class EstablecimientoController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                    'file' =>'required',
+                    'file' =>'required|file',
                     'ciclo_id' => 'required'
                 ]);
             if ($validate ->fails()) {
                 $data = [
                         'code' => 400,
                         'status' => 'error',
+                        'errors' => $validate ->errors(),
+                        'file' => $request -> file,
+                        'ciclo_id' => $request ->ciclo_id
                     ];
             } else {
                 $file = $request -> file;
                 try {
-                    var_dump('pre Excel');
                     Excel::import(new StudentsImport($request -> ciclo_id), $file);
                     $data = [
                         'code' =>200,

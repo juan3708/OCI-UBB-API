@@ -167,7 +167,7 @@ class CicloController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles')->firstwhere('id', $request ->id);
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos')->firstwhere('id', $request ->id);
                 if (empty($ciclo)) {
                     $data = [
                     'code' =>400,
@@ -175,10 +175,12 @@ class CicloController extends Controller
                     'message' => 'No se encontro el ciclo asociado al id'
                 ];
                 } else {
+                    $lessons = $ciclo ->clases()->with('nivel')->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'ciclo' => $ciclo
+                    'ciclo' => $ciclo,
+                    'clases' =>$lessons
                 ];
                 }
             }
@@ -201,11 +203,23 @@ class CicloController extends Controller
             ];
         } else {
             $ciclo = DB::table('ciclo')->where('fecha_termino', '>=', $request -> fecha_termino) ->orWhere('id', '=', DB::table('ciclo')->max('id'))->limit(1)->get();
-            $data = [
+
+            if($ciclo ->isEmpty()){                    
+                $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro el ciclo asociado al id'
+            ];}else{
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos')->firstwhere('id', $ciclo[0]->id);
+                $lessons = $ciclo -> clases() -> with('nivel')->get();
+                
+                $data = [
                 'code' =>200,
                 'status' => 'success',
-                'ciclo' => $ciclo
+                'ciclo' => $ciclo,
+                'clases' =>$lessons
             ];
+            }
         }
         return response()->json($data);
     }
@@ -217,8 +231,7 @@ class CicloController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
             'ciclo_id' =>'required',
-            'establecimientos_id' => 'required',
-            'cupos' => 'required'
+            'establecimientos_id' => 'required'
         ]);
             if ($validate ->fails()) {
                 $data = [
@@ -511,5 +524,146 @@ class CicloController extends Controller
         ];
         }
         return response()-> json($data);
+    }
+    // METODO PARA OBTENER LOS ALUMNOS QUE SE INSCRIBIERON A LAS OCI.
+    public function getStudentsCandidatePerCycle(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'ciclo_id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $ciclo = Ciclo::find($request -> ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el ciclo asociado al id'
+                ];
+                } else {
+                    $students = $ciclo ->alumnos()->with('establecimiento')->where('inscrito', 1)->get();
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'alumnos' => $students,
+                    'ciclo' => $ciclo
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar el ciclo'
+            ];
+        }
+        return response() -> json($data);
+    }
+
+    // METODO PARA OBTENER LOS ALUMNOS QUE SE INSCRIBIERON A LAS OCI MEDIANTE LA FECHA DE TERMINO.
+    public function getStudentsCandidatePerCyclePerFinishDate(Request $request)
+    {
+        if ($request -> fecha_termino  == '') {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+            ];
+        } else {
+            $ciclo = DB::table('ciclo')->where('fecha_termino', '>=', $request -> fecha_termino) ->orWhere('id', '=', DB::table('ciclo')->max('id'))->limit(1)->get();
+            if ($ciclo ->isEmpty()) {
+                $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro el ciclo asociado al id'
+            ];
+            } else {
+                $ciclo = Ciclo::find($ciclo[0]->id);
+                $students = $ciclo ->alumnos()->with('establecimiento')->where('inscrito', 1)->get();
+                $data = [
+                'code' =>200,
+                'status' => 'success',
+                'alumnos' => $students,
+                'ciclo' => $ciclo
+            ];
+            }
+        }
+        return response()->json($data);
+    }
+
+    // METODO PARA OBTENER LOS ALUMNOS QUE PARTICIPARAN DE LAS OCI.
+    public function getStudentsEnrolledPerCycle(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'ciclo_id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $ciclo = Ciclo::find($request -> ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el ciclo asociado al id'
+                ];
+                } else {
+                    $students = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'alumnos' => $students,
+                    'ciclo' => $ciclo
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar el ciclo'
+            ];
+        }
+        return response() -> json($data);
+    }
+
+    // METODO PARA OBTENER LOS ALUMNOS QUE SE INSCRIBIERON A LAS OCI MEDIANTE LA FECHA DE TERMINO.
+    public function getStudentsEnrolledPerCyclePerFinishDate(Request $request)
+    {
+        if ($request -> fecha_termino  == '') {
+            $data = [
+                        'code' =>400,
+                        'status' => 'error',
+                    ];
+        } else {
+            $ciclo = DB::table('ciclo')->where('fecha_termino', '>=', $request -> fecha_termino) ->orWhere('id', '=', DB::table('ciclo')->max('id'))->limit(1)->get();
+            if ($ciclo ->isEmpty()) {
+                $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro el ciclo asociado al id'
+            ];
+            } else {
+                $ciclo = Ciclo::find($ciclo[0]->id);
+                $students = $ciclo ->alumnos()->with('establecimiento')->where('postulante', 1)->get();
+                $data = [
+                        'code' =>200,
+                        'status' => 'success',
+                        'alumnos' => $students,
+                        'ciclo' => $ciclo
+                    ];
+            }
+        }
+        return response()->json($data);
     }
 }

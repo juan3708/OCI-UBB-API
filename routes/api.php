@@ -48,13 +48,17 @@ Route::put('/ciclo/edit', [CicloController::class,'edit']);
 Route::post('/ciclo/delete', [CicloController::class,'delete']);
 Route::post('/ciclo/getbyid', [CicloController::class,'getById']);
 Route::post('/ciclo/getbyfinishdate', [CicloController::class,'getCyclePerFinishDate']);
-Route::post('/ciclo/chargecycles', [CicloController::class,'CycleHasEstablishments']);
-Route::post('/ciclo/updatefeecompetition', [CicloController::class,'UpdateEstablishments']);
-Route::post('/ciclo/deletecompetitions', [CicloController::class,'deleteEstablishmentPerCycle']);
+Route::post('/ciclo/chargeestablishments', [CicloController::class,'CycleHasEstablishments']);
+Route::post('/ciclo/updateestablishments', [CicloController::class,'UpdateEstablishments']);
+Route::post('/ciclo/deleteestablishments', [CicloController::class,'deleteEstablishmentPerCycle']);
 Route::post('/ciclo/chargestudents', [CicloController::class,'CycleHasStudents']);
 Route::post('/ciclo/updatecandidates', [CicloController::class,'UpdateCandidates']);
 Route::post('/ciclo/updateenrolled', [CicloController::class,'Updateenrolled']);
 Route::post('/ciclo/deletestudents', [CicloController::class,'deleteStudentsPerCycle']);
+Route::post('/ciclo/getstudentscandidate', [CicloController::class,'getStudentsCandidatePerCycle']);
+Route::post('/ciclo/getstudentscandidatepercycleperfinishdate', [CicloController::class,'getStudentsCandidatePerCyclePerFinishDate']);
+Route::post('/ciclo/getstudentsenrolled', [CicloController::class,'getStudentsEnrolledPerCycle']);
+Route::post('/ciclo/getstudentsenrolledpercycleperfinishdate', [CicloController::class,'getStudentsEnrolledPerCyclePerFinishDate']);
 
 
 //Rutas Actividad

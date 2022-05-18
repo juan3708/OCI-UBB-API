@@ -26,17 +26,17 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation
     */
     public function model(array $row)
     {
-        $alumno = Alumno::all()->firstWhere($row['rut']);
-        if (empty($alumno)) {
-            var_dump($row);
-            var_dump($this->establecimientos[strtoupper($row['nombre_del_establecimiento'])]);
+        $alumno = Alumno::where('rut',$row['rut'])->get();
+        //var_dump($alumno);
+        if ($alumno ->isEmpty()) {
+            $date = \Carbon\Carbon::parse($row['fecha_de_nacimiento'])->format('Y-m-d');
             $alumno = new Alumno([
             'rut' => $row['rut'],
             'nombre' => $row['nombre'],
             'apellidos' => $row['apellidos'],
             'telefono' => $row['numero_de_telefono'],
             'email' => $row['correo'],
-            'fecha_nacimiento' =>\Carbon\Carbon::parse($row['fecha_de_nacimiento'])->format('Y-m-d'),
+            'fecha_nacimiento' =>$date,
             'curso' => $row['curso'],
             'direccion' => $row['direccion'],
             'telefono_apoderado' => $row['numero_de_telefono_del_apoderado'],
@@ -45,9 +45,11 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation
 
         ]);
             $alumno -> save();
-            var_dump($alumno);
+            $alumno = Alumno::find($alumno->id);
             $alumno ->ciclos() ->attach($this->ciclo_id, ['inscrito'=>true, 'participante' => false]);
         } else {
+            //var_dump('PASO EL IF');
+            $alumno = Alumno::find($alumno[0]->id);
             $alumno ->ciclos() ->attach($this->ciclo_id, ['inscrito'=>true, 'participante' => false]);
         }
 
@@ -57,11 +59,11 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'rut' => ['required','unique:alumno,rut'],
+            'rut' => ['required'],
             'nombre' => ['required'],
             'apellidos' => ['required'],
             'numero_de_telefono' => ['required'],
-            'correo' => ['required','email:rfc,dns','unique:alumno,email'],
+            'correo' => ['required','email:rfc,dns'],
             'fecha_de_nacimiento' => ['required'],
             'curso' => ['required'],
             'direccion' => ['required'],

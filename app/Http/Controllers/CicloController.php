@@ -200,6 +200,7 @@ class CicloController extends Controller
             $data = [
                 'code' =>400,
                 'status' => 'error',
+                'message' =>'Ingrese fecha de termino'
             ];
         } else {
             $ciclo = DB::table('ciclo')->where('fecha_termino', '>=', $request -> fecha_termino) ->orWhere('id', '=', DB::table('ciclo')->max('id'))->limit(1)->get();
@@ -378,7 +379,7 @@ class CicloController extends Controller
                 'message' => 'No se encontro la ciclo'
             ];
                 } else {
-                    $ciclo -> alumnos()->attach($request -> alumnos_id, ['inscrito'=>true, 'participante' => false]);
+                    $ciclo -> alumnos()->attach($request -> alumnos_id, ['participante' => false]);
                     $ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
                     $data = [
                 'code' =>200,
@@ -422,50 +423,6 @@ class CicloController extends Controller
                 } else {
                     foreach ($request->alumnos_id as $key => $alumno) {
                         $ciclo->alumnos()->updateExistingPivot($alumno, ['participante' =>$request->participante[$key]]);
-                    }
-                    $ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
-                    $data = [
-                'code' =>200,
-                'status' => 'success',
-                'ciclo' => $ciclo
-            ];
-                }
-            }
-        } else {
-            $data = [
-            'code' =>400,
-            'status' => 'error',
-            'message' => 'Error al asociar ciclo con alumnos'
-        ];
-        }
-        return response()-> json($data);
-    }
-
-    public function Updateenrolled(Request $request)
-    {
-        if (!empty($request ->all())) {
-            $validate = Validator::make($request ->all(), [
-            'ciclo_id' =>'required',
-            'alumnos_id' => 'required',
-            'inscrito' => 'required',
-        ]);
-            if ($validate ->fails()) {
-                $data = [
-                'code' => 400,
-                'status' => 'error',
-                'errors' => $validate ->errors()
-            ];
-            } else {
-                $ciclo = Ciclo::find($request ->ciclo_id);
-                if (empty($ciclo)) {
-                    $data = [
-                'code' =>400,
-                'status' => 'error',
-                'message' => 'No se encontro la ciclo'
-            ];
-                } else {
-                    foreach ($request->alumnos_id as $key => $establecimiento) {
-                        $ciclo->alumnos()->updateExistingPivot($establecimiento, ['inscrito' =>$request->inscrito[$key]]);
                     }
                     $ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
                     $data = [
@@ -547,7 +504,7 @@ class CicloController extends Controller
                     'message' => 'No se encontro el ciclo asociado al id'
                 ];
                 } else {
-                    $students = $ciclo ->alumnos()->with('establecimiento')->where('inscrito', 1)->get();
+                    $students = $ciclo ->alumnos()->with('establecimiento')->where('participante', 0)->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
@@ -584,7 +541,7 @@ class CicloController extends Controller
             ];
             } else {
                 $ciclo = Ciclo::find($ciclo[0]->id);
-                $students = $ciclo ->alumnos()->with('establecimiento')->where('inscrito', 1)->get();
+                $students = $ciclo ->alumnos()->with('establecimiento')->where('participante', 0)->get();
                 $data = [
                 'code' =>200,
                 'status' => 'success',
@@ -655,7 +612,7 @@ class CicloController extends Controller
             ];
             } else {
                 $ciclo = Ciclo::find($ciclo[0]->id);
-                $students = $ciclo ->alumnos()->with('establecimiento')->where('postulante', 1)->get();
+                $students = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
                 $data = [
                         'code' =>200,
                         'status' => 'success',
@@ -665,5 +622,86 @@ class CicloController extends Controller
             }
         }
         return response()->json($data);
+    }
+
+    //-------------------------------------------------------- METODO PARA OBTENER AYUDANTES Y PROFESORES QUE PARTICIPARON DE UN CICLO
+
+    public function getAssistantsPerCycle(Request $request){
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'ciclo_id' =>'required',
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el ciclo'
+                ];
+                } else {
+                    $ayudantes = DB::table('ayudante')->select('ayudante.id','ayudante.rut','ayudante.apellidos','ayudante.nombre','ayudante.email')->groupBy('ayudante.id','ayudante.rut','ayudante.apellidos','ayudante.nombre','ayudante.email')->join('ayudante_clase','ayudante.id','=','ayudante_clase.ayudante_id')
+                    ->join('clase','ayudante_clase.clase_id','=','clase.id')->where('clase.ciclo_id','=',$request -> ciclo_id)->get();
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'ayudantes' => $ayudantes,
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al realizar la consulta'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    public function getTeachersPerCycle(Request $request){
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'ciclo_id' =>'required',
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $ciclo = Ciclo::find($request ->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el ciclo'
+                ];
+                } else {
+                    $profesores = DB::table('profesor')->select('profesor.id','profesor.rut','profesor.apellidos','profesor.nombre','profesor.email','profesor.facultad','profesor.modalidad')->groupBy('profesor.id','profesor.rut','profesor.apellidos','profesor.nombre','profesor.email','profesor.facultad','profesor.modalidad')
+                    ->join('clase_profesor','profesor.id','=','clase_profesor.profesor_id')
+                    ->join('clase','clase_profesor.clase_id','=','clase.id')->where('clase.ciclo_id','=',$request -> ciclo_id)->get();
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'profesores'=> $profesores
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al realizar la consulta'
+            ];
+        }
+        return response()-> json($data);
     }
 }

@@ -50,7 +50,7 @@ class Ciclo extends Model
     }
 
     public function alumnos(){
-        return $this->belongsToMany(Alumno::class)->withPivot('inscrito', 'participante');
+        return $this->belongsToMany(Alumno::class)->withPivot('participante');
     }
 
 }

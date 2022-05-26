@@ -46,11 +46,11 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation
         ]);
             $alumno -> save();
             $alumno = Alumno::find($alumno->id);
-            $alumno ->ciclos() ->attach($this->ciclo_id, ['inscrito'=>true, 'participante' => false]);
+            $alumno ->ciclos() ->attach($this->ciclo_id, ['participante' => false]);
         } else {
             //var_dump('PASO EL IF');
             $alumno = Alumno::find($alumno[0]->id);
-            $alumno ->ciclos() ->attach($this->ciclo_id, ['inscrito'=>true, 'participante' => false]);
+            $alumno ->ciclos() ->attach($this->ciclo_id, ['participante' => false]);
         }
 
         return $alumno;

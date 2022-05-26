@@ -41,7 +41,7 @@ class Alumno extends Model
 
     public function ciclos()
     {
-        return $this->belongsToMany(Ciclo::class)->withPivot('inscrito', 'participante');
+        return $this->belongsToMany(Ciclo::class)->withPivot('participante');
     }
 
     //Relacion 1

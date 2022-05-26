@@ -167,7 +167,7 @@ class ClaseController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $clase = Clase::with('ciclo', 'nivel', 'alumnos')->firstwhere('id', $request ->id);
+                $clase = Clase::with('ciclo', 'nivel', 'alumnos','ayudantes','profesores')->firstwhere('id', $request ->id);
                 if (empty($clase)) {
                     $data = [
                     'code' =>400,
@@ -447,7 +447,7 @@ class ClaseController extends Controller
         return response()-> json($data);
     }
 
-    public function deleteAssistansPerLesson(Request $request)
+    public function deleteAssistantsPerLesson(Request $request)
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
@@ -483,6 +483,54 @@ class ClaseController extends Controller
                 'code' =>400,
                 'status' => 'error',
                 'message' => 'Error al eliminar relacion ayudante con clase'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+
+    //-------------------------------------------- METODOS RELACION CLASE PROFESOR AYUDANTE ---------------------------------------------------------
+
+    public function getAssistantsAndTeacherWhereNotExist(Request $request){
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'clase_id' =>'required',
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $clase = Clase::find($request ->clase_id);
+                if (empty($clase)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la clase'
+                ];
+                } else {
+                    $clase_id = $request->clase_id;
+                    $ayudantes = DB::table('ayudante')->whereNotExists(function ($query)use($clase_id){
+                        $query -> from('ayudante_clase')->select('ayudante_clase.ayudante_id')->whereColumn('ayudante_clase.ayudante_id','=','ayudante.id','and','ayudante_clase.clase_id','=',$clase_id);
+                    })->get();
+                    $profesores = DB::table('profesor')->whereNotExists(function ($query)use($clase_id){
+                        $query -> from('clase_profesor')->select('clase_profesor.profesor_id')->whereColumn('clase_profesor.profesor_id','=','profesor.id','and','clase_profesor.clase_id','=',$clase_id);
+                    })->get();
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'ayudantes' => $ayudantes,
+                    'profesores'=> $profesores
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al realizar la consulta'
             ];
         }
         return response()-> json($data);

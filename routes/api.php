@@ -53,12 +53,13 @@ Route::post('/ciclo/updateestablishments', [CicloController::class,'UpdateEstabl
 Route::post('/ciclo/deleteestablishments', [CicloController::class,'deleteEstablishmentPerCycle']);
 Route::post('/ciclo/chargestudents', [CicloController::class,'CycleHasStudents']);
 Route::post('/ciclo/updatecandidates', [CicloController::class,'UpdateCandidates']);
-Route::post('/ciclo/updateenrolled', [CicloController::class,'Updateenrolled']);
 Route::post('/ciclo/deletestudents', [CicloController::class,'deleteStudentsPerCycle']);
 Route::post('/ciclo/getstudentscandidate', [CicloController::class,'getStudentsCandidatePerCycle']);
 Route::post('/ciclo/getstudentscandidatepercycleperfinishdate', [CicloController::class,'getStudentsCandidatePerCyclePerFinishDate']);
 Route::post('/ciclo/getstudentsenrolled', [CicloController::class,'getStudentsEnrolledPerCycle']);
 Route::post('/ciclo/getstudentsenrolledpercycleperfinishdate', [CicloController::class,'getStudentsEnrolledPerCyclePerFinishDate']);
+Route::post('/ciclo/getassistantspercycle', [CicloController::class,'getAssistantsPerCycle']);
+Route::post('/ciclo/getteacherspercycle', [CicloController::class,'getTeachersPerCycle']);
 
 
 //Rutas Actividad
@@ -132,8 +133,9 @@ Route::post('/clase/updatelistlesson', [ClaseController::class,'UpdateListLesson
 Route::post('/clase/deletestudents', [ClaseController::class,'deleteStudentPerLesson']);
 Route::post('/clase/chargeteachers', [ClaseController::class,'LessonHasTeachers']);
 Route::post('/clase/deleteteachers', [ClaseController::class,'deleteTeachersPerLesson']);
-Route::post('/clase/chargeassistans', [ClaseController::class,'LessonHasAssistants']);
-Route::post('/clase/deleteassistans', [ClaseController::class,'deleteAssistansPerLesson']);
+Route::post('/clase/chargeassistants', [ClaseController::class,'LessonHasAssistants']);
+Route::post('/clase/deleteassistants', [ClaseController::class,'deleteAssistantsPerLesson']);
+Route::post('/clase/getassistantsandteachers', [ClaseController::class,'getAssistantsAndTeacherWhereNotExist']);
 
 //Rutas Ayudante
 Route::get('/ayudante/all', [AyudanteController::class,'all']);

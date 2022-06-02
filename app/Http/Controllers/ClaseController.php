@@ -133,9 +133,27 @@ class ClaseController extends Controller
                         'message' => 'No se encontro la clase'
                     ];
                 } else {
-                    if ($request ->alumnos_id!=null) {
-                        $clase ->alumnos()->detach($request -> alumnos_id);
-                    }
+                    $clase = Clase::with('alumnos', 'ayudantes', 'profesores')->firstwhere('id', $request ->clase_id);
+                    //Detach alumnos
+                    $array_id = array();
+                    foreach ($clase->alumnos as $key => $alumno) {
+                        $array_id[] = $clase->alumnos[$key]->id;
+                    };
+                    $clase -> alumnos()-> detach($array_id);
+
+                    //Detach ayudantes
+                    $array_id = array();
+                    foreach ($clase->ayudantes as $key => $ayudante) {
+                        $array_id[] = $clase->ayudantes[$key]->id;
+                    };
+                    $clase -> ayudantes()-> detach($array_id);
+
+                    //Detach profesores
+                    $array_id = array();
+                    foreach ($clase->profesores as $key => $profesor) {
+                        $array_id[] = $clase->profesores[$key]->id;
+                    };
+                    $clase -> profesores()-> detach($array_id);
                     $clase ->delete();
                     $data = [
                         'code' =>200,
@@ -167,7 +185,7 @@ class ClaseController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $clase = Clase::with('ciclo', 'nivel', 'alumnos','ayudantes','profesores')->firstwhere('id', $request ->id);
+                $clase = Clase::with('ciclo', 'nivel', 'alumnos', 'ayudantes', 'profesores')->firstwhere('id', $request ->id);
                 if (empty($clase)) {
                     $data = [
                     'code' =>400,
@@ -175,10 +193,15 @@ class ClaseController extends Controller
                     'message' => 'No se encontro la clase asociada al id'
                 ];
                 } else {
+                    $clase_id = $request->id;
+                    $studentWithoutLesson = DB::table('alumno')->whereNotExists(function ($query) use ($clase_id) {
+                        $query -> from('alumno_clase')->select('alumno_clase.alumno_id')->whereColumn('alumno_clase.alumno_id', '=', 'alumno.id', 'and', 'alumno_clase.clase_id', '=', $clase_id);
+                    })->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'clase' => $clase
+                    'clase' => $clase,
+                    'alumnosSinClase' => $studentWithoutLesson
                 ];
                 }
             }
@@ -192,7 +215,7 @@ class ClaseController extends Controller
         return response() -> json($data);
     }
 
-// ------------------------ METODOS RELACION ALUMNO CLASE ------------------------------
+    // ------------------------ METODOS RELACION ALUMNO CLASE ------------------------------
 
     public function LessonHasStudents(Request $request)
     {
@@ -491,7 +514,8 @@ class ClaseController extends Controller
 
     //-------------------------------------------- METODOS RELACION CLASE PROFESOR AYUDANTE ---------------------------------------------------------
 
-    public function getAssistantsAndTeacherWhereNotExist(Request $request){
+    public function getAssistantsAndTeacherWhereNotExist(Request $request)
+    {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'clase_id' =>'required',
@@ -512,11 +536,11 @@ class ClaseController extends Controller
                 ];
                 } else {
                     $clase_id = $request->clase_id;
-                    $ayudantes = DB::table('ayudante')->whereNotExists(function ($query)use($clase_id){
-                        $query -> from('ayudante_clase')->select('ayudante_clase.ayudante_id')->whereColumn('ayudante_clase.ayudante_id','=','ayudante.id','and','ayudante_clase.clase_id','=',$clase_id);
+                    $ayudantes = DB::table('ayudante')->whereNotExists(function ($query) use ($clase_id) {
+                        $query -> from('ayudante_clase')->select('ayudante_clase.ayudante_id')->whereColumn('ayudante_clase.ayudante_id', '=', 'ayudante.id', 'and', 'ayudante_clase.clase_id', '=', $clase_id);
                     })->get();
-                    $profesores = DB::table('profesor')->whereNotExists(function ($query)use($clase_id){
-                        $query -> from('clase_profesor')->select('clase_profesor.profesor_id')->whereColumn('clase_profesor.profesor_id','=','profesor.id','and','clase_profesor.clase_id','=',$clase_id);
+                    $profesores = DB::table('profesor')->whereNotExists(function ($query) use ($clase_id) {
+                        $query -> from('clase_profesor')->select('clase_profesor.profesor_id')->whereColumn('clase_profesor.profesor_id', '=', 'profesor.id', 'and', 'clase_profesor.clase_id', '=', $clase_id);
                     })->get();
                     $data = [
                     'code' =>200,

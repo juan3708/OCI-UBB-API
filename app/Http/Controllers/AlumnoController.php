@@ -15,7 +15,7 @@ class AlumnoController extends Controller
         $alumno = DB::table('alumno as a')->select('a.rut','a.nombre','a.apellidos','a.telefono','a.email','a.curso','a.participante'
         ,'a.direccion','a.telefono_apoderado','a.nombre_apoderado','a.establecimiento_id','a.id',DB::raw('DATE_FORMAT(a.fecha_nacimiento, "%d-%m-%Y") as fecha_nacimiento'))->get();
         */
-       $alumno = Alumno::with('establecimiento')->get();
+        $alumno = Alumno::with('establecimiento')->get();
         $data = [
             'code' => 200,
             'alumnos' => $alumno
@@ -122,7 +122,7 @@ class AlumnoController extends Controller
                 if ($this -> valida_rut($request->rut)) {
                     $alumno = Alumno::find($request->id);
                     if (!empty($alumno)) {
-                      //  $date = \Carbon\Carbon::parse($request ->fecha_nacimiento)->format('Y-m-d');
+                        //  $date = \Carbon\Carbon::parse($request ->fecha_nacimiento)->format('Y-m-d');
                         $alumno -> nombre = $request -> nombre;
                         $alumno -> apellidos = $request -> apellidos;
                         $alumno -> rut = $request -> rut;
@@ -184,6 +184,35 @@ class AlumnoController extends Controller
                         'message' => 'No se encontro el alumno'
                     ];
             } else {
+                $alumno = Alumno::with('niveles', 'ciclos', 'clases', 'competencias')->firstwhere('id', $request ->id);
+
+                //Detach niveles
+                $array_id = array();
+                foreach ($alumno->niveles as $key => $nivel) {
+                    $array_id[] = $alumno->niveles[$key]->id;
+                };
+                $alumno -> niveles()-> detach($array_id);
+
+                //Detach ciclos
+                $array_id = array();
+                foreach ($alumno->ciclos as $key => $ciclo) {
+                    $array_id[] = $alumno->ciclos[$key]->id;
+                };
+                $alumno -> ciclos()-> detach($array_id);
+
+                //Detach clases
+                $array_id = array();
+                foreach ($alumno->clases as $key => $clase) {
+                    $array_id[] = $alumno->clases[$key]->id;
+                };
+                $alumno -> clases()-> detach($array_id);
+
+                //Detach competencias
+                $array_id = array();
+                foreach ($alumno->competencias as $key => $competencia) {
+                    $array_id[] = $alumno->competencias[$key]->id;
+                };
+                $alumno -> competencias()-> detach($array_id);
                 $alumno ->delete();
                 $data = [
                         'code' =>200,
@@ -208,7 +237,7 @@ class AlumnoController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $alumno = Alumno::with('establecimiento')->firstwhere('id', $request ->id);
+                $alumno = Alumno::with('establecimiento', 'niveles', 'ciclos', 'clases', 'competencias')->firstwhere('id', $request ->id);
                 if (empty($alumno)) {
                     $data = [
                     'code' =>400,

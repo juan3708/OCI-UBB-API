@@ -124,9 +124,11 @@ class CompetenciaController extends Controller
                     'message' => 'No se encontro una competencia'
                 ];
             } else {
-                if ($request ->alumnos_id!=null) {
-                    $competencia ->alumnos()->detach($request -> alumnos_id);
-                }
+                $array_id = array();
+                foreach ($competencia->alumnos as $key => $alumno) {
+                    $array_id[] = $competencia->alumnos[$key]->id;
+                };
+                $competencia -> alumnos()-> detach($array_id);
                 $competencia ->delete();
                 $data = [
                     'code' =>200,
@@ -150,7 +152,7 @@ class CompetenciaController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $competencia = Competencia::find($request ->id);
+                $competencia = Competencia::with('alumnos', 'gastos')->firstwhere('id', $request ->id);
                 if (empty($competencia)) {
                     $data = [
                     'code' =>400,
@@ -175,11 +177,13 @@ class CompetenciaController extends Controller
         return response() -> json($data);
     }
 
+//------------------------------------------------------ RELACION COMPETENCIA ALUMNO -------------------------------------------------------------
+    
     public function competitionHasStudent(Request $request)
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'competicion_id' =>'required',
+                'competencia_id' =>'required',
                 'alumnos_id' => 'required'
             ]);
             if ($validate ->fails()) {
@@ -197,12 +201,10 @@ class CompetenciaController extends Controller
                     'message' => 'No se encontro la competencia'
                 ];
                 } else {
-                    $competencia -> alumnos()->attach($request -> alumnos_id);
-                    $competencia = competencia::with('alumnos')->firstwhere('id', $request->competencia_id);
+                    $competencia -> alumnos()->attach($request -> alumnos_id,['puntaje'=>0]);
                     $data = [
                     'code' =>200,
-                    'status' => 'success',
-                    'competencia' => $competencia
+                    'status' => 'success'
                 ];
                 }
             }
@@ -220,8 +222,8 @@ class CompetenciaController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'competicion_id' =>'required',
-                'alumnos_id' => 'required'
+                'competencia_id' =>'required',
+                'alumno_id' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -238,12 +240,10 @@ class CompetenciaController extends Controller
                     'message' => 'No se encontro la competencia'
                 ];
                 } else {
-                    $competencia -> alumnos()->detach($request -> alumnos_id);
-                    $competencia = competencia::with('alumnos')->firstwhere('id', $request->competencia_id);
+                    $competencia -> alumnos()->detach($request -> alumno_id);
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'competencia' => $competencia
                 ];
                 }
             }

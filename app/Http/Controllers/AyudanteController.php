@@ -11,8 +11,8 @@ class AyudanteController extends Controller
 {
     public function all()
     {
-       /* $ayudante = DB::table('ayudante')->select('*')->get();*/
-       $ayudante = Ayudante::all();
+        /* $ayudante = DB::table('ayudante')->select('*')->get();*/
+        $ayudante = Ayudante::all();
         $data = [
             'code' => 200,
             'ayudantes' => $ayudante
@@ -144,21 +144,29 @@ class AyudanteController extends Controller
                 'message' => 'Debe ingresar un ayudante'
             ];
         } else {
-                $ayudante = Ayudante::find($request->id);
-                if (empty($ayudante)) {
-                    $data = [
+            $ayudante = Ayudante::find($request->id);
+            if (empty($ayudante)) {
+                $data = [
                     'code' =>400,
                     'status' => 'error',
                     'message' => 'No se encontro el ayudante'
                 ];
-                } else {
-                    $ayudante -> delete();
-                    $data = [
+            } else {
+                $ayudante = Ayudante::with('clases')->firstwhere('id', $request ->id);
+
+                //Detach clases
+                $array_id = array();
+                foreach ($ayudante->clases as $key => $nivel) {
+                    $array_id[] = $ayudante->clases[$key]->id;
+                };
+                $ayudante -> clases()-> detach($array_id);
+                $ayudante -> delete();
+                $data = [
                     'code' =>200,
                     'status' => 'success',
                     'message' => 'Se ha eliminado correctamente'
                 ];
-                }
+            }
         }
         return response() -> json($data);
     }

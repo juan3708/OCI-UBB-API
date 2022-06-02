@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Nivel;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NivelController extends Controller
 {
     public function all()
     {
-    
-        $nivel = Nivel::with('clases','ciclo')->get();
+        $nivel = Nivel::with('clases', 'ciclo')->get();
         $data = [
             'code' => 200,
             'niveles' => $nivel
@@ -22,7 +22,6 @@ class NivelController extends Controller
     public function create(Request $request)
     {
         if (!empty($request ->all())) {
-            
             $validate = Validator::make($request ->all(), [
                 'nombre' => 'required',
                 'ciclo_id' => 'required'
@@ -125,18 +124,34 @@ class NivelController extends Controller
                     'message' => 'No se encontro el nivel'
                 ];
             } else {
-                $nivel ->delete();
-                $data = [
+                $nivel = Nivel::with('alumnos', 'clases')->firstwhere('id', $request ->id);
+                $clases = $nivel ->clases()->get();
+                if ($clases->isEmpty()) {
+                    //Detach Alumnos
+                    $array_id = array();
+                    foreach ($nivel->alumnos as $key => $alumno) {
+                        $array_id[] = $nivel->alumnos[$key]->id;
+                    };
+                    $nivel -> alumnos()-> detach($array_id);
+                    $nivel ->delete();
+                    $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'message' => 'Se ha eliminado correctamente'
+                    'message' => 'Se ha eliminado correctamente',
                 ];
+                } else {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se puede eliminar un nivel con clases asociadas.',
+                ];
+                }
             }
         }
         return response() -> json($data);
     }
 
-        public function getById(Request $request)
+    public function getById(Request $request)
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
@@ -149,7 +164,7 @@ class NivelController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $nivel = Nivel::with('clases','ciclo','alumnos')->firstwhere('id',$request ->id);
+                $nivel = Nivel::with('clases', 'ciclo', 'alumnos')->firstwhere('id', $request ->id);
                 if (empty($nivel)) {
                     $data = [
                     'code' =>400,
@@ -157,10 +172,19 @@ class NivelController extends Controller
                     'message' => 'No se encontro el nivel asociado al id'
                 ];
                 } else {
+                    $ciclo = $nivel -> ciclo()->get();
+                    $ciclo_id = $ciclo[0]->id;
+                    $alumnosSinNivel = DB::table('alumno')->select('alumno.*')->join('alumno_ciclo', 'alumno.id', '=', 'alumno_ciclo.alumno_id')
+                    ->where('alumno_ciclo.ciclo_id', '=', $ciclo_id)->where('alumno_ciclo.participante', '=', 1)
+                    ->whereNotExists(function ($query) {
+                        $query ->select('alumno_nivel.alumno_id')->from('alumno_nivel')->join('nivel', 'alumno_nivel.nivel_id', '=', 'nivel.id')
+                        ->whereColumn('alumno_nivel.alumno_id', '=', 'alumno.id');
+                    })->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'nivel' => $nivel
+                    'nivel' => $nivel,
+                    'alumnosSinNivel' =>$alumnosSinNivel
                 ];
                 }
             }
@@ -174,7 +198,8 @@ class NivelController extends Controller
         return response() -> json($data);
     }
     
-    public function alumnoHasLevel( Request $request){
+    public function alumnoHasLevel(Request $request)
+    {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'nivel_id' =>'required',
@@ -196,11 +221,50 @@ class NivelController extends Controller
                 ];
                 } else {
                     $nivel -> alumnos()->attach($request -> alumnos_id);
-                    $nivel = Nivel::with('alumnos')->firstwhere('id',$request->nivel_id);
+                    $nivel = Nivel::with('alumnos')->firstwhere('id', $request->nivel_id);
                     $data = [
                     'code' =>200,
                     'status' => 'success',
                     'nivel' => $nivel
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al asociar nivel con clase'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+    public function DeleteStudent(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'nivel_id' =>'required',
+                'alumno_id' => 'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $nivel = Nivel::find($request ->nivel_id);
+                if (empty($nivel)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el nivel'
+                ];
+                } else {
+                    $nivel -> alumnos()->detach($request -> alumno_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success'
                 ];
                 }
             }

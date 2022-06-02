@@ -77,7 +77,7 @@ Route::post('/competencia/delete', [CompetenciaController::class,'delete']);
 Route::post('/competencia/getbyid', [CompetenciaController::class,'getById']);
 Route::post('/competencia/attach', [CompetenciaController::class,'competitionHasStudent']);
 Route::post('/competencia/detach', [CompetenciaController::class,'deleteStudentsPerCompetition']);
-Route::post('/competencia/updatePivot', [CompetenciaController::class,'editScorePerStudent']);
+Route::post('/competencia/updatescores', [CompetenciaController::class,'editScorePerStudent']);
 
 //Rutas Gastos
 Route::get('/gastos/all', [GastosController::class,'all']);
@@ -158,6 +158,8 @@ Route::put('/nivel/edit', [NivelController::class,'edit']);
 Route::post('/nivel/delete', [NivelController::class,'delete']);
 Route::post('/nivel/getbyid', [NivelController::class,'getById']);
 Route::post('/nivel/levelassociate', [NivelController::class,'alumnoHasLevel']);
+Route::post('/nivel/deletestudent', [NivelController::class,'DeleteStudent']);
+
 
 // Rutas Email
 

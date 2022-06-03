@@ -178,13 +178,15 @@ class CicloController extends Controller
                 ];
                 } else {
                     $lessons = $ciclo ->clases()->with('nivel')->get();
-                    $studentsEnrolled = $ciclo ->alumnos()->where('participante', 1)->get();
+                    $costs = $ciclo ->gastos()->with('competencia','actividad','detalles')->get();;
+                    $studentsEnrolled = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
                     'ciclo' => $ciclo,
                     'clases' =>$lessons,
-                    'alumnosParticipantes' =>$studentsEnrolled
+                    'alumnosParticipantes' =>$studentsEnrolled,
+                    'gastos' =>$costs
                 ];
                 }
             }
@@ -218,13 +220,15 @@ class CicloController extends Controller
             } else {
                 $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos')->firstwhere('id', $ciclo[0]->id);
                 $lessons = $ciclo -> clases() -> with('nivel')->get();
-                $studentsEnrolled = $ciclo ->alumnos()->where('participante', 1)->get();
+                $studentsEnrolled = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
+                $costs = $ciclo -> gastos()->with('competencia','actividad','detalles')->get();
                 $data = [
                 'code' =>200,
                 'status' => 'success',
                 'ciclo' => $ciclo,
                 'clases' =>$lessons,
-                'alumnosParticipantes' =>$studentsEnrolled
+                'alumnosParticipantes' =>$studentsEnrolled,
+                'gastos'=>$costs
             ];
             }
         }

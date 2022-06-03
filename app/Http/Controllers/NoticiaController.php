@@ -28,9 +28,10 @@ class NoticiaController extends Controller
             $validate = Validator::make($request ->all(), [
                 'fecha' => 'required|date_format:Y-m-d',
                 'titulo' => 'required',
+                'entrada' => 'required',
                 'cuerpo' => 'required',
                 'ciclo_id' => 'required',
-                'user_rut' => 'required'
+                // 'user_rut' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -44,6 +45,7 @@ class NoticiaController extends Controller
                 $noticia -> fecha = $request -> fecha;
                 $noticia -> cuerpo = $request -> cuerpo;
                 $noticia -> titulo = $request -> titulo;
+                $noticia -> entrada = $request -> entrada;
                 $noticia -> ciclo_id = $request -> ciclo_id;
                 $noticia -> user_rut = $request -> user_rut;
                 $noticia ->save();
@@ -70,9 +72,10 @@ class NoticiaController extends Controller
             $validate = Validator::make($request ->all(), [
                 'fecha' => 'required|date_format:Y-m-d',
                 'titulo' => 'required',
+                'entrada' => 'required',
                 'cuerpo' => 'required',
                 'ciclo_id' => 'required',
-                'user_rut' => 'required'
+                // 'user_rut' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -87,6 +90,7 @@ class NoticiaController extends Controller
                     $noticia -> fecha = $request -> fecha;
                     $noticia -> cuerpo = $request -> cuerpo;
                     $noticia -> titulo = $request -> titulo;
+                    $noticia -> entrada = $request -> entrada;
                     $noticia -> ciclo_id = $request -> ciclo_id;
                     $noticia -> user_rut = $request -> user_rut;
                     $noticia ->save();

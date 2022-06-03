@@ -169,7 +169,7 @@ class CicloController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos')->firstwhere('id', $request ->id);
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos', 'noticias')->firstwhere('id', $request ->id);
                 if (empty($ciclo)) {
                     $data = [
                     'code' =>400,

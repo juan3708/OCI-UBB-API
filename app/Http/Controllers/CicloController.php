@@ -178,15 +178,24 @@ class CicloController extends Controller
                 ];
                 } else {
                     $lessons = $ciclo ->clases()->with('nivel')->get();
-                    $costs = $ciclo ->gastos()->with('competencia','actividad','detalles')->get();;
+                    $costs = $ciclo ->gastos()->with('competencia', 'actividad', 'detalles')->get();
                     $studentsEnrolled = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
+                    $ciclo_id = $ciclo->id;
+                    $establecimientos = DB::table('establecimiento')
+                    ->whereNotExists(function ($query) use ($ciclo_id) {
+                        $query->select('ciclo_establecimiento.*')
+                              ->from('ciclo_establecimiento')
+                              ->whereColumn('ciclo_establecimiento.establecimiento_id', 'establecimiento.id')->where('ciclo_establecimiento.ciclo_id',$ciclo_id);
+                    })
+                    ->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
                     'ciclo' => $ciclo,
                     'clases' =>$lessons,
                     'alumnosParticipantes' =>$studentsEnrolled,
-                    'gastos' =>$costs
+                    'gastos' =>$costs,
+                    'establecimientosSinCiclo' => $establecimientos
                 ];
                 }
             }
@@ -221,7 +230,7 @@ class CicloController extends Controller
                 $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos')->firstwhere('id', $ciclo[0]->id);
                 $lessons = $ciclo -> clases() -> with('nivel')->get();
                 $studentsEnrolled = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
-                $costs = $ciclo -> gastos()->with('competencia','actividad','detalles')->get();
+                $costs = $ciclo -> gastos()->with('competencia', 'actividad', 'detalles')->get();
                 $data = [
                 'code' =>200,
                 'status' => 'success',
@@ -327,7 +336,7 @@ class CicloController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
             'ciclo_id' =>'required',
-            'establecimientos_id' => 'required'
+            'establecimiento_id' => 'required'
         ]);
             if ($validate ->fails()) {
                 $data = [
@@ -344,7 +353,7 @@ class CicloController extends Controller
                 'message' => 'No se encontro la ciclo'
             ];
                 } else {
-                    $ciclo -> establecimientos()->detach($request -> establecimientos_id);
+                    $ciclo -> establecimientos()->detach($request -> establecimiento_id);
                     $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
                     $data = [
                 'code' =>200,
@@ -425,7 +434,7 @@ class CicloController extends Controller
             } else {
                 $ciclo = Ciclo::find($request ->ciclo_id);
                 if (empty($ciclo)) {
-                $data = [
+                    $data = [
                 'code' =>400,
                 'status' => 'error',
                 'message' => 'No se encontro la ciclo'
@@ -435,11 +444,11 @@ class CicloController extends Controller
                         foreach ($request->alumnos_id as  $alumno) {
                             $ciclo->alumnos()->updateExistingPivot($alumno, ['participante' =>$request->participante]);
                         }
-                    }else{
+                    } else {
                         $ciclo->alumnos()->updateExistingPivot($request->alumnos_id, ['participante' =>$request->participante]);
                     }
                     //$ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
-                 $data = [
+                    $data = [
                 'code' =>200,
                 'status' => 'success',
                 //'ciclo' => $ciclo

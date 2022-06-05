@@ -29,14 +29,13 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation
         $alumno = Alumno::where('rut',$row['rut'])->get();
         //var_dump($alumno);
         if ($alumno ->isEmpty()) {
-            $date = \Carbon\Carbon::parse($row['fecha_de_nacimiento'])->format('Y-m-d');
             $alumno = new Alumno([
             'rut' => $row['rut'],
             'nombre' => $row['nombre'],
             'apellidos' => $row['apellidos'],
             'telefono' => $row['numero_de_telefono'],
             'email' => $row['correo'],
-            'fecha_nacimiento' =>$date,
+            'fecha_nacimiento' =>\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['fecha_de_nacimiento'])->format('Y-m-d'),
             'curso' => $row['curso'],
             'direccion' => $row['direccion'],
             'telefono_apoderado' => $row['numero_de_telefono_del_apoderado'],

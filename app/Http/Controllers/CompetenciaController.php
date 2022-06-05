@@ -160,10 +160,12 @@ class CompetenciaController extends Controller
                     'message' => 'No se encontro la competencia asociado al id'
                 ];
                 } else {
+                $gastos = $competencia ->gastos()->with('detalles')->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'competencia' => $competencia
+                    'competencia' => $competencia,
+                    'gastos' => $gastos
                 ];
                 }
             }

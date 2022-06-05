@@ -537,10 +537,10 @@ class ClaseController extends Controller
                 } else {
                     $clase_id = $request->clase_id;
                     $ayudantes = DB::table('ayudante')->whereNotExists(function ($query) use ($clase_id) {
-                        $query -> from('ayudante_clase')->select('ayudante_clase.ayudante_id')->whereColumn('ayudante_clase.ayudante_id', '=', 'ayudante.id', 'and', 'ayudante_clase.clase_id', '=', $clase_id);
+                        $query -> from('ayudante_clase')->select('ayudante_clase.ayudante_id')->whereColumn('ayudante_clase.ayudante_id', '=', 'ayudante.id')->where('ayudante_clase.clase_id', '=', $clase_id);
                     })->get();
                     $profesores = DB::table('profesor')->whereNotExists(function ($query) use ($clase_id) {
-                        $query -> from('clase_profesor')->select('clase_profesor.profesor_id')->whereColumn('clase_profesor.profesor_id', '=', 'profesor.id', 'and', 'clase_profesor.clase_id', '=', $clase_id);
+                        $query -> from('clase_profesor')->select('clase_profesor.profesor_id')->whereColumn('clase_profesor.profesor_id', '=', 'profesor.id')->where( 'clase_profesor.clase_id', '=', $clase_id);
                     })->get();
                     $data = [
                     'code' =>200,

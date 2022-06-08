@@ -15,6 +15,7 @@ use App\Http\Controllers\NivelController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -165,3 +166,8 @@ Route::post('/nivel/deletestudent', [NivelController::class,'DeleteStudent']);
 
 Route::post('/mail/inv', [MailController::class,'invitations']);
 
+// Rutas User
+Route::get('/usuario/all', [ProfesorController::class,'all']);
+Route::post('/usuario/create', [UserController::class,'register']);
+Route::post('/usuario/login', [UserController::class,'login']);
+Route::post('/usuario/delete', [UserController::class,'delete']);

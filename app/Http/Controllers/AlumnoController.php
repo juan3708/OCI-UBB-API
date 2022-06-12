@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Alumno;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class AlumnoController extends Controller
 {
@@ -261,6 +263,125 @@ class AlumnoController extends Controller
         }
         return response() -> json($data);
     }
+
+    public function getAssistance(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'ciclo_id' =>'required',
+                'alumno_id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $alumno = Alumno::find($request->alumno_id);
+                if (empty($alumno)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el alumno asociado al id'
+                ];
+                } else {
+                    $Cantassitance = DB::table('alumno_clase')->select(DB::raw('count(case when alumno_clase.asistencia = 1 then 1 else NULL end  ) as asistencias'),
+                    DB::raw('count(case when alumno_clase.asistencia = 0 then 1 else NULL end  ) as inasistencias'))->join('clase', 'alumno_clase.clase_id','=','clase.id')
+                    ->where('clase.ciclo_id','=',$request->ciclo_id)->where('alumno_clase.alumno_id', '=',$request->alumno_id)->get();
+                    $asistencias = $alumno->clases()->where('ciclo_id','=',$request->ciclo_id)->get();
+                    if (count($asistencias) != 0) {
+                        $porcentajeDeAsistencia = ($Cantassitance[0]->asistencias / count($asistencias))*100;
+                    }else{
+                        $porcentajeDeAsistencia = -1;
+                    }
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'CantAsistenciasEInasistencias' => $Cantassitance,
+                    'Asistencias' => $asistencias,
+                    'Porcentaje' =>$porcentajeDeAsistencia
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al realizar la consulta'
+            ];
+        }
+        return response() -> json($data);
+    }
+
+    public function getAssistanceandScoresPerTwoLastCycles(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'alumno_id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $alumno = Alumno::find($request->alumno_id);
+                if (empty($alumno)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el alumno asociado al id'
+                ];
+                } else {
+                    $ciclos = DB::table('ciclo')->select('ciclo.id','ciclo.nombre')->orderBy('id','desc')->limit(2)->get();
+                    $ciclosConAsistenciaDelAlumno = [];
+                    foreach($ciclos as $ciclo){
+                        $cicloArray = (array)$ciclo;
+                        $Cantassitance = DB::table('alumno_clase')->select(DB::raw('count(case when alumno_clase.asistencia = 1 then 1 else NULL end  ) as asistencias'),
+                        DB::raw('count(case when alumno_clase.asistencia = 0 then 1 else NULL end  ) as inasistencias'))->join('clase', 'alumno_clase.clase_id','=','clase.id')
+                        ->where('clase.ciclo_id','=',$ciclo->id)->where('alumno_clase.alumno_id', '=',$request ->alumno_id)->get();
+                        $asistencias = $alumno->clases()->where('ciclo_id','=',$ciclo->id)->get();
+                        $competecias = $alumno->competencias()->where('ciclo_id','=',$ciclo->id)->get();
+                        if (count($asistencias) != 0) {
+                            $porcentajeDeAsistencia = ($Cantassitance[0]->asistencias / count($asistencias))*100;
+                        }else{
+                            $porcentajeDeAsistencia = -1;
+                        }
+                        $cicloArray['CantAsistenciasEInasistencias'] = $Cantassitance;
+                        $cicloArray['Asistencias'] = $asistencias;
+                        $cicloArray['PorcentajeAsistencia'] = $porcentajeDeAsistencia;
+                        $cicloArray['Competencias'] = $competecias;
+                        array_push($ciclosConAsistenciaDelAlumno, $cicloArray);
+                    }
+
+                    // $Cantassitance = DB::table('alumno_clase')->select(DB::raw('count(case when alumno_clase.asistencia = 1 then 1 else NULL end  ) as asistencias'),
+                    // DB::raw('count(case when alumno_clase.asistencia = 0 then 1 else NULL end  ) as inasistencias'))->join('clase', 'alumno_clase.clase_id','=','clase.id')
+                    // ->where('clase.ciclo_id','=',$request->ciclo_id)->where('alumno_clase.alumno_id', '=',$request->alumno_id)->get();
+                    // $asistencias = $alumno->clases()->where('ciclo_id','=',$request->ciclo_id)->get();
+                    // if (count($asistencias) != 0) {
+                    //     $porcentajeDeAsistencia = ($Cantassitance[0]->asistencias / count($asistencias))*100;
+                    // }else{
+                    //     $porcentajeDeAsistencia = -1;
+                    // }
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'CiclosConAsistenciaYCompetencias' => $ciclosConAsistenciaDelAlumno
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al realizar la consulta'
+            ];
+        }
+        return response() -> json($data);
+    }
+
     private function valida_rut($rut)
     {
         if (!preg_match("/^[0-9.]+[-]?+[0-9kK]{1}/", $rut)) {

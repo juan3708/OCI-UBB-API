@@ -172,13 +172,13 @@ class NivelController extends Controller
                     'message' => 'No se encontro el nivel asociado al id'
                 ];
                 } else {
-                    $ciclo = $nivel -> ciclo()->get();
-                    $ciclo_id = $ciclo[0]->id;
+                    $ciclo_id = $nivel->ciclo_id;
+                    $nivel_id = $nivel->id;
                     $alumnosSinNivel = DB::table('alumno')->select('alumno.*')->join('alumno_ciclo', 'alumno.id', '=', 'alumno_ciclo.alumno_id')
                     ->where('alumno_ciclo.ciclo_id', '=', $ciclo_id)->where('alumno_ciclo.participante', '=', 1)
-                    ->whereNotExists(function ($query) {
+                    ->whereNotExists(function ($query) use($nivel_id){
                         $query ->select('alumno_nivel.alumno_id')->from('alumno_nivel')->join('nivel', 'alumno_nivel.nivel_id', '=', 'nivel.id')
-                        ->whereColumn('alumno_nivel.alumno_id', '=', 'alumno.id');
+                        ->whereColumn('alumno_nivel.alumno_id', '=', 'alumno.id')->where('alumno_nivel.nivel_id','=',$nivel_id);
                     })->get();
                     $data = [
                     'code' =>200,

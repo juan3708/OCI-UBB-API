@@ -14,7 +14,7 @@ class ClaseController extends Controller
     {
         /*$clase = DB::table('clase as c')->select('c.id','c.contenido',
         DB::raw('DATE_FORMAT(c.fecha, "%d-%m-%Y") as fecha'),'c.ciclo_id')->get();*/
-        $clase = Clase::with('ciclo', 'nivel')->get();
+        $clase = Clase::with('ciclo', 'nivel', 'alumnos', 'ayudantes', 'profesores')->get();
         
         $data = [
             'code' => 200,
@@ -195,7 +195,8 @@ class ClaseController extends Controller
                 } else {
                     $clase_id = $request->id;
                     $studentWithoutLesson = DB::table('alumno')->whereNotExists(function ($query) use ($clase_id) {
-                        $query -> from('alumno_clase')->select('alumno_clase.alumno_id')->whereColumn('alumno_clase.alumno_id', '=', 'alumno.id', 'and', 'alumno_clase.clase_id', '=', $clase_id);
+                        $query -> from('alumno_clase')->select('alumno_clase.alumno_id')->whereColumn('alumno_clase.alumno_id', '=', 'alumno.id')
+                        ->where('alumno_clase.clase_id', '=', $clase_id);
                     })->get();
                     $data = [
                     'code' =>200,

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Noticia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class NoticiaController extends Controller
@@ -14,7 +13,7 @@ class NoticiaController extends Controller
         /*$noticia = DB::table('noticia as n')->select('n.cuerpo',DB::raw('DATE_FORMAT(n.fecha, "%d-%m-%Y") as fecha')
         ,'n.titulo','n.user_rut','n.ciclo_id','n.id')->get();*/
         //$noticia = Noticia::with('ciclo','user')->all();
-        $noticia = Noticia::all();
+        $noticia = Noticia::with('adjuntos')->get();
         $data = [
             'code' => 200,
             'noticias' => $noticia
@@ -167,10 +166,13 @@ class NoticiaController extends Controller
                     'message' => 'No se encontro la noticia asociado al id'
                 ];
                 } else {
+                    $noticia = Noticia::with('adjuntos')->where($request->id)->get();
+                    $adjuntos = $noticia ->adjuntos();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'noticia' => $noticia
+                    'noticia' => $noticia,
+                    'adjuntos' => $adjuntos
                 ];
                 }
             }

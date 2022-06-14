@@ -125,7 +125,7 @@ Route::post('/alumno/create', [AlumnoController::class,'create']);
 Route::put('/alumno/edit', [AlumnoController::class,'edit']);
 Route::post('/alumno/delete', [AlumnoController::class,'delete']);
 Route::post('/alumno/getbyid', [AlumnoController::class,'getById']);
-Route::post('/alumno/getassistance', [AlumnoController::class,'getAssistance']);
+Route::post('/alumno/getstatistic', [AlumnoController::class,'getStatistic']);
 Route::post('/alumno/getassistancepertwolastcycles', [AlumnoController::class,'getAssistanceandScoresPerTwoLastCycles']);
 
 

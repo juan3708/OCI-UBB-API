@@ -18,7 +18,7 @@ class CicloController extends Controller
         DB::raw('DATE_FORMAT(c.fecha_inicio, "%d-%m-%Y") as fecha_inicio'),
         DB::raw('DATE_FORMAT(c.fecha_termino, "%d-%m-%Y") as fecha_termino'),
         'coordinador.nombre as nombre_coordinador','coordinador.apellidos as apellidos_coordinador')->join('coordinador','coordinador.id','=','c.coordinador_id')->get();*/
-        $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'clases', 'niveles')->get();
+        $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'clases', 'niveles','establecimientos')->get();
         $data = [
             'code' => 200,
             'ciclos' => $ciclo
@@ -183,6 +183,7 @@ class CicloController extends Controller
                     $studentsEnrolled = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
                     $ciclo_id = $ciclo->id;
                     $competencias = $ciclo->competencias()->with('alumnos', 'gastos')->get();
+                    $actividades = $ciclo->actividades()->with('gastos')->get();
                     $establecimientos = DB::table('establecimiento')
                     ->whereNotExists(function ($query) use ($ciclo_id) {
                         $query->select('ciclo_establecimiento.*')
@@ -200,7 +201,8 @@ class CicloController extends Controller
                     'gastos' =>$costs,
                     'competencias'=>$competencias,
                     'establecimientosSinCiclo' => $establecimientos,
-                    'niveles' => $niveles
+                    'niveles' => $niveles,
+                    'actividades' => $actividades
                 ];
                 }
             }

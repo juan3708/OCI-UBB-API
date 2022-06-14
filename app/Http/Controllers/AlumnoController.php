@@ -263,7 +263,7 @@ class AlumnoController extends Controller
         return response() -> json($data);
     }
 
-    public function getAssistance(Request $request)
+    public function getStatistic(Request $request)
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
@@ -294,12 +294,15 @@ class AlumnoController extends Controller
                     }else{
                         $porcentajeDeAsistencia = -1;
                     }
+                    $competencias = $alumno->competencias()->where('ciclo_id','=',$request->ciclo_id)->get();
                     $data = [
                     'code' =>200,
-                    'status' => 'success',
+                    //'status' => 'success',
+                    //'Alumno' => $alumno,
                     'CantAsistenciasEInasistencias' => $Cantassitance,
                     'Asistencias' => $asistencias,
-                    'Porcentaje' =>$porcentajeDeAsistencia
+                    'Porcentaje' =>$porcentajeDeAsistencia,
+                    'Competencias'=>$competencias
                 ];
                 }
             }
@@ -342,7 +345,7 @@ class AlumnoController extends Controller
                         DB::raw('count(case when alumno_clase.asistencia = 0 then 1 else NULL end  ) as inasistencias'))->join('clase', 'alumno_clase.clase_id','=','clase.id')
                         ->where('clase.ciclo_id','=',$ciclo->id)->where('alumno_clase.alumno_id', '=',$request ->alumno_id)->get();
                         $asistencias = $alumno->clases()->where('ciclo_id','=',$ciclo->id)->get();
-                        $competecias = $alumno->competencias()->where('ciclo_id','=',$ciclo->id)->get();
+                        $competencias = $alumno->competencias()->where('ciclo_id','=',$ciclo->id)->get();
                         if (count($asistencias) != 0) {
                             $porcentajeDeAsistencia = ($Cantassitance[0]->asistencias / count($asistencias))*100;
                         }else{
@@ -351,7 +354,7 @@ class AlumnoController extends Controller
                         $cicloArray['CantAsistenciasEInasistencias'] = $Cantassitance;
                         $cicloArray['Asistencias'] = $asistencias;
                         $cicloArray['PorcentajeAsistencia'] = $porcentajeDeAsistencia;
-                        $cicloArray['Competencias'] = $competecias;
+                        $cicloArray['Competencias'] = $competencias;
                         array_push($ciclosConAsistenciaDelAlumno, $cicloArray);
                     }
 

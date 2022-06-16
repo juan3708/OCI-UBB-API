@@ -184,6 +184,7 @@ class CicloController extends Controller
                     $ciclo_id = $ciclo->id;
                     $competencias = $ciclo->competencias()->with('alumnos', 'gastos')->get();
                     $actividades = $ciclo->actividades()->with('gastos')->get();
+                    $noticias = $ciclo->noticias()->with('adjuntos')->get();
                     $establecimientos = DB::table('establecimiento')
                     ->whereNotExists(function ($query) use ($ciclo_id) {
                         $query->select('ciclo_establecimiento.*')
@@ -202,7 +203,8 @@ class CicloController extends Controller
                     'competencias'=>$competencias,
                     'establecimientosSinCiclo' => $establecimientos,
                     'niveles' => $niveles,
-                    'actividades' => $actividades
+                    'actividades' => $actividades,
+                    'noticias'=> $noticias
                 ];
                 }
             }

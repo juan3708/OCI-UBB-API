@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Adjuntos;
 use App\Models\Noticia;
+use Illuminate\Support\Facades\File;
 
 class AdjuntosController extends Controller
 {
@@ -59,7 +60,7 @@ class AdjuntosController extends Controller
         return response() ->json($data);
     }
 
-// MODIFICAR
+// Eliminar
 
     public function delete(Request $request)
     {
@@ -77,7 +78,11 @@ class AdjuntosController extends Controller
                     'status' => 'error',
                 ];
             } else {
-                $adjunto ->delete();
+                if(File::exists('storage/images/'.$adjunto->url)){
+                    File::delete('storage/images/'.$adjunto->url);
+                    $adjunto ->delete();
+                }
+
                 $data = [
                     'code' =>200,
                     'status' => 'success',

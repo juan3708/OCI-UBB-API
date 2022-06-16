@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -37,17 +38,34 @@ class UserController extends Controller
         ], 201);
     }
 
-    public function login(Request $request)
+    public function login()
     {
-        $credentials = request(['email', 'password']);
-        //VALIDAR QUE SEA EL MISMO CORREO Y MISMA CONTRASEÑA
-        $user = User::where('email', $request -> email)->first();
-        //VALIDAR QUE EXISTA EL USUARIO, SI EXISTE IF (45), SINO MANDAR MJS DE ERROR DE CREDENCIALES INCORRECTAS
-        if (! $token = auth()->claims(['user'=> $user]) -> attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $credentials = request(['rut', 'password']);
+        
+        $user = User::where('rut', $credentials['rut'])->first();
+        if(isset($user)){
+            if(Hash::check($credentials['password'], $user->password)){
+                if ($token = auth()->claims(['user'=> $user->load('rol')]) -> login($user)) {
+                    return $this->respondWithToken($token);
+                }else{
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
+            }else{
+                $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'Contraseña incorrecta'
+                ];
+                return response()->json($data);
+            }
+        }else{
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No existe un usuario asociado a este rut'
+            ];
+            return response()->json($data);
         }
-
-        return $this->respondWithToken($token);
     }
 
     protected function respondWithToken($token)

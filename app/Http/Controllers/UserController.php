@@ -41,7 +41,6 @@ class UserController extends Controller
     public function login()
     {
         $credentials = request(['rut', 'password']);
-        
         $user = User::where('rut', $credentials['rut'])->first();
         if(isset($user)){
             if(Hash::check($credentials['password'], $user->password)){
@@ -60,7 +59,7 @@ class UserController extends Controller
             }
         }else{
             $data = [
-                'code' =>400,
+                'code' =>402,
                 'status' => 'error',
                 'message' => 'No existe un usuario asociado a este rut'
             ];
@@ -72,6 +71,7 @@ class UserController extends Controller
     {
         return response()->json([
             'access_token' => $token,
+            'code' =>200,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);

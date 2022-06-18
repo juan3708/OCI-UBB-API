@@ -303,8 +303,7 @@
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: center;">
                                                                             <span style="color:#8d8d8d;">Hola estimad@
-                                                                                {{$name}}, muchas gracias por contactarte
-                                                                                con nosotros,</span></p>
+                                                                                {{$name}},</span></p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: center;">
                                                                             <span style="color:#8d8d8d;">responderemos

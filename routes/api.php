@@ -177,6 +177,8 @@ Route::post('/nivel/deletestudent', [NivelController::class,'DeleteStudent']);
 
 Route::post('/mail/inv', [MailController::class,'invitations']);
 Route::post('/mail/contact', [MailController::class,'contact']);
+Route::post('/mail/messages', [MailController::class,'messages']);
+
 
 
 // Rutas Adjuntos Noticias

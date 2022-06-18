@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\AdjuntosController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\AyudanteController;
 use App\Http\Controllers\CicloController;
@@ -103,6 +104,9 @@ Route::post('/noticia/create', [NoticiaController::class,'create']);
 Route::put('/noticia/edit', [NoticiaController::class,'edit']);
 Route::post('/noticia/delete', [NoticiaController::class,'delete']);
 Route::post('/noticia/getbyid', [NoticiaController::class,'getById']);
+Route::post('/noticia/getbyword', [NoticiaController::class,'getNewsForLike']);
+Route::get('/noticia/recentpost', [NoticiaController::class,'getRecentPost']);
+
 
 //Rutas Rol
 Route::get('/rol/all', [RolController::class,'all']);
@@ -172,11 +176,13 @@ Route::post('/nivel/deletestudent', [NivelController::class,'DeleteStudent']);
 // Rutas Email
 
 Route::post('/mail/inv', [MailController::class,'invitations']);
+Route::post('/mail/contact', [MailController::class,'contact']);
 
 
 // Rutas Adjuntos Noticias
 
 Route::post('/image/add', [AdjuntosController::class,'add']);
+Route::post('/image/delete', [AdjuntosController::class,'delete']);
 
 // Rutas User
 Route::get('/usuario/all', [ProfesorController::class,'all']);

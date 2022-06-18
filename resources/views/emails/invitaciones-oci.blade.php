@@ -67,7 +67,6 @@
                 display: block;
             }
         }
-
     </style>
 </head>
 
@@ -149,7 +148,8 @@
                                                                         style="font-size: 12px; font-family: 'Oswald', Arial, 'Helvetica Neue', Helvetica, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #cf1f1f; line-height: 1.2;">
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: center;">
-                                                                            <br><br><br></p>
+                                                                            <br><br><br>
+                                                                        </p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: center;">
                                                                             <span
@@ -201,7 +201,8 @@
                                                                             style="margin: 0; font-size: 14px; text-align: center; letter-spacing: -1px;">
                                                                             <span style="font-size:24px;"><strong>&lt;
                                                                                     {{ $subject }}
-                                                                                    /&gt;</strong></span></p>
+                                                                                    /&gt;</strong></span>
+                                                                        </p>
                                                                     </div>
                                                                 </div>
                                                             </td>

@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function all()
     {
-        $user = User::all();
+        $user = User::with('rol')->get();
         $data = [
             'code' => 200,
             'usuarios' => $user

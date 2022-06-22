@@ -14,8 +14,12 @@ class PdfController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                    'data' => 'required',
-                    'nombreEstablecimiento' =>'required'
+                    'students' => 'required',
+                    'nombreCiclo' =>'required',
+                    'nombreEstablecimiento' =>'required',
+                    'email' =>'required',
+                    'emailProfesor' =>'required'
+
                 ]);
             if ($validate ->fails()) {
                 $data = [
@@ -24,14 +28,19 @@ class PdfController extends Controller
                         'errors' => $validate ->errors()
                     ];
             } else {
-                $data = [
-                        'title' => 'Welcome to ItSolutionStuff.com',
-                        'date' => date('m/d/Y')
-                    ];
                 $fileName = 'asistencia-alumnos-'.$request->nombreEstablecimiento.'.pdf';
-                $pdf = Pdf::loadView('pdfs.asistenciasPorEstablecimiento', $data);
-                Storage::put('temp\\'.$fileName, $pdf->output());
                 $data = [
+                    'nombreCiclo' => $request ->nombreCiclo,
+                    'nombreEstablecimiento' => $request->nombreEstablecimiento,
+                    'email' => $request->email,
+                    'emailProfesor' => $request->emailProfesor,
+                    'cantEstudiantes' => count($request->students),
+                    'students' => $request->students,
+                    
+                ];
+                $pdf = Pdf::loadView('pdfs.asistenciasPorEstablecimiento',$data )->setPaper('letter');
+                Storage::put('temp\\'.$fileName, $pdf->output());
+                $data1 = [
                         'code' =>200,
                         'status' => 'success',
                         'fileName' => $fileName
@@ -43,7 +52,7 @@ class PdfController extends Controller
                     'status' => 'error'
                 ];
         }
-        return response()-> json($data);
+        return response()-> json($data1);
     }
 
     public function download($fileName)
@@ -51,6 +60,7 @@ class PdfController extends Controller
         $path = storage_path('app\temp'."\\".$fileName);
         return response()->download($path);
     }
+
 
     public function delete(Request $request)
     {

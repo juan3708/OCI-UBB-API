@@ -14,6 +14,7 @@ use App\Http\Controllers\GastosController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\NivelController;
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UserController;
@@ -191,3 +192,12 @@ Route::get('/usuario/all', [UserController::class,'all']);
 Route::post('/usuario/create', [UserController::class,'register']);
 Route::post('/usuario/login', [UserController::class,'login']);
 Route::post('/usuario/delete', [UserController::class,'delete']);
+
+
+//PDFS
+Route::post('/pdf/assistanceperestablishment', [PdfController::class,'AssistancePerEstablishment']);
+Route::get('/pdf/download/{fileName}', [PdfController::class,'download']);
+Route::post('/pdf/delete', [PdfController::class,'delete']);
+
+
+

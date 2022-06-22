@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alumno;
+use App\Models\Ayudante;
 use App\Models\Ciclo;
 use App\Models\Establecimiento;
+use App\Models\Profesor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -734,8 +736,11 @@ class CicloController extends Controller
                     'message' => 'No se encontro el ciclo'
                 ];
                 } else {
-                    $ayudantes = DB::table('ayudante')->select('ayudante.id', 'ayudante.rut', 'ayudante.apellidos', 'ayudante.nombre', 'ayudante.email')->groupBy('ayudante.id', 'ayudante.rut', 'ayudante.apellidos', 'ayudante.nombre', 'ayudante.email')->join('ayudante_clase', 'ayudante.id', '=', 'ayudante_clase.ayudante_id')
-                    ->join('clase', 'ayudante_clase.clase_id', '=', 'clase.id')->where('clase.ciclo_id', '=', $request -> ciclo_id)->get();
+                    $ciclo_id = $request->ciclo_id;
+                    $ayudantes = Ayudante::with(['clases' => function ($query) use($ciclo_id) {
+                        $query->where('ciclo_id', $ciclo_id);
+                    }])->get();
+
                     $data = [
                     'code' =>200,
                     'status' => 'success',
@@ -774,9 +779,10 @@ class CicloController extends Controller
                     'message' => 'No se encontro el ciclo'
                 ];
                 } else {
-                    $profesores = DB::table('profesor')->select('profesor.id', 'profesor.rut', 'profesor.apellidos', 'profesor.nombre', 'profesor.email', 'profesor.facultad', 'profesor.modalidad')->groupBy('profesor.id', 'profesor.rut', 'profesor.apellidos', 'profesor.nombre', 'profesor.email', 'profesor.facultad', 'profesor.modalidad')
-                    ->join('clase_profesor', 'profesor.id', '=', 'clase_profesor.profesor_id')
-                    ->join('clase', 'clase_profesor.clase_id', '=', 'clase.id')->where('clase.ciclo_id', '=', $request -> ciclo_id)->get();
+                    $ciclo_id = $request->ciclo_id;
+                    $profesores = Profesor::with(['clases' => function ($query) use($ciclo_id) {
+                        $query->where('ciclo_id', $ciclo_id);
+                    }])->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',

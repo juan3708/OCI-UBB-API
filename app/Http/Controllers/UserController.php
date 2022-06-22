@@ -11,13 +11,24 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['all', 'login', 'register']]);
+    }
+
+    public function all()
+    {
+        $user = User::all();
+        $data = [
+            'code' => 200,
+            'usuarios' => $user
+        ];
+        return response() ->json($data);
     }
 
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nombre' => 'required',
+            'apellidos' => 'required',
             'email' => 'required|email:rfc,dns||unique:user,email',
             'password' => 'required|string|min:6',
             'fecha_creacion' => 'required|date_format:Y-m-d',
@@ -25,7 +36,10 @@ class UserController extends Controller
             'rol_id' => 'required'
         ]);
         if($validator->fails()){
-            return response()->json($validator->errors()->toJson(),400);
+            return response()->json([
+                'errors' => $validator->errors()->toJson(),
+                'code' => 400
+            ]);
         }
         $user = User::create(array_merge(
             $validator->validate(),
@@ -34,8 +48,9 @@ class UserController extends Controller
 
         return response()->json([
             'message' => '¡Usuario registrado exitosamente!',
-            'user' => $user
-        ], 201);
+            'user' => $user,
+            'code' => 200
+        ]);
     }
 
     public function login()

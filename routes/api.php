@@ -187,7 +187,7 @@ Route::post('/image/add', [AdjuntosController::class,'add']);
 Route::post('/image/delete', [AdjuntosController::class,'delete']);
 
 // Rutas User
-Route::get('/usuario/all', [ProfesorController::class,'all']);
+Route::get('/usuario/all', [UserController::class,'all']);
 Route::post('/usuario/create', [UserController::class,'register']);
 Route::post('/usuario/login', [UserController::class,'login']);
 Route::post('/usuario/delete', [UserController::class,'delete']);

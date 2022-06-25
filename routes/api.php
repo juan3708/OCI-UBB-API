@@ -66,6 +66,8 @@ Route::post('/ciclo/getteacherspercycle', [CicloController::class,'getTeachersPe
 Route::post('/ciclo/getassistanceperdateandcycle', [CicloController::class,'getAssistancePerDateAndCycle']);
 Route::post('/ciclo/getstudentassistancepercycleandestablishment', [CicloController::class,'getStudentAssistancePerCycleAndEstablishment']);
 Route::post('/ciclo/getstudentassistancepercycle', [CicloController::class,'getStudentAssistancePerCycle']);
+Route::post('/ciclo/getstatisticspercycle', [CicloController::class,'getStatisticsPerCycle']);
+
 
 
 //Rutas Actividad

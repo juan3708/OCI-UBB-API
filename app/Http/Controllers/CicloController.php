@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Alumno;
 use App\Models\Ayudante;
 use App\Models\Ciclo;
+use App\Models\Competencia;
 use App\Models\Establecimiento;
 use App\Models\Profesor;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class CicloController extends Controller
         DB::raw('DATE_FORMAT(c.fecha_inicio, "%d-%m-%Y") as fecha_inicio'),
         DB::raw('DATE_FORMAT(c.fecha_termino, "%d-%m-%Y") as fecha_termino'),
         'coordinador.nombre as nombre_coordinador','coordinador.apellidos as apellidos_coordinador')->join('coordinador','coordinador.id','=','c.coordinador_id')->get();*/
-        $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'clases', 'niveles','establecimientos')->get();
+        $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'clases', 'niveles', 'establecimientos')->get();
         $data = [
             'code' => 200,
             'ciclos' => $ciclo
@@ -182,6 +183,7 @@ class CicloController extends Controller
                 } else {
                     $lessons = $ciclo ->clases()->with('ciclo', 'nivel', 'alumnos', 'ayudantes', 'profesores')->get();
                     $costs = $ciclo ->gastos()->with('competencia', 'actividad', 'detalles')->get();
+                    $totalCost = $ciclo->gastos()->sum('valor');
                     $studentsEnrolled = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
                     $ciclo_id = $ciclo->id;
                     $competencias = $ciclo->competencias()->with('alumnos', 'gastos')->get();
@@ -202,6 +204,7 @@ class CicloController extends Controller
                     'clases' =>$lessons,
                     'alumnosParticipantes' =>$studentsEnrolled,
                     'gastos' =>$costs,
+                    'totalGastos' => $totalCost,
                     'competencias'=>$competencias,
                     'establecimientosSinCiclo' => $establecimientos,
                     'niveles' => $niveles,
@@ -737,7 +740,7 @@ class CicloController extends Controller
                 ];
                 } else {
                     $ciclo_id = $request->ciclo_id;
-                    $ayudantes = Ayudante::with(['clases' => function ($query) use($ciclo_id) {
+                    $ayudantes = Ayudante::with(['clases' => function ($query) use ($ciclo_id) {
                         $query->where('ciclo_id', $ciclo_id);
                     }])->get();
 
@@ -780,7 +783,7 @@ class CicloController extends Controller
                 ];
                 } else {
                     $ciclo_id = $request->ciclo_id;
-                    $profesores = Profesor::with(['clases' => function ($query) use($ciclo_id) {
+                    $profesores = Profesor::with(['clases' => function ($query) use ($ciclo_id) {
                         $query->where('ciclo_id', $ciclo_id);
                     }])->get();
                     $data = [
@@ -959,8 +962,16 @@ class CicloController extends Controller
                     'message' => 'No se encontro el ciclo asociado al id'
                 ];
                 } else {
-                    $establecimientos = $ciclo->establecimientos()->select('establecimiento.id','nombre','direccion','telefono_profesor','email_profesor','nombre_profesor',
-                    'email','telefono')->get();
+                    $establecimientos = $ciclo->establecimientos()->select(
+                        'establecimiento.id',
+                        'nombre',
+                        'direccion',
+                        'telefono_profesor',
+                        'email_profesor',
+                        'nombre_profesor',
+                        'email',
+                        'telefono'
+                    )->get();
                     $establecimientoWithStudentsStatistic = array();
                     foreach ($establecimientos as $establecimiento) {
                         $establecimientoArray = $establecimiento->toArray();
@@ -998,6 +1009,166 @@ class CicloController extends Controller
                     'Establecimientos' => $establecimientoWithStudentsStatistic,
                     //'Asistencias' => $asistencias,
                     //'Porcentaje' =>$porcentajeDeAsistencia
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al realizar la consulta'
+            ];
+        }
+        return response() -> json($data);
+    }
+
+    public function getStatisticsPerCycle(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'ciclo_id' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $ciclo = Ciclo::find($request->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el ciclo asociado al id'
+                ];
+                } else {
+                    $ciclo = Ciclo::with('coordinador')->where('id',$request->ciclo_id)->get();
+                    $ciclo = $ciclo[0];
+                    //dd($ciclo);
+                    $cantStudentsEnrolled = count($ciclo->alumnos()->get());
+                    $cantStudentsActive = count($ciclo->alumnos()->where('participante', 1)->get());
+                    $cantEstablishment = count($ciclo->establecimientos()->get());
+                    if (intval($request->ciclo_id) >1) {
+                        $ciclo2 = Ciclo::find(($request->ciclo_id)-1);
+                        $diferenceCantStudentsEnrolled = $cantStudentsEnrolled -  count($ciclo2->alumnos()->get());
+                        $diferenceCantStudentsActive = $cantStudentsActive - count($ciclo2->alumnos()->where('participante', 1)->get());
+                        $diferenceCantEstablishment = $cantEstablishment - count($ciclo->establecimientos()->get());
+                    } else {
+                        $ciclo2 = -1;
+                        $diferenceCantStudentsEnrolled = -1;
+                        $diferenceCantStudentsActive = -1;
+                        $diferenceCantEstablishment = -1;
+                    }
+                    $totalCost = $ciclo->gastos()->sum('valor');
+                    $costs = $ciclo->gastos()->with('detalles','competencia','actividad')->get();
+                    $competencies = Competencia::with(['alumnos' => function ($query){
+                        $query->with('establecimiento')->get();
+                    }])->where('ciclo_id', $ciclo->id)->get();
+                    $competenciesArray = array();
+                    $sum = 0;
+
+                    foreach ($competencies as $competition) {
+                        $competitionArray = $competition->toArray();
+                        foreach ($competition ->alumnos as $student) {
+                            $sum += $student->pivot->puntaje;
+                        }
+                        if (count($competition->alumnos)>0) {
+                            $competitionArray['promedioPuntaje'] = $sum/count($competition->alumnos);
+                        } else {
+                            $competitionArray['promedioPuntaje'] = 0;
+                        }
+                        $sum = 0;
+                        array_push($competenciesArray, $competitionArray);
+                    }
+
+                    $establishments = $ciclo -> establecimientos()->get();
+                    
+                    if (!$establishments->isEmpty()) {
+                        $establishmentsArray = array();
+                        foreach ($establishments as $establishment) {
+                            $establishmentArray = $establishment->toArray();
+                            $establishmentArray['Alumnos'] = count(DB::table('alumno')->join('alumno_ciclo', 'alumno.id', '=', 'alumno_ciclo.alumno_id')
+                        ->where('alumno.establecimiento_id', $establishment ->id)->where('alumno_ciclo.ciclo_id', $ciclo->id)->get());
+                            array_push($establishmentsArray, $establishmentArray);
+                        }
+                        $maxEstablishmentStudentsEnrolled = max($establishmentsArray);
+                        $minEstablishmentStudentEnrolled = min($establishmentsArray);
+
+                        $establishmentsArray = array();
+                        foreach ($establishments as $establishment) {
+                            $establishmentArray = $establishment->toArray();
+                            $establishmentArray['Alumnos'] = count(DB::table('alumno')->join('alumno_ciclo', 'alumno.id', '=', 'alumno_ciclo.alumno_id')
+                        ->where('alumno.establecimiento_id', $establishment ->id)->where('alumno_ciclo.ciclo_id', $ciclo->id)->where('alumno_ciclo.participante', 1)->get());
+                            array_push($establishmentsArray, $establishmentArray);
+                        }
+                        $maxEstablishmentStudentsActive = max($establishmentsArray);
+                        $minEstablishmentStudentActive = min($establishmentsArray);
+                    } else {
+                        $maxEstablishmentStudentsEnrolled = -1;
+                        $minEstablishmentStudentEnrolled = -1;
+                        $maxEstablishmentStudentsActive = -1;
+                        $minEstablishmentStudentActive = -1;
+                    }
+                    
+                    $establecimientos = $ciclo->establecimientos()->select(
+                        'establecimiento.id',
+                        'nombre',
+                        'direccion',
+                        'telefono_profesor',
+                        'email_profesor',
+                        'nombre_profesor',
+                        'email',
+                        'telefono'
+                    )->get();
+                    $establecimientoWithStudentsStatistic = array();
+                    foreach ($establecimientos as $establecimiento) {
+                        $establecimientoArray = $establecimiento->toArray();
+                        $students = DB::table('alumno')->select('alumno.*')->join('alumno_clase', 'alumno.id', '=', 'alumno_clase.alumno_id')
+                        ->join('clase', 'alumno_clase.clase_id', '=', 'clase.id')->where('clase.ciclo_id', '=', $request->ciclo_id)
+                        ->where('alumno.establecimiento_id', '=', $establecimiento->id)->distinct()->get();
+                        $studentsWithAssistanceStatistic = array();
+                        foreach ($students as $student) {
+                            $studentArray = (array)$student;
+                            $student = Alumno::find($student->id);
+                            $Cantassitance = DB::table('alumno_clase')->select(
+                                DB::raw('count(case when alumno_clase.asistencia = 1 then 1 else NULL end  ) as asistencias'),
+                                DB::raw('count(case when alumno_clase.asistencia = 0 then 1 else NULL end  ) as inasistencias')
+                            )->join('clase', 'alumno_clase.clase_id', '=', 'clase.id')
+                            ->where('clase.ciclo_id', '=', $request->ciclo_id)->where('alumno_clase.alumno_id', '=', $student->id)->distinct()->get();
+                            $asistencias = $student->clases()->where('ciclo_id', '=', $ciclo->id)->get();
+                            //$competecias = $student->competencias()->where('ciclo_id','=',$ciclo->id)->get();
+                            if (count($asistencias) != 0) {
+                                $porcentajeDeAsistencia = ($Cantassitance[0]->asistencias / count($asistencias))*100;
+                            } else {
+                                $porcentajeDeAsistencia = -1;
+                            }
+                            $studentArray['CantAsistenciasEInasistencias'] = $Cantassitance;
+                            $studentArray['Asistencias'] = $asistencias;
+                            $studentArray['PorcentajeAsistencia'] = $porcentajeDeAsistencia;
+                            array_push($studentsWithAssistanceStatistic, $studentArray);
+                        }
+                        $establecimientoArray['alumnos'] = $studentsWithAssistanceStatistic;
+                        array_push($establecimientoWithStudentsStatistic, $establecimientoArray);
+                    }
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'cicloAnterior' => $ciclo2,
+                    'cantidadAlumnosInscritos'=> $cantStudentsEnrolled,
+                    'diferenciaAlumnosInscritos' => $diferenceCantStudentsEnrolled,
+                    'cantidadAlumnosParticipantes'=>$cantStudentsActive,
+                    'diferenciaAlumnosParticipantes'=>$diferenceCantStudentsActive,
+                    'cantEstablecimientos' =>$cantEstablishment,
+                    'diferenciaEstablecimientos'=>$diferenceCantEstablishment,
+                    'totalGastos'=> $totalCost,
+                    'gastos' => $costs,
+                    'competencias'=>$competenciesArray,
+                    'establecimientos'=>$establecimientoWithStudentsStatistic,
+                    'establecimientoMaxInscritos' =>$maxEstablishmentStudentsEnrolled,
+                    'establecimientoMinInscritos'=>$minEstablishmentStudentEnrolled,
+                    'establecimientoMaxParticipantes'=>$maxEstablishmentStudentsActive,
+                    'establecimientoMinParticipantes'=>$minEstablishmentStudentActive
                 ];
                 }
             }

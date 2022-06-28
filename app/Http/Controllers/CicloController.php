@@ -502,11 +502,9 @@ class CicloController extends Controller
             ];
                 } else {
                     $ciclo -> alumnos()->detach($request -> alumno_id);
-                    $ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
                     $data = [
                 'code' =>200,
-                'status' => 'success',
-                'ciclo' => $ciclo
+                'status' => 'success'
             ];
                 }
             }
@@ -1043,7 +1041,7 @@ class CicloController extends Controller
                     'message' => 'No se encontro el ciclo asociado al id'
                 ];
                 } else {
-                    $ciclo = Ciclo::with('coordinador')->where('id',$request->ciclo_id)->get();
+                    $ciclo = Ciclo::with('coordinador')->where('id', $request->ciclo_id)->get();
                     $ciclo = $ciclo[0];
                     //dd($ciclo);
                     $cantStudentsEnrolled = count($ciclo->alumnos()->get());
@@ -1061,8 +1059,8 @@ class CicloController extends Controller
                         $diferenceCantEstablishment = -1;
                     }
                     $totalCost = $ciclo->gastos()->sum('valor');
-                    $costs = $ciclo->gastos()->with('detalles','competencia','actividad')->get();
-                    $competencies = Competencia::with(['alumnos' => function ($query){
+                    $costs = $ciclo->gastos()->with('detalles', 'competencia', 'actividad')->get();
+                    $competencies = Competencia::with(['alumnos' => function ($query) {
                         $query->with('establecimiento')->get();
                     }])->where('ciclo_id', $ciclo->id)->get();
                     $competenciesArray = array();

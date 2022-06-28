@@ -118,16 +118,16 @@
                                         width="680">
                                         <tbody>
                                             <tr>
-                                                <td class="column column-1" width="100%"
-                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 20px; padding-bottom: 20px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                <td class="column column-1" width="66.66666666666667%"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: center; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
                                                     <table class="icons_block" width="100%" border="0"
                                                         cellpadding="0" cellspacing="0" role="presentation"
                                                         style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                         <tr>
                                                             <td
-                                                                style="vertical-align: middle; color: #000000; font-family: inherit; font-size: 14px; text-align: center;">
+                                                                style="vertical-align: middle; color: #000000; font-family: inherit; font-size: 14px; text-align: center; padding-top: 20px; padding-bottom: 20px;">
                                                                 <table cellpadding="0" cellspacing="0"
-                                                                    role="presentation" align="center"
+                                                                    role="presentation" align="left"
                                                                     style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                                     <tr>
                                                                         <td
@@ -148,6 +148,28 @@
                                                                         </td>
                                                                     </tr>
                                                                 </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td class="column column-2" width="33.333333333333336%"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                    <table class="text_block" width="100%" border="0"
+                                                        cellpadding="0" cellspacing="0" role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td
+                                                                style="padding-bottom:20px;padding-left:15px;padding-right:15px;padding-top:55px;">
+                                                                <div style="font-family: sans-serif">
+                                                                    <div class="txtTinyMce-wrapper"
+                                                                        style="font-size: 12px; mso-line-height-alt: 18px; color: #020b22; line-height: 1.5; font-family: Poppins, Arial, Helvetica, sans-serif;">
+                                                                        <p
+                                                                            style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 25.5px;">
+                                                                            <span class="tinyMce-placeholder"
+                                                                                style="font-size:17px;font-weight: bold">{{ $fecha }}</span>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -180,7 +202,7 @@
                                                                 style="padding-bottom:100px;padding-top:100px;text-align:center;width:100%;">
                                                                 <h1
                                                                     style="margin: 0; color: #ffffff; direction: ltr; font-family: Poppins, Arial, Helvetica, sans-serif; font-size: 38px; font-weight: 700; letter-spacing: normal; line-height: 150%; text-align: center; margin-top: 0; margin-bottom: 0;">
-                                                                    <span class="tinyMce-placeholder">Hola,
+                                                                    <span class="tinyMce-placeholder">Bienvenid@,
                                                                         {{ $nombre }}!</span>
                                                                 </h1>
                                                             </td>
@@ -215,22 +237,29 @@
                                                                 style="padding-bottom:10px;padding-top:15px;text-align:center;width:100%;">
                                                                 <h3
                                                                     style="margin: 0; color: #0452ee; direction: ltr; font-family: Poppins, Arial, Helvetica, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;">
-                                                                    <span class="tinyMce-placeholder">Con fecha:
-                                                                        {{ $fecha }},
-                                                                        hemos recibido una solicitud para generar una
-                                                                        nueva contraseña asociada a tu usuario</span>
+                                                                    <span class="tinyMce-placeholder">Estamos felices
+                                                                        que seas parte de este proceso</span>
                                                                 </h3>
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <table class="paragraph_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                    <table class="divider_block" width="100%" border="0"
+                                                        cellpadding="20" cellspacing="0" role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                         <tr>
                                                             <td>
-                                                                <div
-                                                                    style="color:#101112;font-size:28px;font-family:Poppins, Arial, Helvetica, sans-serif;font-weight:700;line-height:180%;text-align:center;direction:ltr;letter-spacing:0px;mso-line-height-alt:50.4px;">
-                                                                    <p style="margin: 0;">{{ $password }}</p>
+                                                                <div align="center">
+                                                                    <table border="0" cellpadding="0"
+                                                                        cellspacing="0" role="presentation"
+                                                                        width="15%"
+                                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                                        <tr>
+                                                                            <td class="divider_inner"
+                                                                                style="font-size: 1px; line-height: 1px; border-top: 3px solid #0452EE;">
+                                                                                <span>&#8202;</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -247,9 +276,10 @@
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 30px;">
                                                                             <span class="tinyMce-placeholder"
-                                                                                style="font-size:20px;">Le recomendamos
-                                                                                una vez ingresado al sistema, cambiar su
-                                                                                contraseña actual.</span>
+                                                                                style="font-size:20px;">Le invitamos a
+                                                                                acceder al sistema, su contraseña son
+                                                                                los seis primeros dígitos de su
+                                                                                Rut.</span>
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -277,11 +307,31 @@
                                             <tr>
                                                 <td class="column column-1" width="100%"
                                                     style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                    <table class="image_block" width="100%" border="0" cellpadding="0"
-                                                        cellspacing="0" role="presentation"
+                                                    <table class="button_block" width="100%" border="0"
+                                                        cellpadding="0" cellspacing="0" role="presentation"
                                                         style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                         <tr>
-                                                            <br>
+                                                            <td style="text-align:center;">
+                                                                <div align="center">
+                                                                    <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="www.google.cl" style="height:62px;width:324px;v-text-anchor:middle;" arcsize="7%" stroke="false" fillcolor="#0452ee"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:16px"><![endif]--><a
+                                                                        href=www.google.cl target="_blank"
+                                                                        style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#0452ee;border-radius:4px;width:auto;border-top:1px solid #0452ee;font-weight:400;border-right:1px solid #0452ee;border-bottom:1px solid #0452ee;border-left:1px solid #0452ee;padding-top:15px;padding-bottom:15px;font-family:Poppins, Arial, Helvetica, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;"><span
+                                                                            style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span
+                                                                                style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;">Haga
+                                                                                click para acceder al
+                                                                                sistema</span></span></a>
+                                                                    <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="image_block" width="100%" border="0"
+                                                        cellpadding="0" cellspacing="0" role="presentation"
+                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                        <tr>
+                                                            <td style="width:100%;padding-right:0px;padding-left:0px;">
+                                                                <br>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -348,25 +398,6 @@
                                                                         </td>
                                                                     </tr>
                                                                 </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="text_block" width="100%" border="0"
-                                                        cellpadding="20" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td>
-                                                                <div style="font-family: sans-serif">
-                                                                    <div class="txtTinyMce-wrapper"
-                                                                        style="font-size: 12px; font-family: Poppins, Arial, Helvetica, sans-serif; mso-line-height-alt: 18px; color: #fafafa; line-height: 1.5;">
-                                                                        <p
-                                                                            style="margin: 0; font-size: 10px; text-align: center; mso-line-height-alt: 15px;">
-                                                                            <span style="font-size:10px;"><span style>©
-                                                                                    2022 Universidad del Bío
-                                                                                    Bío</span></span>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </table>

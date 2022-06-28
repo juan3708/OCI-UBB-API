@@ -162,11 +162,17 @@ class CompetenciaController extends Controller
                 ];
                 } else {
                 $gastos = $competencia ->gastos()->with('detalles')->get();
+                $competencia_id = $competencia ->id;
+                $studentWithoutCompetition = DB::table('alumno')->select('alumno.*')->join('alumno_ciclo','alumno.id','=','alumno_ciclo.alumno_id')->where('alumno_ciclo.participante',1)->whereNotExists(function ($query) use ($competencia_id) {
+                    $query -> from('alumno_competencia')->select('alumno_competencia.alumno_id')->whereColumn('alumno_competencia.alumno_id', '=', 'alumno.id')
+                    ->where('alumno_competencia.competencia_id', '=', $competencia_id);
+                })->distinct()->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
                     'competencia' => $competencia,
-                    'gastos' => $gastos
+                    'gastos' => $gastos,
+                    'alumnosSinCompetencia' => $studentWithoutCompetition
                 ];
                 }
             }

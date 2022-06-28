@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Alumno;
+use App\Models\Ciclo;
 use App\Models\Establecimiento;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -47,9 +48,14 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation
             $alumno = Alumno::find($alumno->id);
             $alumno ->ciclos() ->attach($this->ciclo_id, ['participante' => false]);
         } else {
-            //var_dump('PASO EL IF');
+           $ciclo_id = $this->ciclo_id;
+            $relacion = Alumno::whereHas('ciclos',function($query)use ($ciclo_id){
+                        $query->where('ciclo_id', $ciclo_id);
+            })->where('rut',$row['rut'])->get();
             $alumno = Alumno::find($alumno[0]->id);
-            $alumno ->ciclos() ->attach($this->ciclo_id, ['participante' => false]);
+            if ($relacion->isEmpty()) {
+                $alumno ->ciclos() ->attach($this->ciclo_id, ['participante' => false]);
+            }
         }
 
         return $alumno;

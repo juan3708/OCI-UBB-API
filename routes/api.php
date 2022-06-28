@@ -93,6 +93,8 @@ Route::post('/gastos/create', [GastosController::class,'create']);
 Route::put('/gastos/edit', [GastosController::class,'edit']);
 Route::post('/gastos/delete', [GastosController::class,'delete']);
 Route::post('/gastos/getbyid', [GastosController::class,'getById']);
+Route::post('/gastos/getcostperdateandcycle', [GastosController::class,'getCostPerDateAndCycle']);
+
 
 //Rutas Detalle
 Route::get('/detalle/all', [DetallesController::class,'all']);
@@ -194,6 +196,12 @@ Route::get('/usuario/all', [UserController::class,'all']);
 Route::post('/usuario/create', [UserController::class,'register']);
 Route::post('/usuario/login', [UserController::class,'login']);
 Route::post('/usuario/delete', [UserController::class,'delete']);
+Route::post('/usuario/changestatus', [UserController::class,'changeStatus']);
+Route::post('/usuario/resetpassword', [UserController::class,'ResetPassword']);
+Route::post('/usuario/changepassword', [UserController::class,'ChangePassword']);
+
+
+
 
 
 //PDFS

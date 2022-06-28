@@ -332,14 +332,6 @@
                                                                                     alt="Instagram" title="Instagram"
                                                                                     style="display: block; height: auto; border: 0;"></a>
                                                                         </td>
-                                                                        <td style="padding:0 4px 0 0;"><a
-                                                                                href="https://www.linkedin.com/"
-                                                                                target="_blank"><img
-                                                                                    src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-circle-white/linkedin@2x.png"
-                                                                                    width="32" height="32"
-                                                                                    alt="LinkedIn" title="LinkedIn"
-                                                                                    style="display: block; height: auto; border: 0;"></a>
-                                                                        </td>
                                                                     </tr>
                                                                 </table>
                                                             </td>

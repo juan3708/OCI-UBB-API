@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ciclo;
 use App\Models\Gastos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,7 @@ class GastosController extends Controller
         /*$gastos = DB::table('gastos as g')->select('g.id','g.valor','g.tipo',
         DB::raw('DATE_FORMAT(g.fecha, "%d-%m-%Y") as fecha'),
         'g.ciclo_id','g.actividad_id','g.competencia_id')->get();*/
-        $gastos = Gastos::with('ciclo','actividad','competencia', 'detalles')->get();
+        $gastos = Gastos::with('ciclo', 'actividad', 'competencia', 'detalles')->get();
         $data = [
             'code' => 200,
             'gastos' => $gastos
@@ -152,7 +153,7 @@ class GastosController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $gastos = Gastos::with(['detalles'])->firstwhere('id',$request ->id);
+                $gastos = Gastos::with(['detalles'])->firstwhere('id', $request ->id);
                 if (empty($gastos)) {
                     $data = [
                     'code' =>400,
@@ -172,6 +173,50 @@ class GastosController extends Controller
                 'code' =>400,
                 'status' => 'error',
                 'message' => 'Error al buscar el gastos'
+            ];
+        }
+        return response() -> json($data);
+    }
+
+    public function getCostPerDateAndCycle(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'ciclo_id' =>'required',
+                'fecha_inicial' => 'required|date_format:Y-m-d',
+                'fecha_final' => 'required|date_format:Y-m-d|after:fecha_inicial'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $ciclo = Ciclo::find($request->ciclo_id);
+                if (empty($ciclo)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro el ciclo asociado al id'
+                ];
+                } else {
+                    $costs = Gastos::with('detalles','competencia','actividad')->whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])->where('ciclo_id', $request->ciclo_id)->get();
+                    $totalCost = $ciclo->gastos()->sum('valor');
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'gastos'=>$costs,
+                    'totalGastado' =>$totalCost
+
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al realizar la consulta'
             ];
         }
         return response() -> json($data);

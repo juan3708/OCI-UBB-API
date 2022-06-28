@@ -7,25 +7,24 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class CambiarContraseña extends Mailable
+class Bienvenidos extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $nombre;
-    public $password;
     public $fecha;
     public $subject;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($nombre, $password, $fecha)
+    public function __construct($nombre, $fecha)
     {
         $this->nombre = $nombre;
-        $this->password = $password;
         $this->fecha = $fecha;
-        $this->subject = 'Nueva contraseña generada Sistema OCI - UBB';
+        $this->subject = "Bienvenido a las OCI - UBB!";
         //
     }
 
@@ -36,6 +35,6 @@ class CambiarContraseña extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.cambiarContraseña');
+        return $this->view('emails.bienvenidos');
     }
 }

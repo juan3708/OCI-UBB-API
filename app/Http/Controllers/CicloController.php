@@ -971,7 +971,10 @@ class CicloController extends Controller
                         'telefono'
                     )->get();
                     $establecimientoWithStudentsStatistic = array();
-                    foreach ($establecimientos as $establecimiento) {
+                    $establecimientoConMenosAlumnos = array();
+                    $establecimientoConMasAlumnos = array();
+                    $totalAlumnos = 0;
+                    foreach ($establecimientos as $key => $establecimiento) {
                         $establecimientoArray = $establecimiento->toArray();
                         $students = DB::table('alumno')->select('alumno.*')->join('alumno_clase', 'alumno.id', '=', 'alumno_clase.alumno_id')
                         ->join('clase', 'alumno_clase.clase_id', '=', 'clase.id')->where('clase.ciclo_id', '=', $request->ciclo_id)
@@ -999,14 +1002,26 @@ class CicloController extends Controller
                             array_push($studentsWithAssistanceStatistic, $studentArray);
                         }
                         $establecimientoArray['alumnos'] = $studentsWithAssistanceStatistic;
+                        $totalAlumnos += count($establecimientoArray['alumnos']);
+                        if ($key == 0) {
+                            $establecimientoConMenosAlumnos = $establecimientoArray;
+                            $establecimientoConMasAlumnos = $establecimientoArray;
+                        } else {
+                            if (count($establecimientoArray['alumnos'])>= count($establecimientoConMasAlumnos['alumnos'])) {
+                                $establecimientoConMasAlumnos = $establecimientoArray;
+                            } elseif (count($establecimientoArray['alumnos']) <= count($establecimientoConMenosAlumnos['alumnos'])) {
+                                $establecimientoConMenosAlumnos = $establecimientoArray;
+                            }
+                        }
                         array_push($establecimientoWithStudentsStatistic, $establecimientoArray);
                     }
                     $data = [
                     'code' =>200,
                     'status' => 'success',
                     'Establecimientos' => $establecimientoWithStudentsStatistic,
-                    //'Asistencias' => $asistencias,
-                    //'Porcentaje' =>$porcentajeDeAsistencia
+                    'EstablecimientoConMenosAlumnos' => $establecimientoConMenosAlumnos,
+                    'EstablecimientoConMasAlumnos' =>$establecimientoConMasAlumnos,
+                    'TotalAlumnos' => $totalAlumnos
                 ];
                 }
             }
@@ -1081,27 +1096,48 @@ class CicloController extends Controller
                     }
 
                     $establishments = $ciclo -> establecimientos()->get();
-                    
+                    $maxEstablishmentStudentsEnrolled = array();
+                    $minEstablishmentStudentEnrolled = array();
+                    $maxEstablishmentStudentsActive = array();
+                    $minEstablishmentStudentActive = array();
+
                     if (!$establishments->isEmpty()) {
                         $establishmentsArray = array();
-                        foreach ($establishments as $establishment) {
+                        foreach ($establishments as $key => $establishment) {
                             $establishmentArray = $establishment->toArray();
                             $establishmentArray['Alumnos'] = count(DB::table('alumno')->join('alumno_ciclo', 'alumno.id', '=', 'alumno_ciclo.alumno_id')
                         ->where('alumno.establecimiento_id', $establishment ->id)->where('alumno_ciclo.ciclo_id', $ciclo->id)->get());
-                            array_push($establishmentsArray, $establishmentArray);
-                        }
-                        $maxEstablishmentStudentsEnrolled = max($establishmentsArray);
-                        $minEstablishmentStudentEnrolled = min($establishmentsArray);
 
+                            array_push($establishmentsArray, $establishmentArray);
+
+                            if ($key == 0) {
+                                $maxEstablishmentStudentsEnrolled = $establishmentArray;
+                                $minEstablishmentStudentEnrolled = $establishmentArray;
+                            } else {
+                                if ($establishmentArray['Alumnos']>= $maxEstablishmentStudentsEnrolled['Alumnos']) {
+                                $maxEstablishmentStudentsEnrolled = $establishmentArray;
+                                } elseif ($establishmentArray['Alumnos'] <= $minEstablishmentStudentEnrolled['Alumnos']) {
+                                    $minEstablishmentStudentEnrolled = $establishmentArray;
+                                }
+                            }
+                        }
                         $establishmentsArray = array();
-                        foreach ($establishments as $establishment) {
+                        foreach ($establishments as $key => $establishment) {
                             $establishmentArray = $establishment->toArray();
                             $establishmentArray['Alumnos'] = count(DB::table('alumno')->join('alumno_ciclo', 'alumno.id', '=', 'alumno_ciclo.alumno_id')
                         ->where('alumno.establecimiento_id', $establishment ->id)->where('alumno_ciclo.ciclo_id', $ciclo->id)->where('alumno_ciclo.participante', 1)->get());
                             array_push($establishmentsArray, $establishmentArray);
+                            if ($key == 0) {
+                                $maxEstablishmentStudentsActive = $establishmentArray;
+                                $minEstablishmentStudentActive = $establishmentArray;
+                            } else {
+                                if ($establishmentArray['Alumnos']>= $maxEstablishmentStudentsActive['Alumnos']) {
+                                    $maxEstablishmentStudentsActive = $establishmentArray;
+                                } elseif ($establishmentArray['Alumnos'] <= $minEstablishmentStudentActive['Alumnos']) {
+                                    $minEstablishmentStudentActive = $establishmentArray;
+                                }
+                            }
                         }
-                        $maxEstablishmentStudentsActive = max($establishmentsArray);
-                        $minEstablishmentStudentActive = min($establishmentsArray);
                     } else {
                         $maxEstablishmentStudentsEnrolled = -1;
                         $minEstablishmentStudentEnrolled = -1;
@@ -1149,6 +1185,7 @@ class CicloController extends Controller
                         $establecimientoArray['alumnos'] = $studentsWithAssistanceStatistic;
                         array_push($establecimientoWithStudentsStatistic, $establecimientoArray);
                     }
+
                     $data = [
                     'code' =>200,
                     'status' => 'success',

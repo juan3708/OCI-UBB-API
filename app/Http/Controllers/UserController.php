@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\Bienvenidos;
 use App\Mail\CambiarContraseña;
+use App\Mail\CambiarCorreo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['all', 'login', 'register','changeStatus','ResetPassword','ChangePassword']]);
+        $this->middleware('auth:api', ['except' => ['all', 'login', 'register','changeStatus','ResetPassword','ChangePassword','Edit','ChangeEmail']]);
     }
 
     public function all()
@@ -58,6 +59,48 @@ class UserController extends Controller
             'user' => $user,
             'code' => 200
         ]);
+    }
+
+    public function Edit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'required',
+            'apellidos' => 'required',
+            'rut' => 'required',
+            'email' => 'required',
+            'rol_id' => 'required',
+            'id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()->toJson(),
+                'code' => 400
+            ]);
+        } else {
+            $user = User::find($request->id);
+            if (empty($user)) {
+                $data = [
+                        'code' => 400,
+                        'status' => 'error',
+                        'msg' => 'error en el find'
+                            ];
+            } else {
+                $user ->nombre = $request->nombre;
+                $user ->apellidos = $request->apellidos;
+                $user ->rut = $request->rut;
+                $user ->email = $request->email;
+                $user ->rol_id = $request->rol_id;
+                $user->save();
+                $data = [
+                        'code' => 200,
+                        'status' => 'success',
+                        'message' => 'Se ha editado correctamente el usuario',
+                        'usuario' => $user
+                            ];
+            }
+        }
+
+        return response() ->json($data);
     }
 
     public function login()
@@ -194,7 +237,7 @@ class UserController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                    'passwordActual' => 'required|string|min:6',
+                    'passwordActual' => 'required',
                     'newPassword' => 'required|string|min:6',
                     'user_id' =>'required'
                 ]);
@@ -225,6 +268,57 @@ class UserController extends Controller
                             'code' => 401,
                             'status' => 'error',
                             'message' => 'La contraseña actual es incorrecta',
+                                ];
+                    }
+                }
+            }
+        } else {
+            $data = [
+                    'code' => 400,
+                    'status' => 'error'
+                ];
+        }
+        return response() ->json($data);
+    }
+
+    public function ChangeEmail(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                    'password' => 'required',
+                    'newEmail' => 'required|email:rfc,dns||unique:user,email',
+                    'user_id' =>'required'
+                ]);
+            if ($validate ->fails()) {
+                $data = [
+                        'code' => 401,
+                        'status' => 'error',
+                        'message' => $validate->errors()->toJson(),
+                    ];
+            } else {
+                $user = User::find($request->user_id);
+                if (empty($user)) {
+                    $data = [
+                        'code' => 400,
+                        'status' => 'error',
+                            ];
+                } else {
+                    if (Hash::check($request->password, $user->password)) {
+                        $newDate = date("d/m/Y");
+                        $email = $user->email;
+                        $user ->email = $request->newEmail;
+                        $user-> save();
+                        Mail::to($email)->send(new CambiarCorreo($user->nombre." ".$user->apellidos, $request->newEmail, $newDate));
+                        $data = [
+                            'code' => 200,
+                            'status' => 'success',
+                            'message' => 'Se ha cambiado correctamente el correo',
+                                ];
+                    } else {
+                        $data = [
+                            'code' => 401,
+                            'status' => 'error',
+                            'message' => 'La contraseña es incorrecta',
                                 ];
                     }
                 }

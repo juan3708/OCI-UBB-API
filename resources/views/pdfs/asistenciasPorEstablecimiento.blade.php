@@ -86,7 +86,7 @@
                         <th style="border: 1px solid #999;">TOTAL CLASES</th>
                     </tr>
                 </thead>
-                <tbody>}
+                <tbody>
                     @for ($i = 0; $i < $cantEstudiantes; $i++)
                         <tr>
                             <td style="border: 1px solid #999;text-align: center;width: 80px;">{{ $students[$i]['rut'] }}</td>

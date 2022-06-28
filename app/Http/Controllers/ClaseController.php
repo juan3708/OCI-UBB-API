@@ -194,10 +194,10 @@ class ClaseController extends Controller
                 ];
                 } else {
                     $clase_id = $request->id;
-                    $studentWithoutLesson = DB::table('alumno')->whereNotExists(function ($query) use ($clase_id) {
+                    $studentWithoutLesson = DB::table('alumno')->select('alumno.*')->join('alumno_ciclo','alumno.id','=','alumno_ciclo.alumno_id')->whereNotExists(function ($query) use ($clase_id) {
                         $query -> from('alumno_clase')->select('alumno_clase.alumno_id')->whereColumn('alumno_clase.alumno_id', '=', 'alumno.id')
                         ->where('alumno_clase.clase_id', '=', $clase_id);
-                    })->get();
+                    })->where('alumno_ciclo.participante',1)->distinct()->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',

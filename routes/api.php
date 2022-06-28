@@ -199,6 +199,10 @@ Route::post('/usuario/delete', [UserController::class,'delete']);
 Route::post('/usuario/changestatus', [UserController::class,'changeStatus']);
 Route::post('/usuario/resetpassword', [UserController::class,'ResetPassword']);
 Route::post('/usuario/changepassword', [UserController::class,'ChangePassword']);
+Route::post('/usuario/edit', [UserController::class,'Edit']);
+Route::post('/usuario/changeemail', [UserController::class,'ChangeEmail']);
+
+
 
 
 
@@ -206,6 +210,8 @@ Route::post('/usuario/changepassword', [UserController::class,'ChangePassword'])
 
 //PDFS
 Route::post('/pdf/assistanceperestablishment', [PdfController::class,'AssistancePerEstablishment']);
+Route::post('/pdf/generalassistance', [PdfController::class,'GeneralAssistance']);
+Route::post('/pdf/costs', [PdfController::class,'Costs']);
 Route::get('/pdf/download/{fileName}', [PdfController::class,'download']);
 Route::post('/pdf/delete', [PdfController::class,'delete']);
 

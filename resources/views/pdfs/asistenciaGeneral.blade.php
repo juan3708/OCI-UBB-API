@@ -124,22 +124,22 @@
                                 <tbody>
                                     @for ($j = 0; $j < count($establecimientos[$i]['alumnos']); $j++)
                                         <tr>
-                                            <td style="border: 1px solid #999;text-align: center;width: 80px;">
+                                            <td style="border: 1px solid #999;text-align: center;width: 15%;">
                                                 {{ $establecimientos[$i]['alumnos'][$j]['rut'] }}</td>
-                                            <td style="border: 1px solid #999;text-align: center;">
+                                            <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                                 {{ $establecimientos[$i]['alumnos'][$j]['nombre'] }}</td>
-                                            <td style="border: 1px solid #999;text-align: center;">
+                                            <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                                 {{ $establecimientos[$i]['alumnos'][$j]['apellidos'] }}</td>
-                                            <td style="border: 1px solid #999;text-align: center;width: 50px;">
+                                            <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                                 {{ $establecimientos[$i]['alumnos'][$j]['PorcentajeAsistencia'] }}%
                                             </td>
-                                            <td style="border: 1px solid #999;text-align: center;">
+                                            <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                                 {{ $establecimientos[$i]['alumnos'][$j]['CantAsistenciasEInasistencias'][0]['asistencias'] }}
                                             </td>
-                                            <td style="border: 1px solid #999;text-align: center;">
+                                            <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                                 {{ $establecimientos[$i]['alumnos'][$j]['CantAsistenciasEInasistencias'][0]['inasistencias'] }}
                                             </td>
-                                            <td style="border: 1px solid #999;text-align: center;">
+                                            <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                                 {{ count($establecimientos[$i]['alumnos'][$j]['Asistencias']) }}
                                             </td>
 
@@ -169,22 +169,22 @@
                             <tbody>
                                 @for ($j = 0; $j < count($establecimientos[$i]['alumnos']); $j++)
                                     <tr>
-                                        <td style="border: 1px solid #999;text-align: center;width: 80px;">
+                                        <td style="border: 1px solid #999;text-align: center;width: 15%;">
                                             {{ $establecimientos[$i]['alumnos'][$j]['rut'] }}</td>
-                                        <td style="border: 1px solid #999;text-align: center;">
+                                        <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                             {{ $establecimientos[$i]['alumnos'][$j]['nombre'] }}</td>
-                                        <td style="border: 1px solid #999;text-align: center;">
+                                        <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                             {{ $establecimientos[$i]['alumnos'][$j]['apellidos'] }}</td>
-                                        <td style="border: 1px solid #999;text-align: center;width: 50px;">
+                                        <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                             {{ $establecimientos[$i]['alumnos'][$j]['PorcentajeAsistencia'] }}%
                                         </td>
-                                        <td style="border: 1px solid #999;text-align: center;">
+                                        <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                             {{ $establecimientos[$i]['alumnos'][$j]['CantAsistenciasEInasistencias'][0]['asistencias'] }}
                                         </td>
-                                        <td style="border: 1px solid #999;text-align: center;">
+                                        <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                             {{ $establecimientos[$i]['alumnos'][$j]['CantAsistenciasEInasistencias'][0]['inasistencias'] }}
                                         </td>
-                                        <td style="border: 1px solid #999;text-align: center;">
+                                        <td style="border: 1px solid #999;text-align: center;width: 14%;">
                                             {{ count($establecimientos[$i]['alumnos'][$j]['Asistencias']) }}
                                         </td>
 

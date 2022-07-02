@@ -348,8 +348,9 @@ class AlumnoController extends Controller
                     'message' => 'No se encontro el alumno asociado al id'
                 ];
                 } else {
-                    $ciclos = DB::table('ciclo')->select('ciclo.id', 'ciclo.nombre')->orderBy('id', 'desc')->limit(2)->get();
+                    $ciclos = DB::table('ciclo')->select('ciclo.id', 'ciclo.nombre')->orderBy('id', 'desc')->limit(3)->get();
                     $ciclosConAsistenciaDelAlumno = [];
+                    unset($ciclos[0]);
                     foreach ($ciclos as $ciclo) {
                         $cicloArray = (array)$ciclo;
                         $Cantassitance = DB::table('alumno_clase')->select(

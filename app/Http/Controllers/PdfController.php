@@ -120,9 +120,9 @@ class PdfController extends Controller
                         'errors' => $validate ->errors()
                     ];
             } else {
-                $fileName = 'asistencia-general-'.$request->nombreCiclo.'.pdf';
+                $fileName = 'informe-gastos-'.$request->nombreCiclo.'.pdf';
                 $parseFechaInicio = date("d/m/Y", strtotime($request->fecha_inicio));
-                $parseFechaFinal = date("d/m/Y", strtotime($request->parseFechaFinal));
+                $parseFechaFinal = date("d/m/Y", strtotime($request->fecha_final));
 
                 $dataView = [
                     'nombreCiclo' => $request ->nombreCiclo,
@@ -133,7 +133,75 @@ class PdfController extends Controller
                     'presupuestoCiclo' => $request->presupuestoCiclo
                     
                 ];
-                $pdf = Pdf::loadView('pdfs.asistenciaGeneral',$dataView )->setPaper('letter');
+                $pdf = Pdf::loadView('pdfs.gastos',$dataView )->setPaper('letter');
+                Storage::put('temp\\'.$fileName, $pdf->output());
+                $data = [
+                        'code' =>200,
+                        'status' => 'success',
+                        'fileName' => $fileName
+                    ];
+            }
+        } else {
+            $data = [
+                    'code' =>400,
+                    'status' => 'error'
+                ];
+        }
+        return response()-> json($data);
+    }
+
+    public function GeneralStatistic(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                    'cantEstablecimientos' => 'required',
+                    'cantidadAlumnosInscritos' =>'required',
+                    'cantidadAlumnosParticipantes' =>'required',
+                    'cicloAnterior' =>'required',
+                    'diferenciaAlumnosInscritos'=>'required',
+                    'diferenciaAlumnosParticipantes' => 'required',
+                    'diferenciaEstablecimientos' =>'required',
+                    'establecimientoMaxInscritos' =>'required',
+                    'establecimientoMaxParticipantes' =>'required',
+                    'establecimientoMinInscritos' =>'required',
+                    'establecimientoMinParticipantes'=>'required',
+                    'establecimientos' => 'required',
+                    'totalGastos' =>'required',
+                    'prespuestoRestante' =>'required',
+                    'ciclo' => 'required'
+
+                ]);
+            if ($validate ->fails()) {
+                $data = [
+                        'code' => 400,
+                        'status' => 'error',
+                        'errors' => $validate ->errors()
+                    ];
+            } else {
+               // dd($request->ciclo['nombre']);
+                $fileName = 'informe-general-'.$request->ciclo['nombre'].'.pdf';
+
+                $dataView = [
+                    'cantEstablecimientos' => $request ->cantEstablecimientos,
+                    'cantidadAlumnosInscritos' => $request->cantidadAlumnosInscritos,
+                    'cantidadAlumnosParticipantes' => $request->cantidadAlumnosParticipantes,
+                    'cicloAnterior' => $request->cicloAnterior,
+                    'competencias' => $request->competencias,
+                    'diferenciaAlumnosInscritos' => $request->diferenciaAlumnosInscritos,
+                    'diferenciaAlumnosParticipantes' => $request ->diferenciaAlumnosParticipantes,
+                    'diferenciaEstablecimientos' => $request->diferenciaEstablecimientos,
+                    'establecimientoMaxInscritos' => $request->establecimientoMaxInscritos,
+                    'establecimientoMaxParticipantes' => $request->establecimientoMaxParticipantes,
+                    'establecimientoMinInscritos' => $request->establecimientoMinInscritos,
+                    'establecimientoMinParticipantes' => $request->establecimientoMinParticipantes,
+                    'establecimientos' => $request ->establecimientos,
+                    'gastos' => $request->gastos,
+                    'totalGastos' => $request->totalGastos,
+                    'prespuestoRestante' => $request->prespuestoRestante,
+                    'ciclo' => $request ->ciclo
+                    
+                ];
+                $pdf = Pdf::loadView('pdfs.estadisticaGeneral',$dataView )->setPaper('letter');
                 Storage::put('temp\\'.$fileName, $pdf->output());
                 $data = [
                         'code' =>200,

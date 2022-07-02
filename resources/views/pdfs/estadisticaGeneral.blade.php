@@ -40,8 +40,6 @@
                     {{ $ciclo['nombre'] }}
                     <br>
                     Informe estadistico del Ciclo.
-
-
                 </span>
             </h2>
         </div>
@@ -151,7 +149,7 @@
                             @if (count($establecimientos[$i]['alumnos']) == 0 && $i == 0)
                                 <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
                                     ESTABLECIMIENTO</h4>
-                            @elseif ($i > count($establecimientos) - 1 && count($establecimientos[$i]['alumnos']) == 0)
+                            @elseif ($i < count($establecimientos) - 1 && count($establecimientos[$i]['alumnos']) == 0)
                                 @if (count($establecimientos[$i + 1]['alumnos']) == 0)
                                     <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
                                         ESTABLECIMIENTO</h4>
@@ -266,47 +264,37 @@
     <div style="page-break-after:always;"></div>
     <div>
         <div>
-            @if (count($competencias) == 0)
-                <h4 style="font-weight: bold;text-align: center">NO EXISTEN COMPETENCIAS ASOCIADAS.</h4>
-            @else
-                <table style="width: 100%;border: transparent;">
-                    <caption>
-                        <h2
-                            style="font-weight: bold;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                            COMPETENCIAS DE LAS OCI</h2>
-                    </caption>
+            <table style="width: 100%;border: transparent;">
+                <caption>
+                    <h2
+                        style="font-weight: bold;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
+                        COMPETENCIAS</h2>
+                </caption>
+                @if (count($competencias) == 0)
+                    <h4 style="font-weight: bold;text-align: center">NO EXISTEN COMPETENCIAS ASOCIADAS.</h4>
+                @else
                     <tbody>
                         @for ($i = 0; $i < count($competencias); $i++)
                             <tr style="background-color:white;">
-                                <th style="border: transparent;text-align: left;font-weight: normal;width: 30%">
-                                    <b>FECHA: {{ date('d/m/Y', strtotime($competencias[$i]['fecha'])) }} </b>
-                                </th>
-                                <th style="border: transparent;text-align: left;font-weight: normal;width: 40%">
-                                    <b>TIPO DE COMPETICION: {{ $competencias[$i]['tipo'] }} </b>
-                                </th>
-                                <th style="border: transparent;text-align: left;font-weight: normal;width: 30%">
-                                    <b>LUGAR: {{ $competencias[$i]['lugar'] }} </b>
-                                </th>
-                            </tr>
-                            <br>
-                            <tr>
-                                <th style="border: transparent;text-align: left;font-weight: normal;width: 50%">
-                                    <b>PUNTAJE PROMEDIO: {{ $competencias[$i]['promedioPuntaje'] }} </b>
-                                </th>
-                                <th style="border: transparent;text-align: left;font-weight: normal;width: 50%">
-                                    <b>Cantidad total de alumnos: {{ count($competencias[$i]['alumnos']) }} </b>
+                                <th style="border: transparent;text-align: center;font-weight: normal;">
+                                    <b>FECHA: </b> {{ date('d/m/Y', strtotime($competencias[$i]['fecha'])) }} -
+                                    <b>TIPO DE COMPETICION: </b>{{ $competencias[$i]['tipo'] }} -
+                                    <b>LUGAR: </b>{{ $competencias[$i]['lugar'] }}
                                 </th>
                             </tr>
                             @if (count($competencias[$i]['alumnos']) == 0)
-                                <h5 style="font-weight: bold;text-align: center"> NO EXISTEN ALUMNOS ASOCIADOS</h5>
+                                <h4 style="font-weight: bold;text-align: center"> NO EXISTEN ALUMNOS ASOCIADOS</h4>
+                                <br>
                             @else
+                                <br>
+                                <tr>
+                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 50%">
+                                        <b>PUNTAJE PROMEDIO: </b> {{ $competencias[$i]['promedioPuntaje'] }} -
+                                        <b>Cantidad total de alumnos: </b>{{ count($competencias[$i]['alumnos']) }}
+                                    </th>
+                                </tr>
                                 <table
                                     style="width: 100%;border: 1px solid #999;border-collapse: collapse;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
-                                    <caption>
-                                        <h3
-                                            style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                            ALUMNOS</h3>
-                                    </caption>
                                     <thead>
                                         <tr style="text-align: center;background-color: #f6f6f6;">
                                             <th style="border: 1px solid #999;">RUT</th>
@@ -318,16 +306,16 @@
                                     <tbody>
                                         @for ($j = 0; $j < count($competencias[$i]['alumnos']); $j++)
                                             <tr>
-                                                <td style="border: 1px solid #999;text-align: center;width: 25%;">
+                                                <td style="border: 1px solid #999;text-align: center;">
                                                     {{ $competencias[$i]['alumnos'][$j]['rut'] }}</td>
-                                                <td style="border: 1px solid #999;text-align: center;width: 25%;">
+                                                <td style="border: 1px solid #999;text-align: center;">
                                                     {{ $competencias[$i]['alumnos'][$j]['nombre'] }}</td>
-                                                <td style="border: 1px solid #999;text-align: center;width: 25%;">
+                                                <td style="border: 1px solid #999;text-align: center;">
                                                     {{ $competencias[$i]['alumnos'][$j]['apellidos'] }}</td>
-                                                <td style="border: 1px solid #999;text-align: center;width: 25%;">
+                                                <td style="border: 1px solid #999;text-align: center;">
                                                     {{ $competencias[$i]['alumnos'][$j]['establecimiento']['nombre'] }}
                                                 </td>
-                                                <td style="border: 1px solid #999;text-align: center;width: 25%;">
+                                                <td style="border: 1px solid #999;text-align: center;">
                                                     {{ $competencias[$i]['alumnos'][$j]['pivot']['puntaje'] }}
                                                 </td>
                                             </tr>
@@ -335,116 +323,107 @@
                                     </tbody>
                                 </table>
                                 <br>
+                                <br>
                             @endif
-                        @endfor
-                    </tbody>
-                </table>
-            @endif
-        </div>
-    </div>
-    <div style="page-break-after:always;"></div>
-    <div>
-        <div>
-            <table style="border: transparent;">
-                <caption>
-                    <h2
-                        style="font-weight: bold;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                        GASTOS</h2>
-                </caption>
-                @if (count($gastos) == 0)
-                    <h4>NO EXISTEN GASTOS ASOCIADOS</h4>
-                @else
-                    <tr style="background-color:white;">
-                        <th style="border: transparent;text-align: left;font-weight: normal;width: 50%"><b>PRESUPUESTO
-                                ACTUAL:</b>
-                            ${{ number_format(intval($ciclo['presupuesto']), 0, ',', '.') }}</th>
-                        <th style="border: transparent;text-align: center;font-weight: normal"><b>PRESUPUESTO
-                                RESTANTE:</b> ${{ number_format(intval($prespuestoRestante), 0, ',', '.') }}</th>
-                    </tr>
-                    <br>
-                    <tr style="background-color:white;">
-                        <th style="border: transparent;text-align: left;font-weight: normal;"><b>TOTAL GASTOS:</b>
-                            ${{ number_format(intval($totalGastos), 0, ',', '.') }}</th>
-
-                    </tr>
-                    <br>
-                    <tbody style="text-align: center">
-                        @for ($i = 0; $i < count($gastos); $i++)
-                            @if ($gastos[$i]['actividad'] == null && $gastos[$i]['competencia'] == null)
-                                <tr style="background-color:white">
-                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 40%">
-                                        <b>FECHA:</b>
-                                        {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }}
-                                    </th>
-                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 100%">
-                                        <b>ASOCIADO CON :</b> NO ASOCIADO
-                                    </th>
-                                </tr>
-                            @elseif ($gastos[$i]['actividad'] != null && $gastos[$i]['competencia'] != null)
-                                <tr>
-                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 40%">
-                                        <b>FECHA:</b>
-                                        {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }}
-                                    </th>
-                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 100%">
-                                        <b>ASOCIADO CON :</b>
-                                        La actividad: {{ $gastos[$i]['actividad']['nombre'] }} y competencia:
-                                        {{ $gastos[$i]['competencia']['tipo'] }}
-                                    </th>
-                                </tr>
-                            @elseif ($gastos[$i]['actividad'] == null && $gastos[$i]['competencia'] != null)
-                                <tr style="background-color:white">
-                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 40%">
-                                        <b>FECHA:</b>
-                                        {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }}
-                                    </th>
-                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 100%">
-                                        <b>ASOCIADO CON :</b>
-                                        La competencia: {{ $gastos[$i]['competencia']['tipo'] }}
-                                    </th>
-                                </tr>
-                            @elseif($gastos[$i]['actividad'] != null && $gastos[$i]['competencia'] == null)
-                                <tr style="background-color:white">
-                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 40%">
-                                        <b>FECHA:</b>
-                                        {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }}
-                                    </th>
-                                    <th style="border: transparent;text-align: left;font-weight: normal;width: 100%">
-                                        <b>ASOCIADO CON :</b>
-                                        La actividad: {{ $gastos[$i]['actividad']['nombre'] }}</th>
-                                </tr>
-                            @endif
-                            <table
-                                style="width: 100%;border: 1px solid #999;border-collapse: collapse;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
-                                <thead>
-                                    <tr style="text-align: center;background-color: #f6f6f6">
-                                        <th style="border: 1px solid #999;">NOMBRE DEL DETALLE</th>
-                                        <th style="border: 1px solid #999;">VALOR</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for ($j = 0; $j < count($gastos[$i]['detalles']); $j++)
-                                        <tr>
-                                            <td style="width:50% ;border: 1px solid #999;text-align: center;">
-                                                {{ $gastos[$i]['detalles'][$j]['nombre'] }}</td>
-                                            <td style="width:50% ;border: 1px solid #999;text-align: center;">
-                                                ${{ number_format(intval($gastos[$i]['detalles'][$j]['valor']), 0, ',', '.') }}
-                                            </td>
-                                        </tr>
-                                    @endfor
-                                </tbody>
-                                <td style="font-weight: bold;text-align: center;">TOTAL:</td>
-                                <td style="border: 1px solid #999;">
-                                    ${{ number_format(intval($gastos[$i]['valor']), 0, ',', '.') }}
-                                </td>
-                            </table>
-                            <br>
                         @endfor
                     </tbody>
                 @endif
             </table>
         </div>
     </div>
+    <div style="page-break-after:always;"></div>
+
+    <table style="border: transparent">
+        <caption>
+            <h2
+                style="font-weight: bold;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
+                GASTOS</h2>
+        </caption>
+        @if (count($gastos) == 0)
+            <h4
+                style="font-weight: bold;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
+                NO EXISTEN GASTOS ASOCIADOS</h4>
+        @else
+            <tr style="background-color:white;">
+                <th class="presupuestoActual" style="border: transparent;text-align: left;font-weight: normal">
+                    <b>PRESUPUESTO
+                        ACTUAL:</b>
+                    ${{ number_format(intval($ciclo['presupuesto']), 0, ',', '.') }} - <b>PRESUPUESTO
+                        RESTANTE:</b> ${{ number_format(intval($prespuestoRestante), 0, ',', '.') }}
+                </th>
+            </tr>
+            <br>
+            <tr style="background-color:white;">
+                <th style="border: transparent;text-align: left;font-weight: normal;"><b>TOTAL GASTOS:</b>
+                    ${{ number_format(intval($totalGastos), 0, ',', '.') }}</th>
+
+            </tr>
+            <br>
+            <tbody style="text-align: center">
+                @for ($i = 0; $i < count($gastos); $i++)
+                    @if ($gastos[$i]['actividad'] == null && $gastos[$i]['competencia'] == null)
+                        <tr style="background-color:white">
+                            <th style="border: transparent;text-align: left;font-weight: normal;">
+                                <b>FECHA:</b>
+                                {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }} - <b>ASOCIADO CON :</b>
+                                NO ASOCIADO
+                            </th>
+                        </tr>
+                    @elseif ($gastos[$i]['actividad'] != null && $gastos[$i]['competencia'] != null)
+                        <tr>
+                            <th style="border: transparent;text-align: left;font-weight: normal;">
+                                <b>FECHA:</b>
+                                {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }} - <b>ASOCIADO CON :</b>
+                                La actividad: {{ $gastos[$i]['actividad']['nombre'] }} y competencia:
+                                {{ $gastos[$i]['competencia']['tipo'] }}
+                            </th>
+                        </tr>
+                    @elseif ($gastos[$i]['actividad'] == null && $gastos[$i]['competencia'] != null)
+                        <tr style="background-color:white">
+                            <th style="border: transparent;text-align: left;font-weight: normal;">
+                                <b>FECHA:</b>
+                                {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }} - <b>ASOCIADO CON :</b>
+                                La competencia: {{ $gastos[$i]['competencia']['tipo'] }}
+                            </th>
+                        </tr>
+                    @elseif($gastos[$i]['actividad'] != null && $gastos[$i]['competencia'] == null)
+                        <tr style="background-color:white">
+                            <th style="border: transparent;text-align: left;font-weight: normal">
+                                <b>FECHA:</b>
+                                {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }} - <b>ASOCIADO CON :</b>
+                                La actividad: {{ $gastos[$i]['actividad']['nombre'] }}
+                            </th>
+                        </tr>
+                    @endif
+                    <table
+                        style="width: 100%;border: 1px solid #999;border-collapse: collapse;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
+                        <thead>
+                            <tr style="text-align: center;background-color: #f6f6f6">
+                                <th style="border: 1px solid #999;width: 50%">NOMBRE DEL DETALLE</th>
+                                <th style="border: 1px solid #999;width: 50%">VALOR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for ($j = 0; $j < count($gastos[$i]['detalles']); $j++)
+                                <tr>
+                                    <td style="width:100% ;border: 1px solid #999;text-align: center;">
+                                        {{ $gastos[$i]['detalles'][$j]['nombre'] }}</td>
+                                    <td style="width:100% ;border: 1px solid #999;text-align: center;">
+                                        ${{ number_format(intval($gastos[$i]['detalles'][$j]['valor']), 0, ',', '.') }}
+                                    </td>
+                                </tr>
+                            @endfor
+                        </tbody>
+                        <td style="width:100% ;font-weight: bold;text-align: center;">TOTAL:</td>
+                        <td style="width:100% ;border: 1px solid #999;">
+                            ${{ number_format(intval($gastos[$i]['valor']), 0, ',', '.') }}
+                        </td>
+                    </table>
+                    <br>
+                @endfor
+            </tbody>
+        @endif
+    </table>
 </body>
 
 </html>

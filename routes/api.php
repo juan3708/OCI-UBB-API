@@ -153,6 +153,8 @@ Route::post('/clase/deleteteachers', [ClaseController::class,'deleteTeachersPerL
 Route::post('/clase/chargeassistants', [ClaseController::class,'LessonHasAssistants']);
 Route::post('/clase/deleteassistants', [ClaseController::class,'deleteAssistantsPerLesson']);
 Route::post('/clase/getassistantsandteachers', [ClaseController::class,'getAssistantsAndTeacherWhereNotExist']);
+Route::post('/clase/getlessonspercycleandteacher', [ClaseController::class,'getLessonsPerCycleAndTeacher']);
+Route::post('/clase/getlessonspercycleandassistant', [ClaseController::class,'getLessonsPerCycleAndAssistant']);
 
 //Rutas Ayudante
 Route::get('/ayudante/all', [AyudanteController::class,'all']);
@@ -212,6 +214,7 @@ Route::post('/usuario/changeemail', [UserController::class,'ChangeEmail']);
 Route::post('/pdf/assistanceperestablishment', [PdfController::class,'AssistancePerEstablishment']);
 Route::post('/pdf/generalassistance', [PdfController::class,'GeneralAssistance']);
 Route::post('/pdf/costs', [PdfController::class,'Costs']);
+Route::post('/pdf/generalstatistic', [PdfController::class,'GeneralStatistic']);
 Route::get('/pdf/download/{fileName}', [PdfController::class,'download']);
 Route::post('/pdf/delete', [PdfController::class,'delete']);
 

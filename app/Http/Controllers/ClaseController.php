@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ayudante;
+use App\Models\Ciclo;
 use App\Models\Clase;
+use App\Models\Profesor;
 use Countable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -194,10 +197,10 @@ class ClaseController extends Controller
                 ];
                 } else {
                     $clase_id = $request->id;
-                    $studentWithoutLesson = DB::table('alumno')->select('alumno.*')->join('alumno_ciclo','alumno.id','=','alumno_ciclo.alumno_id')->whereNotExists(function ($query) use ($clase_id) {
+                    $studentWithoutLesson = DB::table('alumno')->select('alumno.*')->join('alumno_ciclo', 'alumno.id', '=', 'alumno_ciclo.alumno_id')->whereNotExists(function ($query) use ($clase_id) {
                         $query -> from('alumno_clase')->select('alumno_clase.alumno_id')->whereColumn('alumno_clase.alumno_id', '=', 'alumno.id')
                         ->where('alumno_clase.clase_id', '=', $clase_id);
-                    })->where('alumno_ciclo.participante',1)->distinct()->get();
+                    })->where('alumno_ciclo.participante', 1)->where('alumno_ciclo.ciclo_id', $clase ->ciclo_id)->distinct()->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
@@ -541,7 +544,7 @@ class ClaseController extends Controller
                         $query -> from('ayudante_clase')->select('ayudante_clase.ayudante_id')->whereColumn('ayudante_clase.ayudante_id', '=', 'ayudante.id')->where('ayudante_clase.clase_id', '=', $clase_id);
                     })->get();
                     $profesores = DB::table('profesor')->whereNotExists(function ($query) use ($clase_id) {
-                        $query -> from('clase_profesor')->select('clase_profesor.profesor_id')->whereColumn('clase_profesor.profesor_id', '=', 'profesor.id')->where( 'clase_profesor.clase_id', '=', $clase_id);
+                        $query -> from('clase_profesor')->select('clase_profesor.profesor_id')->whereColumn('clase_profesor.profesor_id', '=', 'profesor.id')->where('clase_profesor.clase_id', '=', $clase_id);
                     })->get();
                     $data = [
                     'code' =>200,
@@ -550,6 +553,87 @@ class ClaseController extends Controller
                     'profesores'=> $profesores
                 ];
                 }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al realizar la consulta'
+            ];
+        }
+        return response()-> json($data);
+    }
+
+
+    // ------------------------------------------------- LISTAR CLASES SEGUN SUS ROLES ---------------------------------------------
+
+    public function getLessonsPerCycleAndTeacher(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+            'rut_profesor' =>'required',
+            'ciclo_id'=>'required'
+        ]);
+            if ($validate ->fails()) {
+                $data = [
+                'code' => 400,
+                'status' => 'error',
+                'errors' => $validate ->errors()
+            ];
+            } else {
+                $teacher = Profesor::where('rut', $request->rut_profesor)->first();
+                if (empty($teacher)) {
+                    $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'No se encontro el profesor'
+            ];
+                } else {
+                $lessons = $teacher->clases()->with('nivel', 'alumnos', 'ayudantes', 'profesores')->where('ciclo_id', $request->ciclo_id)->get();
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos', 'noticias')->firstwhere('id', $request ->ciclo_id);
+                $data = [
+                'code' =>200,
+                'status' => 'success',
+                'clases' => $lessons,
+                'profesor'=> $teacher,
+                'ciclo'=> $ciclo
+            ];
+                }
+            }
+        } else {
+            $data = [
+            'code' =>400,
+            'status' => 'error',
+            'message' => 'Error al realizar la consulta'
+        ];
+        }
+        return response()-> json($data);
+    }
+
+    public function getLessonsPerCycleAndAssistant(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'rut_ayudante' =>'required',
+                'ciclo_id'=>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $assistant = Ayudante::where('rut', $request->rut_ayudante)->first();
+                $lessons = $assistant->clases()->with('nivel', 'alumnos', 'ayudantes', 'profesores')->where('ciclo_id', $request->ciclo_id)->get();
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos', 'noticias')->firstwhere('id', $request ->ciclo_id);
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'clases' => $lessons,
+                    'ciclo'=>$ciclo
+                ];
+                
             }
         } else {
             $data = [

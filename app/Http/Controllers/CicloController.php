@@ -241,7 +241,7 @@ class CicloController extends Controller
                 'message' => 'No se encontro el ciclo asociado al id'
             ];
             } else {
-                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos')->firstwhere('id', $ciclo[0]->id);
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos','noticias')->firstwhere('id', $ciclo[0]->id);
                 $lessons = $ciclo -> clases() -> with('nivel')->get();
                 $studentsEnrolled = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
                 $costs = $ciclo -> gastos()->with('competencia', 'actividad', 'detalles')->get();

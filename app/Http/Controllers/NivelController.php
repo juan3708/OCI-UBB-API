@@ -11,7 +11,7 @@ class NivelController extends Controller
 {
     public function all()
     {
-        $nivel = Nivel::with('clases', 'ciclo')->get();
+        $nivel = Nivel::with('clases', 'ciclo','alumnos')->get();
         $data = [
             'code' => 200,
             'niveles' => $nivel
@@ -33,8 +33,6 @@ class NivelController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $nivel = Nivel::where('nombre', $request ->nombre)->first();
-                if (empty($nivel)) {
                     $nivel = new Nivel();
                     $nivel -> nombre = $request -> nombre;
                     $nivel -> ciclo_id = $request -> ciclo_id;
@@ -45,13 +43,6 @@ class NivelController extends Controller
                             'message' => 'Se ha creado correctamente el nivel',
                             'nivel' => $nivel
                         ];
-                } else {
-                    $data = [
-                            'code' => 401,
-                            'status' => 'error',
-                            'message' => 'Ya existe un nivel con ese nombre'
-                        ];
-                }
             }
         } else {
             $data = [

@@ -38,7 +38,8 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
             'fecha_creacion' => 'required|date_format:Y-m-d',
             'rut' => 'required',
-            'rol_id' => 'required'
+            'rol_id' => 'required',
+            'admin'=>'required'
         ]);
         if ($validator->fails()) {
             return response()->json([

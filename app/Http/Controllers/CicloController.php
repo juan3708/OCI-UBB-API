@@ -189,7 +189,7 @@ class CicloController extends Controller
                     $competencias = $ciclo->competencias()->with('alumnos', 'gastos')->get();
                     $actividades = $ciclo->actividades()->with('gastos')->get();
                     $noticias = $ciclo->noticias()->with('adjuntos')->get();
-                    $establecimientos = DB::table('establecimiento')
+                    $establecimientosSinCiclo = DB::table('establecimiento')
                     ->whereNotExists(function ($query) use ($ciclo_id) {
                         $query->select('ciclo_establecimiento.*')
                               ->from('ciclo_establecimiento')
@@ -197,6 +197,17 @@ class CicloController extends Controller
                     })
                     ->get();
                     $niveles = $ciclo->niveles()->with('clases', 'alumnos')->get();
+                    $establecimientos = $ciclo->establecimientos()->get();
+                    $establecimientoHasQuotes = false;
+    
+                    foreach ($establecimientos as $establecimiento) {
+                        if($establecimiento->pivot->cupos >=1){
+                            $establecimientoHasQuotes = true;
+                            break;
+                        }
+                    }
+                    $ciclo['establecimientoTieneCupos'] = $establecimientoHasQuotes;
+                    $ciclo['alumnosParticipantes'] = count($studentsEnrolled);
                     $data = [
                     'code' =>200,
                     'status' => 'success',
@@ -206,10 +217,11 @@ class CicloController extends Controller
                     'gastos' =>$costs,
                     'totalGastos' => $totalCost,
                     'competencias'=>$competencias,
-                    'establecimientosSinCiclo' => $establecimientos,
+                    'establecimientosSinCiclo' => $establecimientosSinCiclo,
                     'niveles' => $niveles,
                     'actividades' => $actividades,
-                    'noticias'=> $noticias
+                    'noticias'=> $noticias,
+                    'establecimientoTieneCupos'=>$establecimientoHasQuotes
                 ];
                 }
             }
@@ -241,18 +253,49 @@ class CicloController extends Controller
                 'message' => 'No se encontro el ciclo asociado al id'
             ];
             } else {
-                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos','noticias')->firstwhere('id', $ciclo[0]->id);
-                $lessons = $ciclo -> clases() -> with('nivel')->get();
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos', 'noticias')->firstwhere('id',$ciclo[0]->id);
+                $lessons = $ciclo ->clases()->with('ciclo', 'nivel', 'alumnos', 'ayudantes', 'profesores')->get();
+                $costs = $ciclo ->gastos()->with('competencia', 'actividad', 'detalles')->get();
+                $totalCost = $ciclo->gastos()->sum('valor');
                 $studentsEnrolled = $ciclo ->alumnos()->with('establecimiento')->where('participante', 1)->get();
-                $costs = $ciclo -> gastos()->with('competencia', 'actividad', 'detalles')->get();
+                $ciclo_id = $ciclo->id;
+                $competencias = $ciclo->competencias()->with('alumnos', 'gastos')->get();
+                $actividades = $ciclo->actividades()->with('gastos')->get();
+                $noticias = $ciclo->noticias()->with('adjuntos')->get();
+                $establecimientosSinCiclo = DB::table('establecimiento')
+                    ->whereNotExists(function ($query) use ($ciclo_id) {
+                        $query->select('ciclo_establecimiento.*')
+                              ->from('ciclo_establecimiento')
+                              ->whereColumn('ciclo_establecimiento.establecimiento_id', 'establecimiento.id')->where('ciclo_establecimiento.ciclo_id', $ciclo_id);
+                    })
+                    ->get();
+                $niveles = $ciclo->niveles()->with('clases', 'alumnos')->get();
+                $establecimientos = $ciclo->establecimientos()->get();
+                $establecimientoHasQuotes = false;
+
+                foreach ($establecimientos as $establecimiento) {
+                    if($establecimiento->pivot->cupos >=1){
+                        $establecimientoHasQuotes = true;
+                        break;
+                    }
+                }
+                $ciclo['establecimientoTieneCupos'] = $establecimientoHasQuotes;
+                $ciclo['alumnosParticipantes'] = count($studentsEnrolled);
                 $data = [
-                'code' =>200,
-                'status' => 'success',
-                'ciclo' => $ciclo,
-                'clases' =>$lessons,
-                'alumnosParticipantes' =>$studentsEnrolled,
-                'gastos'=>$costs
-            ];
+                        'code' =>200,
+                        'status' => 'success',
+                        'ciclo' => $ciclo,
+                        'clases' =>$lessons,
+                        'alumnosParticipantes' =>$studentsEnrolled,
+                        'gastos' =>$costs,
+                        'totalGastos' => $totalCost,
+                        'competencias'=>$competencias,
+                        'establecimientosSinCiclo' => $establecimientosSinCiclo,
+                        'niveles' => $niveles,
+                        'actividades' => $actividades,
+                        'noticias'=> $noticias,
+                        'establecimientoTieneCupos'=>$establecimientoHasQuotes
+                    ];
             }
         }
         return response()->json($data);
@@ -531,7 +574,7 @@ class CicloController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $ciclo = Ciclo::find($request -> ciclo_id);
+                $ciclo = Ciclo::with('coordinador', 'competencias', 'actividades', 'gastos', 'clases', 'niveles', 'alumnos', 'establecimientos', 'noticias')->firstwhere('id', $request ->ciclo_id);
                 if (empty($ciclo)) {
                     $data = [
                     'code' =>400,
@@ -738,10 +781,14 @@ class CicloController extends Controller
                 ];
                 } else {
                     $ciclo_id = $request->ciclo_id;
-                    $ayudantes = Ayudante::with(['clases' => function ($query) use ($ciclo_id) {
-                        $query->where('ciclo_id', $ciclo_id);
-                    }])->get();
-
+                    $ayudantes = DB::table('ayudante')->select('ayudante.*')->join('ayudante_clase', 'ayudante.id','=','ayudante_clase.ayudante_id')
+                    ->join('clase','clase.id','=','ayudante_clase.clase_id')->where('clase.ciclo_id',$request->ciclo_id)->get();
+                    if(!$ayudantes->isEmpty()){
+                        $ayudantes = Ayudante::with(['clases' => function ($query) use ($ciclo_id) {
+                            $query->where('ciclo_id', $ciclo_id);
+                        }])->get();
+    
+                    }
                     $data = [
                     'code' =>200,
                     'status' => 'success',
@@ -781,9 +828,13 @@ class CicloController extends Controller
                 ];
                 } else {
                     $ciclo_id = $request->ciclo_id;
-                    $profesores = Profesor::with(['clases' => function ($query) use ($ciclo_id) {
-                        $query->where('ciclo_id', $ciclo_id);
-                    }])->get();
+                    $profesores = DB::table('profesor')->select('profesor.*')->join('clase_profesor', 'profesor.id','=','clase_profesor.profesor_id')
+                    ->join('clase','clase.id','=','clase_profesor.clase_id')->where('clase.ciclo_id',$request->ciclo_id)->get();
+                    if(!$profesores->isEmpty()){
+                        $profesores = Profesor::with(['clases' => function ($query) use ($ciclo_id) {
+                            $query->where('ciclo_id', $ciclo_id);
+                        }])->get();
+                    }
                     $data = [
                     'code' =>200,
                     'status' => 'success',
@@ -1115,7 +1166,7 @@ class CicloController extends Controller
                                 $minEstablishmentStudentEnrolled = $establishmentArray;
                             } else {
                                 if ($establishmentArray['Alumnos']>= $maxEstablishmentStudentsEnrolled['Alumnos']) {
-                                $maxEstablishmentStudentsEnrolled = $establishmentArray;
+                                    $maxEstablishmentStudentsEnrolled = $establishmentArray;
                                 } elseif ($establishmentArray['Alumnos'] <= $minEstablishmentStudentEnrolled['Alumnos']) {
                                     $minEstablishmentStudentEnrolled = $establishmentArray;
                                 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\AdjuntosController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\AyudanteController;
 use App\Http\Controllers\CicloController;
@@ -10,9 +11,13 @@ use App\Http\Controllers\CoordinadorController;
 use App\Http\Controllers\DetallesController;
 use App\Http\Controllers\EstablecimientoController;
 use App\Http\Controllers\GastosController;
+use App\Http\Controllers\MailController;
+use App\Http\Controllers\NivelController;
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +50,25 @@ Route::post('/ciclo/create', [CicloController::class,'create']);
 Route::put('/ciclo/edit', [CicloController::class,'edit']);
 Route::post('/ciclo/delete', [CicloController::class,'delete']);
 Route::post('/ciclo/getbyid', [CicloController::class,'getById']);
+Route::post('/ciclo/getbyfinishdate', [CicloController::class,'getCyclePerFinishDate']);
+Route::post('/ciclo/chargeestablishments', [CicloController::class,'CycleHasEstablishments']);
+Route::post('/ciclo/updateestablishments', [CicloController::class,'UpdateEstablishments']);
+Route::post('/ciclo/deleteestablishments', [CicloController::class,'deleteEstablishmentPerCycle']);
+Route::post('/ciclo/chargestudents', [CicloController::class,'CycleHasStudents']);
+Route::post('/ciclo/updatecandidates', [CicloController::class,'UpdateCandidates']);
+Route::post('/ciclo/deletestudents', [CicloController::class,'deleteStudentsPerCycle']);
+Route::post('/ciclo/getstudentscandidate', [CicloController::class,'getStudentsCandidatePerCycle']);
+Route::post('/ciclo/getstudentscandidatepercycleperfinishdate', [CicloController::class,'getStudentsCandidatePerCyclePerFinishDate']);
+Route::post('/ciclo/getstudentsenrolled', [CicloController::class,'getStudentsEnrolledPerCycle']);
+Route::post('/ciclo/getstudentsenrolledpercycleperfinishdate', [CicloController::class,'getStudentsEnrolledPerCyclePerFinishDate']);
+Route::post('/ciclo/getassistantspercycle', [CicloController::class,'getAssistantsPerCycle']);
+Route::post('/ciclo/getteacherspercycle', [CicloController::class,'getTeachersPerCycle']);
+Route::post('/ciclo/getassistanceperdateandcycle', [CicloController::class,'getAssistancePerDateAndCycle']);
+Route::post('/ciclo/getstudentassistancepercycleandestablishment', [CicloController::class,'getStudentAssistancePerCycleAndEstablishment']);
+Route::post('/ciclo/getstudentassistancepercycle', [CicloController::class,'getStudentAssistancePerCycle']);
+Route::post('/ciclo/getstatisticspercycle', [CicloController::class,'getStatisticsPerCycle']);
+
+
 
 //Rutas Actividad
 Route::get('/actividad/all', [ActividadController::class,'all']);
@@ -59,6 +83,9 @@ Route::post('/competencia/create', [CompetenciaController::class,'create']);
 Route::put('/competencia/edit', [CompetenciaController::class,'edit']);
 Route::post('/competencia/delete', [CompetenciaController::class,'delete']);
 Route::post('/competencia/getbyid', [CompetenciaController::class,'getById']);
+Route::post('/competencia/attach', [CompetenciaController::class,'competitionHasStudent']);
+Route::post('/competencia/detach', [CompetenciaController::class,'deleteStudentsPerCompetition']);
+Route::post('/competencia/updatescores', [CompetenciaController::class,'editScorePerStudent']);
 
 //Rutas Gastos
 Route::get('/gastos/all', [GastosController::class,'all']);
@@ -66,12 +93,14 @@ Route::post('/gastos/create', [GastosController::class,'create']);
 Route::put('/gastos/edit', [GastosController::class,'edit']);
 Route::post('/gastos/delete', [GastosController::class,'delete']);
 Route::post('/gastos/getbyid', [GastosController::class,'getById']);
+Route::post('/gastos/getcostperdateandcycle', [GastosController::class,'getCostPerDateAndCycle']);
+
 
 //Rutas Detalle
 Route::get('/detalle/all', [DetallesController::class,'all']);
-Route::post('/detalle/create', [DetalleController::class,'create']);
-Route::put('/detalle/edit', [DetalleController::class,'edit']);
-Route::post('/detalle/delete', [DetalleController::class,'delete']);
+Route::post('/detalle/create', [DetallesController::class,'create']);
+Route::put('/detalle/edit', [DetallesController::class,'edit']);
+Route::post('/detalle/delete', [DetallesController::class,'delete']);
 Route::post('/detalle/getbyid', [DetallesController::class,'getById']);
 
 //Rutas Noticia
@@ -80,6 +109,9 @@ Route::post('/noticia/create', [NoticiaController::class,'create']);
 Route::put('/noticia/edit', [NoticiaController::class,'edit']);
 Route::post('/noticia/delete', [NoticiaController::class,'delete']);
 Route::post('/noticia/getbyid', [NoticiaController::class,'getById']);
+Route::post('/noticia/getbyword', [NoticiaController::class,'getNewsForLike']);
+Route::get('/noticia/recentpost', [NoticiaController::class,'getRecentPost']);
+
 
 //Rutas Rol
 Route::get('/rol/all', [RolController::class,'all']);
@@ -94,6 +126,7 @@ Route::post('/establecimiento/create', [EstablecimientoController::class,'create
 Route::put('/establecimiento/edit', [EstablecimientoController::class,'edit']);
 Route::post('/establecimiento/delete', [EstablecimientoController::class,'delete']);
 Route::post('/establecimiento/getbyid', [EstablecimientoController::class,'getById']);
+Route::post('/establecimiento/chargestudents', [EstablecimientoController::class,'chargeStudentPerForm']);
 
 //Rutas Alumno
 Route::get('/alumno/all', [AlumnoController::class,'all']);
@@ -101,6 +134,10 @@ Route::post('/alumno/create', [AlumnoController::class,'create']);
 Route::put('/alumno/edit', [AlumnoController::class,'edit']);
 Route::post('/alumno/delete', [AlumnoController::class,'delete']);
 Route::post('/alumno/getbyid', [AlumnoController::class,'getById']);
+Route::post('/alumno/getstatistic', [AlumnoController::class,'getStatistic']);
+Route::post('/alumno/getassistancepertwolastcycles', [AlumnoController::class,'getAssistanceandScoresPerTwoLastCycles']);
+
+
 
 //Rutas Clase
 Route::get('/clase/all', [ClaseController::class,'all']);
@@ -108,6 +145,16 @@ Route::post('/clase/create', [ClaseController::class,'create']);
 Route::put('/clase/edit', [ClaseController::class,'edit']);
 Route::post('/clase/delete', [ClaseController::class,'delete']);
 Route::post('/clase/getbyid', [ClaseController::class,'getById']);
+Route::post('/clase/chargestudents', [ClaseController::class,'LessonHasStudents']);
+Route::post('/clase/updatelistlesson', [ClaseController::class,'UpdateListLesson']);
+Route::post('/clase/deletestudents', [ClaseController::class,'deleteStudentPerLesson']);
+Route::post('/clase/chargeteachers', [ClaseController::class,'LessonHasTeachers']);
+Route::post('/clase/deleteteachers', [ClaseController::class,'deleteTeachersPerLesson']);
+Route::post('/clase/chargeassistants', [ClaseController::class,'LessonHasAssistants']);
+Route::post('/clase/deleteassistants', [ClaseController::class,'deleteAssistantsPerLesson']);
+Route::post('/clase/getassistantsandteachers', [ClaseController::class,'getAssistantsAndTeacherWhereNotExist']);
+Route::post('/clase/getlessonspercycleandteacher', [ClaseController::class,'getLessonsPerCycleAndTeacher']);
+Route::post('/clase/getlessonspercycleandassistant', [ClaseController::class,'getLessonsPerCycleAndAssistant']);
 
 //Rutas Ayudante
 Route::get('/ayudante/all', [AyudanteController::class,'all']);
@@ -122,3 +169,54 @@ Route::post('/profesor/create', [ProfesorController::class,'create']);
 Route::put('/profesor/edit', [ProfesorController::class,'edit']);
 Route::post('/profesor/delete', [ProfesorController::class,'delete']);
 Route::post('/profesor/getbyid', [ProfesorController::class,'getById']);
+
+//Rutas Nivel
+Route::get('/nivel/all', [NivelController::class,'all']);
+Route::post('/nivel/create', [NivelController::class,'create']);
+Route::put('/nivel/edit', [NivelController::class,'edit']);
+Route::post('/nivel/delete', [NivelController::class,'delete']);
+Route::post('/nivel/getbyid', [NivelController::class,'getById']);
+Route::post('/nivel/levelassociate', [NivelController::class,'alumnoHasLevel']);
+Route::post('/nivel/deletestudent', [NivelController::class,'DeleteStudent']);
+
+
+// Rutas Email
+
+Route::post('/mail/inv', [MailController::class,'invitations']);
+Route::post('/mail/contact', [MailController::class,'contact']);
+Route::post('/mail/messages', [MailController::class,'messages']);
+
+
+
+// Rutas Adjuntos Noticias
+
+Route::post('/image/add', [AdjuntosController::class,'add']);
+Route::post('/image/delete', [AdjuntosController::class,'delete']);
+
+// Rutas User
+Route::get('/usuario/all', [UserController::class,'all']);
+Route::post('/usuario/create', [UserController::class,'register']);
+Route::post('/usuario/login', [UserController::class,'login']);
+Route::post('/usuario/delete', [UserController::class,'delete']);
+Route::post('/usuario/changestatus', [UserController::class,'changeStatus']);
+Route::post('/usuario/resetpassword', [UserController::class,'ResetPassword']);
+Route::post('/usuario/changepassword', [UserController::class,'ChangePassword']);
+Route::post('/usuario/edit', [UserController::class,'Edit']);
+Route::post('/usuario/changeemail', [UserController::class,'ChangeEmail']);
+
+
+
+
+
+
+
+//PDFS
+Route::post('/pdf/assistanceperestablishment', [PdfController::class,'AssistancePerEstablishment']);
+Route::post('/pdf/generalassistance', [PdfController::class,'GeneralAssistance']);
+Route::post('/pdf/costs', [PdfController::class,'Costs']);
+Route::post('/pdf/generalstatistic', [PdfController::class,'GeneralStatistic']);
+Route::get('/pdf/download/{fileName}', [PdfController::class,'download']);
+Route::post('/pdf/delete', [PdfController::class,'delete']);
+
+
+

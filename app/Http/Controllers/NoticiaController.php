@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Adjuntos;
 use App\Models\Noticia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class NoticiaController extends Controller
 {
@@ -13,7 +15,8 @@ class NoticiaController extends Controller
     {
         /*$noticia = DB::table('noticia as n')->select('n.cuerpo',DB::raw('DATE_FORMAT(n.fecha, "%d-%m-%Y") as fecha')
         ,'n.titulo','n.user_rut','n.ciclo_id','n.id')->get();*/
-        $noticia = Noticia::all();
+        //$noticia = Noticia::with('ciclo','user')->all();
+        $noticia = Noticia::with('adjuntos','user')->get();
         $data = [
             'code' => 200,
             'noticias' => $noticia
@@ -27,9 +30,10 @@ class NoticiaController extends Controller
             $validate = Validator::make($request ->all(), [
                 'fecha' => 'required|date_format:Y-m-d',
                 'titulo' => 'required',
+                'entrada' => 'required',
                 'cuerpo' => 'required',
                 'ciclo_id' => 'required',
-                'user_rut' => 'required'
+                // 'user_id' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -43,8 +47,9 @@ class NoticiaController extends Controller
                 $noticia -> fecha = $request -> fecha;
                 $noticia -> cuerpo = $request -> cuerpo;
                 $noticia -> titulo = $request -> titulo;
+                $noticia -> entrada = $request -> entrada;
                 $noticia -> ciclo_id = $request -> ciclo_id;
-                $noticia -> user_rut = $request -> user_rut;
+                $noticia -> user_id = $request -> user_id;
                 $noticia ->save();
                 $data = [
                             'code' => 200,
@@ -69,9 +74,10 @@ class NoticiaController extends Controller
             $validate = Validator::make($request ->all(), [
                 'fecha' => 'required|date_format:Y-m-d',
                 'titulo' => 'required',
+                'entrada' => 'required',
                 'cuerpo' => 'required',
                 'ciclo_id' => 'required',
-                'user_rut' => 'required'
+                // 'user_rut' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -86,6 +92,7 @@ class NoticiaController extends Controller
                     $noticia -> fecha = $request -> fecha;
                     $noticia -> cuerpo = $request -> cuerpo;
                     $noticia -> titulo = $request -> titulo;
+                    $noticia -> entrada = $request -> entrada;
                     $noticia -> ciclo_id = $request -> ciclo_id;
                     $noticia -> user_rut = $request -> user_rut;
                     $noticia ->save();
@@ -130,6 +137,16 @@ class NoticiaController extends Controller
                     'message' => 'No se encontro una noticia asociada al ID'
                 ];
             } else {
+                $adjuntos = $noticia->adjuntos()->get();
+                if ($adjuntos->isEmpty()!=true) {
+                    foreach ($adjuntos as $adjunto) {
+                        if (File::exists('storage/images/'.$adjunto->url)) {
+                            File::delete('storage/images/'.$adjunto->url);
+                            $adjunto ->delete();
+                        }
+                    }
+                } else {
+                }
                 $noticia ->delete();
                 $data = [
                     'code' =>200,
@@ -162,10 +179,13 @@ class NoticiaController extends Controller
                     'message' => 'No se encontro la noticia asociado al id'
                 ];
                 } else {
+                    $noticia = Noticia::with('adjuntos')->where($request->id)->get();
+                    $adjuntos = $noticia ->adjuntos();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'noticia' => $noticia
+                    'noticia' => $noticia,
+                    'adjuntos' => $adjuntos
                 ];
                 }
             }
@@ -175,6 +195,64 @@ class NoticiaController extends Controller
                 'status' => 'error',
                 'message' => 'Error al buscar la noticia'
             ];
+        }
+        return response() -> json($data);
+    }
+
+    public function getNewsForLike(Request $request)
+    {
+        if (!empty($request ->all())) {
+            $validate = Validator::make($request ->all(), [
+                'palabra' =>'required'
+            ]);
+            if ($validate ->fails()) {
+                $data = [
+                    'code' => 400,
+                    'status' => 'error',
+                    'errors' => $validate ->errors()
+                ];
+            } else {
+                $noticias = Noticia::with('adjuntos')->where('titulo', 'like', '%'.$request->palabra.'%')->get();
+                if (empty($noticias)) {
+                    $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la noticia asociado al id'
+                ];
+                } else {
+                    $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'noticias' => $noticias,
+                ];
+                }
+            }
+        } else {
+            $data = [
+                'code' =>400,
+                'status' => 'error',
+                'message' => 'Error al buscar la noticia'
+            ];
+        }
+        return response() -> json($data);
+    }
+
+    public function getRecentPost()
+    {
+        $noticias =Noticia::with('adjuntos')->orderBy('id','desc')->limit(3)->get();
+        //DB::table('noticias')->select('ciclo.id', 'ciclo.nombre')->orderBy('id', 'desc')->limit(3)->get();
+        if (empty($noticias)) {
+            $data = [
+                    'code' =>400,
+                    'status' => 'error',
+                    'message' => 'No se encontro la noticia asociado al id'
+                ];
+        } else {
+            $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                    'noticias' => $noticias,
+                ];
         }
         return response() -> json($data);
     }

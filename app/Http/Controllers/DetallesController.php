@@ -12,7 +12,7 @@ class DetallesController extends Controller
     public function all()
     {
         //$detalles = DB::table('detalles')->select('*')->get();
-        $detalles=Detalles::all();
+        $detalles=Detalles::with('gastos')->get();
         $data = [
             'code' => 200,
             'detalles' => $detalles
@@ -25,7 +25,7 @@ class DetallesController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'valor' => 'required',
-                'descripcion' => 'required',
+                'nombre' => 'required',
                 'gastos_id' => 'required'
             ]);
             if ($validate ->fails()) {
@@ -39,7 +39,7 @@ class DetallesController extends Controller
                 $detalles = new Detalles();
                 $detalles -> valor = $request -> valor;
                 $detalles -> gastos_id = $request -> gastos_id;
-                $detalles -> descripcion = $request -> descripcion;
+                $detalles -> nombre = $request -> nombre;
                 $detalles ->save();
                 $data = [
                             'code' => 200,
@@ -63,7 +63,7 @@ class DetallesController extends Controller
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
                 'valor' => 'required',
-                'descripcion' => 'required'
+                'nombre' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -77,7 +77,7 @@ class DetallesController extends Controller
                 if (!empty($detalles)) {
                     $detalles -> valor = $request -> valor;
                     $detalles -> gastos_id = $request -> gastos_id;
-                    $detalles -> descripcion = $request -> descripcion;
+                    $detalles -> nombre = $request -> nombre;
                     $detalles ->save();
                     $data = [
                                 'code' => 200,

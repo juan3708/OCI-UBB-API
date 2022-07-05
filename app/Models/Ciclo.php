@@ -32,6 +32,11 @@ class Ciclo extends Model
         return $this->hasMany(Clase::class);
     }
 
+    public function niveles(){
+        return $this->hasMany(Nivel::class);
+    }
+
+
     //Relaciones 1
 
     public function coordinador(){
@@ -42,6 +47,10 @@ class Ciclo extends Model
 
     public function establecimientos(){
         return $this->belongsToMany(Establecimiento::class)->withPivot('cupos');
+    }
+
+    public function alumnos(){
+        return $this->belongsToMany(Alumno::class)->withPivot('participante');
     }
 
 }

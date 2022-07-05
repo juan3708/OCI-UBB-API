@@ -16,6 +16,10 @@ class Clase extends Model
     public function ciclo(){
         return $this->belongsTo(Ciclo::class);
     }
+        
+    public function nivel(){
+        return $this->belongsTo(Nivel::class);
+    }
 
     //Relacion N a N
 

@@ -11,10 +11,10 @@ class ActividadController extends Controller
 {
     public function all()
     {
-       /* $actividad = DB::table('actividad as a')->select('a.nombre','a.fecha','a.descripcion','a.id',
-        DB::raw('DATE_FORMAT(a.fecha, "%d-%m-%Y") as fecha'), 'a.ciclo_id')->get();*/
+        /* $actividad = DB::table('actividad as a')->select('a.nombre','a.fecha','a.descripcion','a.id',
+         DB::raw('DATE_FORMAT(a.fecha, "%d-%m-%Y") as fecha'), 'a.ciclo_id')->get();*/
 
-        $actividad = Actividad::all();
+        $actividad = Actividad::with('ciclo', 'gastos')->get();
 
         $data = [
             'code' => 200,
@@ -155,10 +155,13 @@ class ActividadController extends Controller
                     'message' => 'No se encontro la actividad asociado al id'
                 ];
                 } else {
+                    $actividad = Actividad::with('gastos')->firstwhere('id', $request ->id);
+                    $gastos = $actividad ->gastos()->with('detalles')->get();
                     $data = [
                     'code' =>200,
                     'status' => 'success',
-                    'actividad' => $actividad
+                    'actividad' => $actividad,
+                    'gastos'=>$gastos
                 ];
                 }
             }

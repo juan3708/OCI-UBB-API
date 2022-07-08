@@ -423,7 +423,7 @@ class CicloController extends Controller
             $data = [
             'code' =>400,
             'status' => 'error',
-            'message' => 'Error al asociar ciclo con establecimientos'
+            'message' => 'Error al eliminar el establecimiento del ciclo'
         ];
         }
         return response()-> json($data);

@@ -33,7 +33,7 @@ class NoticiaController extends Controller
                 'entrada' => 'required',
                 'cuerpo' => 'required',
                 'ciclo_id' => 'required',
-                // 'user_id' => 'required'
+                'user_id' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -76,8 +76,7 @@ class NoticiaController extends Controller
                 'titulo' => 'required',
                 'entrada' => 'required',
                 'cuerpo' => 'required',
-                'ciclo_id' => 'required',
-                // 'user_rut' => 'required'
+                'ciclo_id' => 'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -94,7 +93,7 @@ class NoticiaController extends Controller
                     $noticia -> titulo = $request -> titulo;
                     $noticia -> entrada = $request -> entrada;
                     $noticia -> ciclo_id = $request -> ciclo_id;
-                    $noticia -> user_rut = $request -> user_rut;
+                    $noticia -> user_id = $request -> user_id;
                     $noticia ->save();
                     $data = [
                                 'code' => 200,

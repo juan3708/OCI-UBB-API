@@ -331,7 +331,8 @@ class AlumnoController extends Controller
     {
         if (!empty($request ->all())) {
             $validate = Validator::make($request ->all(), [
-                'alumno_id' =>'required'
+                'alumno_id' =>'required',
+                'ciclo_id' =>'required'
             ]);
             if ($validate ->fails()) {
                 $data = [
@@ -348,9 +349,15 @@ class AlumnoController extends Controller
                     'message' => 'No se encontro el alumno asociado al id'
                 ];
                 } else {
-                    $ciclos = DB::table('ciclo')->select('ciclo.id', 'ciclo.nombre')->orderBy('id', 'desc')->limit(3)->get();
+                    $ciclo_id = intval($request->ciclo_id);
+                    $ciclos = DB::table('ciclo')->select('ciclo.id', 'ciclo.nombre')->where('id',$ciclo_id)->orWhere('id',$ciclo_id-1)->orWhere('id',$ciclo_id-2)->get();
                     $ciclosConAsistenciaDelAlumno = [];
-                    unset($ciclos[0]);
+                    if(count($ciclos) == 3){
+                        unset($ciclos[3]);
+                    }else if(count($ciclos) == 2){
+                        unset($ciclos[2]);
+                    }
+                   // unset($ciclos[0]);
                     foreach ($ciclos as $ciclo) {
                         $cicloArray = (array)$ciclo;
                         $Cantassitance = DB::table('alumno_clase')->select(

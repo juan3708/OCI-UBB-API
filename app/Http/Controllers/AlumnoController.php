@@ -13,10 +13,10 @@ class AlumnoController extends Controller
     public function all()
     {
 
-/*
-        $alumno = DB::table('alumno as a')->select('a.rut','a.nombre','a.apellidos','a.telefono','a.email','a.curso','a.participante'
-        ,'a.direccion','a.telefono_apoderado','a.nombre_apoderado','a.establecimiento_id','a.id',DB::raw('DATE_FORMAT(a.fecha_nacimiento, "%d-%m-%Y") as fecha_nacimiento'))->get();
-        */
+        /*
+                $alumno = DB::table('alumno as a')->select('a.rut','a.nombre','a.apellidos','a.telefono','a.email','a.curso','a.participante'
+                ,'a.direccion','a.telefono_apoderado','a.nombre_apoderado','a.establecimiento_id','a.id',DB::raw('DATE_FORMAT(a.fecha_nacimiento, "%d-%m-%Y") as fecha_nacimiento'))->get();
+                */
         $alumno = Alumno::with('establecimiento')->get();
         $data = [
             'code' => 200,
@@ -185,7 +185,7 @@ class AlumnoController extends Controller
                         'message' => 'No se encontro el alumno'
                     ];
             } else {
-                $alumno = Alumno::with('niveles', 'ciclos', 'clases', 'competencias')->firstwhere('id', $request ->id);
+                $alumno = Alumno::with('niveles', 'ciclos', 'clases', 'competencias')->firstwhere('id', $request ->id)->get();
 
                 //Detach niveles
                 $array_id = array();
@@ -350,14 +350,15 @@ class AlumnoController extends Controller
                 ];
                 } else {
                     $ciclo_id = intval($request->ciclo_id);
-                    $ciclos = DB::table('ciclo')->select('ciclo.id', 'ciclo.nombre')->where('id',$ciclo_id)->orWhere('id',$ciclo_id-1)->orWhere('id',$ciclo_id-2)->get();
+                    $ciclos = DB::table('ciclo')->select('ciclo.id', 'ciclo.nombre')->where('id', '<=', $ciclo_id)->orderByDesc('id')->limit(3)->get();
+
                     $ciclosConAsistenciaDelAlumno = [];
-                    if(count($ciclos) == 3){
-                        unset($ciclos[3]);
-                    }else if(count($ciclos) == 2){
-                        unset($ciclos[2]);
+                    if (count($ciclos) == 3) {
+                        unset($ciclos[0]);
+                    } elseif (count($ciclos) == 2) {
+                        unset($ciclos[1]);
                     }
-                   // unset($ciclos[0]);
+                    // unset($ciclos[0]);
                     foreach ($ciclos as $ciclo) {
                         $cicloArray = (array)$ciclo;
                         $Cantassitance = DB::table('alumno_clase')->select(

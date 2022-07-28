@@ -315,15 +315,6 @@
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;">
                                                                             &nbsp;</p>
-                                                                        <p
-                                                                            style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 18px;">
-                                                                            <span
-                                                                                style="color:#8d8d8d;font-size:12px;"><strong>OCI
-                                                                                    UBB - Universidad del
-                                                                                    Bio-Bio</strong></span></p>
-                                                                        <p
-                                                                            style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;">
-                                                                            &nbsp;</p>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -337,172 +328,160 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table class="row row-7" align="center" width="100%" border="0" cellpadding="0" cellspacing="0"
-                        role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <table class="row-content stack" align="center" border="0" cellpadding="0"
-                                        cellspacing="0" role="presentation"
-                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #428bca; color: #000000; width: 700px;"
-                                        width="700">
-                                        <tbody>
-                                            <tr>
-                                                <td class="column column-1" width="25%"
-                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-left: 5px; padding-right: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                    <table class="text_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td
-                                                                style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:15px;">
-                                                                <div style="font-family: sans-serif">
-                                                                    <div class="txtTinyMce-wrapper"
-                                                                        style="font-size: 14px; mso-line-height-alt: 16.8px; color: #ffffff; line-height: 1.2; font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;">
-                                                                        <p style="margin: 0; font-size: 14px;">
-                                                                            <strong>Social Media</strong></p>
-                                                                    </div>
+                    <table class="row row-6" align="center" width="100%" border="0" cellpadding="0" cellspacing="0"
+                    role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table class="row-content stack" align="center" border="0" cellpadding="0"
+                                    cellspacing="0" role="presentation"
+                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; background-image: url('https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1226/Testimonial_Final_1.png'); background-repeat: no-repeat; color: #000000; width: 700px;"
+                                    width="700">
+                                    <tbody>
+                                        <tr>
+                                            <td class="column column-1" width="100%"
+                                                style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; background-color: #ffffff; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="row row-7" align="center" width="100%" border="0" cellpadding="0" cellspacing="0"
+                    role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table class="row-content stack" align="center" border="0" cellpadding="0"
+                                    cellspacing="0" role="presentation"
+                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #428bca; color: #000000; width: 700px;"
+                                    width="700">
+                                    <tbody>
+                                        <tr>
+                                            <td class="column column-1" width="25%"
+                                                style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-left: 5px; padding-right: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                <table class="text_block" width="100%" border="0" cellpadding="0"
+                                                    cellspacing="0" role="presentation"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                    <tr>
+                                                        <td
+                                                            style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:15px;">
+                                                            <div style="font-family: sans-serif">
+                                                                <div class="txtTinyMce-wrapper"
+                                                                    style="font-size: 14px; mso-line-height-alt: 16.8px; color: #ffffff; line-height: 1.2; font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;">
+                                                                    <p style="margin: 0; font-size: 14px;">
+                                                                        <strong>Redes Sociales</strong>
+                                                                    </p>
                                                                 </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="social_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                        <tr>
-                                                            <td
-                                                                style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:10px;text-align:left;">
-                                                                <table class="social-table" width="108px" border="0"
-                                                                    cellpadding="0" cellspacing="0" role="presentation"
-                                                                    align="left"
-                                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                                    <tr>
-                                                                        <td style="padding:0 4px 0 0;"><a
-                                                                                href="https://twitter.com/"
-                                                                                target="_blank"><img
-                                                                                    src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-circle-white/twitter@2x.png"
-                                                                                    width="32" height="32" alt="Twitter"
-                                                                                    title="Twitter"
-                                                                                    style="display: block; height: auto; border: 0;"></a>
-                                                                        </td>
-                                                                        <td style="padding:0 4px 0 0;"><a
-                                                                                href="https://instagram.com/"
-                                                                                target="_blank"><img
-                                                                                    src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-circle-white/instagram@2x.png"
-                                                                                    width="32" height="32"
-                                                                                    alt="Instagram" title="Instagram"
-                                                                                    style="display: block; height: auto; border: 0;"></a>
-                                                                        </td>
-                                                                        <td style="padding:0 4px 0 0;"><a
-                                                                                href="https://www.linkedin.com/"
-                                                                                target="_blank"><img
-                                                                                    src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-circle-white/linkedin@2x.png"
-                                                                                    width="32" height="32"
-                                                                                    alt="LinkedIn" title="LinkedIn"
-                                                                                    style="display: block; height: auto; border: 0;"></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td class="column column-2" width="25%"
-                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                    <table class="text_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td
-                                                                style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:15px;">
-                                                                <div style="font-family: sans-serif">
-                                                                    <div class="txtTinyMce-wrapper"
-                                                                        style="font-size: 14px; mso-line-height-alt: 16.8px; color: #ffffff; line-height: 1.2; font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;">
-                                                                        <p style="margin: 0; font-size: 14px;"><strong
-                                                                                style="font-size:14px;">Years
-                                                                                of&nbsp;</strong><span
-                                                                                style="background-color:transparent;font-size:14px;"><strong>Experience</strong></span>
-                                                                        </p>
-                                                                    </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table class="social_block" width="100%" border="0" cellpadding="0"
+                                                    cellspacing="0" role="presentation"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                    <tr>
+                                                        <td
+                                                            style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:10px;text-align:left;">
+                                                            <table class="social-table" width="108px" border="0"
+                                                                cellpadding="0" cellspacing="0" role="presentation"
+                                                                align="left"
+                                                                style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                                <tr>
+                                                                    <td style="padding:0 4px 0 0;"><a
+                                                                            href="https://www.facebook.com/IngenieriaCivilInformaticaUBBChillan"
+                                                                            target="_blank"><img
+                                                                                src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-circle-white/facebook@2x.png"
+                                                                                width="32" height="32" alt="Twitter"
+                                                                                title="Twitter"
+                                                                                style="display: block; height: auto; border: 0;"></a>
+                                                                    </td>
+                                                                    <td style="padding:0 4px 0 0;"><a
+                                                                            href="https://www.instagram.com/ubiobio/"
+                                                                            target="_blank"><img
+                                                                                src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-circle-white/instagram@2x.png"
+                                                                                width="32" height="32"
+                                                                                alt="Instagram" title="Instagram"
+                                                                                style="display: block; height: auto; border: 0;"></a>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="column column-2" width="25%"
+                                                style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                <table class="social_block" width="100%" border="0" cellpadding="0"
+                                                cellspacing="0" role="presentation"
+                                                style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                <tr>
+                                                    <td
+                                                        style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:10px;text-align:left;">
+                                                        <table class="social-table" width="108px" border="0"
+                                                            cellpadding="0" cellspacing="0" role="presentation"
+                                                            align="left"
+                                                            style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                            <tr>
+                                                                <td style="padding:0 4px 0 0;">
+                                                                </td>
+                                                                <td style="padding:0 4px 0 0;">
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                                <table class="text_block" width="100%" border="0" cellpadding="0"
+                                                    cellspacing="0" role="presentation"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                    <tr>
+                                                        <td>
+                                                            <div style="font-family: sans-serif">
+                                                                <div class="txtTinyMce-wrapper"
+                                                                    style="font-size: 14px; mso-line-height-alt: 21px; color: #ffffff; line-height: 1.5; font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;">
+                                                                    <p
+                                                                        style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 18px;">
+                                                                        <span
+                                                                            style="color:#ffffff;font-size:12px;"><strong>OCI
+                                                                                UBB - Universidad del
+                                                                                Bio-Bio</strong></span>
+                                                                    </p>
+                                                                    <p
+                                                                        style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 21px;">
+                                                                        &nbsp;</p>
                                                                 </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="text_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td
-                                                                style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:10px;">
-                                                                <div style="font-family: sans-serif">
-                                                                    <div class="txtTinyMce-wrapper"
-                                                                        style="font-size: 14px; mso-line-height-alt: 16.8px; color: #e1e1e1; line-height: 1.2; font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;">
-                                                                        <p style="margin: 0; font-size: 14px;">7 Years +
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td class="column column-3" width="25%"
-                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                    <table class="text_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td
-                                                                style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:15px;">
-                                                                <div style="font-family: sans-serif">
-                                                                    <div class="txtTinyMce-wrapper"
-                                                                        style="font-size: 14px; mso-line-height-alt: 16.8px; color: #ffffff; line-height: 1.2; font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;">
-                                                                        <p style="margin: 0; font-size: 14px;">
-                                                                            <strong>Expertise</strong></p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="text_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td
-                                                                style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:10px;">
-                                                                <div style="font-family: sans-serif">
-                                                                    <div class="txtTinyMce-wrapper"
-                                                                        style="font-size: 14px; mso-line-height-alt: 16.8px; color: #e1e1e1; line-height: 1.2; font-family: Roboto, Tahoma, Verdana, Segoe, sans-serif;">
-                                                                        <p style="margin: 0; font-size: 14px;">UX/UI
-                                                                            Designer</p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td class="column column-4" width="25%"
-                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                                    <table class="image_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                                        <tr>
-                                                            <td
-                                                                style="width:100%;padding-right:0px;padding-left:0px;padding-bottom:5px;">
-                                                                <div align="center" style="line-height:10px"><img
-                                                                        src="https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/801272_785116/Escudo%20sobre%20fondo%20oscuro.png"
-                                                                        style="display: block; height: auto; border: 0; width: 175px; max-width: 100%;"
-                                                                        width="175"></div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="column column-4" width="25%"
+                                                style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                                <table class="image_block" width="100%" border="0" cellpadding="0"
+                                                    cellspacing="0" role="presentation"
+                                                    style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                                    <tr>
+                                                        <td
+                                                            style="width:100%;padding-right:0px;padding-left:0px;padding-bottom:5px;">
+                                                            <div align="center" style="line-height:10px"><img
+                                                                    src="https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators/BeeProAgency/801272_785116/Escudo%20sobre%20fondo%20oscuro.png"
+                                                                    style="display: block; height: auto; border: 0; width: 175px; max-width: 100%;"
+                                                                    width="175"></div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 </td>
             </tr>
         </tbody>

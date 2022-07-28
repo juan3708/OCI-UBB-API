@@ -410,13 +410,26 @@ class CicloController extends Controller
                 'message' => 'No se encontro la ciclo'
             ];
                 } else {
-                    $ciclo -> establecimientos()->detach($request -> establecimiento_id);
-                    $ciclo = Ciclo::with('establecimientos')->firstwhere('id', $request->ciclo_id);
-                    $data = [
-                'code' =>200,
-                'status' => 'success',
-                'ciclo' => $ciclo
-            ];
+                    $tieneAlumnos = false;
+                    $alumnosParticipantes = $ciclo ->alumnos()->with('establecimiento:id')->where('participante', 1)->get();
+                    foreach ($alumnosParticipantes as $alumno) {
+                        if($alumno->establecimiento->id == $request->establecimiento_id){
+                            $tieneAlumnos = true;
+                        }
+                    }
+                    if(!$tieneAlumnos){
+                        $ciclo -> establecimientos()->detach($request -> establecimiento_id);
+                        $data = [
+                            'code' =>200,
+                            'status' => 'success'
+                        ];
+                    }else{
+                        $data = [
+                            'code' =>400,
+                            'status' => 'error',
+                            'message' => 'El establecimiento tiene alumnos que están participando en el ciclo'
+                        ];
+                    }
                 }
             }
         } else {
@@ -503,6 +516,36 @@ class CicloController extends Controller
                         }
                     } else {
                         $ciclo->alumnos()->updateExistingPivot($request->alumnos_id, ['participante' =>$request->participante]);
+                        if($request->participante == 0){
+                            $alumno = Alumno::with('niveles', 'clases', 'competencias')->firstwhere('id', $request ->alumnos_id);
+
+                            //Detach niveles
+                            $array_id = array();
+                            foreach ($alumno->niveles as $nivel) {
+                                if ($nivel->ciclo_id == $request->ciclo_id) {
+                                    $array_id[] = $nivel->id;
+                                }
+                            };
+                            $alumno -> niveles()-> detach($array_id);
+        
+                            //Detach clases
+                            $array_id = array();
+                            foreach ($alumno->clases as $clase) {
+                                if ($clase->ciclo_id == $request->ciclo_id) {
+                                    $array_id[] = $clase->id;
+                                }
+                            };
+                            $alumno -> clases()-> detach($array_id);
+        
+                            //Detach competencias
+                            $array_id = array();
+                            foreach ($alumno->competencias as $competencia) {
+                                if ($competencia->ciclo_id == $request->ciclo_id) {
+                                    $array_id[] = $competencia->id;
+                                }
+                            };
+                            $alumno -> competencias()-> detach($array_id);
+                        }
                     }
                     //$ciclo = Ciclo::with('alumnos')->firstwhere('id', $request->ciclo_id);
                     $data = [
@@ -1107,14 +1150,13 @@ class CicloController extends Controller
                     'message' => 'No se encontro el ciclo asociado al id'
                 ];
                 } else {
-                    $ciclo = Ciclo::with('coordinador')->where('id', $request->ciclo_id)->get();
-                    $ciclo = $ciclo[0];
-                    //dd($ciclo);
+                    $ciclos = DB::table('ciclo')->select('ciclo.id', 'ciclo.nombre')->where('id','<=',$request->ciclo_id)->orderByDesc('id')->limit(2)->get();
+                    $ciclo = Ciclo::find($ciclos[0]->id);
                     $cantStudentsEnrolled = count($ciclo->alumnos()->get());
                     $cantStudentsActive = count($ciclo->alumnos()->where('participante', 1)->get());
                     $cantEstablishment = count($ciclo->establecimientos()->get());
                     if (intval($request->ciclo_id) >1) {
-                        $ciclo2 = Ciclo::find(($request->ciclo_id)-1);
+                        $ciclo2 = Ciclo::find($ciclos[1]->id);
                         $diferenceCantStudentsEnrolled = $cantStudentsEnrolled -  count($ciclo2->alumnos()->get());
                         $diferenceCantStudentsActive = $cantStudentsActive - count($ciclo2->alumnos()->where('participante', 1)->get());
                         $diferenceCantEstablishment = $cantEstablishment - count($ciclo->establecimientos()->get());

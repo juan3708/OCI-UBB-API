@@ -256,28 +256,8 @@
                                                                 <h1
                                                                     style="margin: 0; color: #ffffff; direction: ltr; font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace; font-size: 22px; font-weight: 400; line-height: 200%; text-align: left; margin-top: 0; margin-bottom: 0;">
                                                                     <span
-                                                                        style="color: #000000;"><strong>Contacto</strong></span>
+                                                                        style="color: #000000;"><strong>Redes</strong></span>
                                                                 </h1>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="text_block" width="100%" border="0"
-                                                        cellpadding="0" cellspacing="0" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td
-                                                                style="padding-bottom:10px;padding-left:20px;padding-right:20px;padding-top:10px;">
-                                                                <div style="font-family: sans-serif">
-                                                                    <div class="txtTinyMce-wrapper"
-                                                                        style="font-size: 12px; mso-line-height-alt: 14.399999999999999px; color: #a9a9a9; line-height: 1.2; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif;">
-                                                                        <p style="margin: 0; font-size: 14px;"><span
-                                                                                style="color:#000000;"><a
-                                                                                    target="_blank"
-                                                                                    style="text-decoration:none;color:#000000;"
-                                                                                    rel="noopener">Info@company.com</a></span>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </table>

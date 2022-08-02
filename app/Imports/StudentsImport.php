@@ -6,11 +6,12 @@ use App\Models\Alumno;
 use App\Models\Ciclo;
 use App\Models\Establecimiento;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class StudentsImport implements ToModel, WithHeadingRow, WithValidation
+class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows
 {
     private $establecimientos;
     private $ciclo_id;

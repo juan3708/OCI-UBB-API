@@ -206,26 +206,27 @@ class EstablecimientoController extends Controller
                 $file = $request -> file;
                 try {
                     Excel::import(new StudentsImport($request -> ciclo_id), $file);
-                    $data = [
-                        'code' =>200,
-                        'status' => 'success',
-                    ];
+
                 } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
                     $failures = $e->failures();
-                    foreach ($failures as $failure) {
-                        var_dump("Rows", $failure->row());// row that went wrong
-                        var_dump("Attribute", $failure->attribute()); // either heading key (if using heading row concern) or column index
-                        var_dump("Errors", $failure->errors());// Actual error messages from Laravel validator
-                        var_dump("Values Wrongs", $failure->values()); // The values of the row that has failed.
-                    }
+                    // foreach ($failures as $failure) {
+                    //     var_dump("Rows", $failure->row());// row that went wrong
+                    //     var_dump("Attribute", $failure->attribute()); // either heading key (if using heading row concern) or column index
+                    //     var_dump("Errors", $failure->errors());// Actual error messages from Laravel validator
+                    //     var_dump("Values Wrongs", $failure->values()); // The values of the row that has failed.
+                    // }
 
                     $data = [
                         'code' =>400,
                         'status' => 'error',
-                        'msg' => 'Error al guardar'
+                        'msg' => 'Porfavor revise el formato del archivo'
                     ];
                     return response() -> json($data);
                 }
+                $data = [
+                    'code' =>200,
+                    'status' => 'success',
+                ];
             }
         } else {
             $data = [

@@ -238,7 +238,7 @@ class NoticiaController extends Controller
 
     public function getRecentPost()
     {
-        $noticias =Noticia::with('adjuntos')->orderBy('id','desc')->limit(3)->get();
+        $noticias =Noticia::with('adjuntos','user')->orderBy('id','desc')->limit(3)->get();
         //DB::table('noticias')->select('ciclo.id', 'ciclo.nombre')->orderBy('id', 'desc')->limit(3)->get();
         if (empty($noticias)) {
             $data = [

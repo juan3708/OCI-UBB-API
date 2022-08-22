@@ -67,6 +67,9 @@ Route::post('/ciclo/getassistanceperdateandcycle', [CicloController::class,'getA
 Route::post('/ciclo/getstudentassistancepercycleandestablishment', [CicloController::class,'getStudentAssistancePerCycleAndEstablishment']);
 Route::post('/ciclo/getstudentassistancepercycle', [CicloController::class,'getStudentAssistancePerCycle']);
 Route::post('/ciclo/getstatisticspercycle', [CicloController::class,'getStatisticsPerCycle']);
+Route::get('/ciclo/check', [CicloController::class,'checkCorrectSystem']);
+Route::post('/ciclo/studentsperestablishments', [CicloController::class,'getStudentPerEstablishment']);
+Route::post('/ciclo/getlasttwocycleswithtotal', [CicloController::class,'getLastTwoCyclesWithTotal']);
 
 
 

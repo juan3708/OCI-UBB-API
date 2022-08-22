@@ -1343,10 +1343,10 @@ class CicloController extends Controller
                     $ciclo = Ciclo::find($request->ciclo_id);
                     if (empty($ciclo)) {
                         $data = [
-                        'code' =>400,
-                        'status' => 'error',
-                        'message' => 'No se encontro el ciclo asociado al id'
-                    ];
+                            'code' =>400,
+                            'status' => 'error',
+                            'message' => 'No se encontro el ciclo asociado al id'
+                        ];
                     } else {
                         $students = $ciclo->alumnos()->where('participante', 1)->get();
                         $establishmentWithStudentsCant = array();
@@ -1360,7 +1360,7 @@ class CicloController extends Controller
                                 }
                             }
                             $establishmentWithNameAndStudents['name'] = $establishment->nombre;
-                            $establishmentWithNameAndStudents['value'] = $count; 
+                            $establishmentWithNameAndStudents['value'] = $count;
                             array_push($establishmentWithStudentsCant, $establishmentWithNameAndStudents);
                         }
                         $data = [
@@ -1384,7 +1384,7 @@ class CicloController extends Controller
         {
             if (!empty($request ->all())) {
                 $validate = Validator::make($request ->all(), [
-                    'ciclo_id' =>'required',
+                    'ciclo_id' =>'required'
                 ]);
                 if ($validate ->fails()) {
                     $data = [
@@ -1396,30 +1396,32 @@ class CicloController extends Controller
                     $ciclo = Ciclo::find($request->ciclo_id);
                     if (empty($ciclo)) {
                         $data = [
-                        'code' =>400,
-                        'status' => 'error',
-                        'message' => 'No se encontro el ciclo asociado al id'
-                    ];
+                            'code' =>400,
+                            'status' => 'error',
+                            'message' => 'No se encontro el ciclo asociado al id'
+                        ];
                     } else {
-                        $students = $ciclo->alumnos()->where('participante', 1)->get();
-                        $establishmentWithStudentsCant = array();
-                        $establishments = $ciclo->establecimientos()->select('establecimiento.nombre', 'establecimiento.id')->get();
-                        foreach ($establishments as $establishment) {
-                            $establishmentWithNameAndStudents = array();
-                            $count = 0;
-                            foreach ($students as $student) {
-                                if ($student->establecimiento_id == $establishment->id) {
-                                    $count++;
-                                }
-                            }
-                            $establishmentWithNameAndStudents['name'] = $establishment->nombre;
-                            $establishmentWithNameAndStudents['value'] = $count; 
-                            array_push($establishmentWithStudentsCant, $establishmentWithNameAndStudents);
+                        $ciclos = DB::table('ciclo')->select('ciclo.id', 'ciclo.nombre')->where('id', '<=', intval($request->ciclo_id))->orderByDesc('id')->limit(3)->get();
+                        // if (count($ciclos) == 3) {
+                        //     unset($ciclos[0]);
+                        // } elseif (count($ciclos) == 2) {
+                        //     unset($ciclos[1]);
+                        // }
+                        $CyclesWithTotalAndCost = array();
+                        foreach ($ciclos as $ciclo) {
+                            $totalYPresupuesto = array();
+                            $cicloArray = array();
+                            $ciclo = Ciclo::with('gastos')->firstwhere('id', $ciclo ->id);
+                            $totalCost = $ciclo->gastos()->sum('valor');
+                            $totalYPresupuesto = [["name"=>'Presupuesto', "value"=>$ciclo->presupuesto],["name" => 'Total Gastado',"value"=>$totalCost]];
+                            $cicloArray["name"] = $ciclo->nombre;
+                            $cicloArray["series"] = $totalYPresupuesto;
+                            array_push($CyclesWithTotalAndCost, $cicloArray);
                         }
                         $data = [
                         'code' =>200,
                         'status' => 'success',
-                        'establecimientosConTotalAlumnos' => $establishmentWithStudentsCant,
+                        'CiclosConTotalYPresupuesto' => $CyclesWithTotalAndCost
                     ];
                     }
                 }

@@ -218,7 +218,7 @@
                                                                         style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#61a7d0;border-radius:35px;width:auto;border-top:2px solid #F9F3F3;font-weight:400;border-right:2px solid #F9F3F3;border-bottom:2px solid #F9F3F3;border-left:2px solid #F9F3F3;padding-top:5px;padding-bottom:5px;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;"><span
                                                                             style="padding-left:35px;padding-right:35px;font-size:16px;display:inline-block;letter-spacing:4px;"><span
                                                                                 style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><strong>Inscribir
-                                                                                    Alumnos</strong></span></span></a>
+                                                                                    Estudiantes</strong></span></span></a>
                                                                     <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
                                                                 </div>
                                                             </td>

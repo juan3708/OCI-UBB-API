@@ -178,7 +178,7 @@ class NoticiaController extends Controller
                     'message' => 'No se encontro la noticia asociado al id'
                 ];
                 } else {
-                    $noticia = Noticia::with('adjuntos')->where($request->id)->get();
+                    $noticia = Noticia::with('adjuntos','user')->where($request->id)->get();
                     $adjuntos = $noticia ->adjuntos();
                     $data = [
                     'code' =>200,
@@ -211,7 +211,7 @@ class NoticiaController extends Controller
                     'errors' => $validate ->errors()
                 ];
             } else {
-                $noticias = Noticia::with('adjuntos')->where('titulo', 'like', '%'.$request->palabra.'%')->get();
+                $noticias = Noticia::with('adjuntos','user')->where('titulo', 'like', '%'.$request->palabra.'%')->get();
                 if (empty($noticias)) {
                     $data = [
                     'code' =>400,

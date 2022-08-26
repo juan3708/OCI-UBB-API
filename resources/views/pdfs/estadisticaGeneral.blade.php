@@ -83,7 +83,7 @@
             </tr>
             <br>
             <tr style="text-align: left;">
-                <td><b>Cantidad de alumnos inscritos:</b> {{ $cantidadAlumnosInscritos }}</td>
+                <td><b>Cantidad de estudiantes inscritos:</b> {{ $cantidadAlumnosInscritos }}</td>
                 @if ($cicloAnterior != -1)
                     <td><b>Diferencia en comparacion con la OCI anterior ({{ $cicloAnterior['nombre'] }}): </b>
                         {{ $diferenciaAlumnosInscritos }}</td>
@@ -94,7 +94,7 @@
             </tr>
             <br>
             <tr style="text-align: left;">
-                <td><b>Cantidad de alumnos participantes:</b> {{ $cantidadAlumnosParticipantes }}</td>
+                <td><b>Cantidad de estudiantes participantes:</b> {{ $cantidadAlumnosParticipantes }}</td>
                 @if ($cicloAnterior != -1)
                     <td><b>Diferencia en comparacion con la OCI anterior ({{ $cicloAnterior['nombre'] }}): </b>
                         {{ $diferenciaAlumnosParticipantes }}</td>
@@ -105,17 +105,17 @@
             </tr>
             <br>
             <tr style="text-align: left;">
-                <td><b>Establecimiento con mas alumnos inscritos:</b> {{ $establecimientoMaxInscritos['nombre'] }}
+                <td><b>Establecimiento con mas estudiantes inscritos:</b> {{ $establecimientoMaxInscritos['nombre'] }}
                     con la cantidad de {{ $establecimientoMaxInscritos['Alumnos'] }} alumnos </td>
-                <td><b>Establecimiento con menos alumnos inscritos:</b> {{ $establecimientoMinInscritos['nombre'] }}
+                <td><b>Establecimiento con menos estudiantes inscritos:</b> {{ $establecimientoMinInscritos['nombre'] }}
                     con la cantidad de {{ $establecimientoMinInscritos['Alumnos'] }} alumnos </td>
             </tr>
             <br>
             <tr style="text-align: left;">
-                <td><b>Establecimiento con mas alumnos participantes:</b>
+                <td><b>Establecimiento con mas estudiantes participantes:</b>
                     {{ $establecimientoMaxParticipantes['nombre'] }} con la cantidad de
                     {{ $establecimientoMaxParticipantes['Alumnos'] }} alumnos </td>
-                <td><b>Establecimiento con menos alumnos participantes:</b>
+                <td><b>Establecimiento con menos estudiantes participantes:</b>
                     {{ $establecimientoMinParticipantes['nombre'] }} con la cantidad de
                     {{ $establecimientoMinParticipantes['Alumnos'] }} alumnos </td>
             </tr>
@@ -143,7 +143,7 @@
                             <tr style="background-color:white;">
                                 <th style="border: transparent;text-align: left;font-weight: normal"><b>NOMBRE DEL
                                         ESTABLECIMIENTO:</b>
-                                    {{ $establecimientos[$i]['nombre'] }} - <b>TOTAL ALUMNOS:</b>
+                                    {{ $establecimientos[$i]['nombre'] }} - <b>TOTAL ESTUDIANTES:</b>
                                     {{ count($establecimientos[$i]['alumnos']) }}</th>
                             </tr>
                             @if (count($establecimientos[$i]['alumnos']) == 0 && $i == 0)
@@ -168,7 +168,7 @@
                                         <caption>
                                             <h3
                                                 style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                                ALUMNOS</h3>
+                                                ESTUDIANTES</h3>
                                         </caption>
                                         <thead>
                                             <tr style="text-align: center;background-color: #f6f6f6;">
@@ -214,7 +214,7 @@
                                     <caption>
                                         <h3
                                             style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                            ALUMNOS</h3>
+                                            ESTUDIANTES</h3>
                                     </caption>
                                     <thead>
                                         <tr style="text-align: center;background-color: #f6f6f6;">
@@ -283,14 +283,14 @@
                                 </th>
                             </tr>
                             @if (count($competencias[$i]['alumnos']) == 0)
-                                <h4 style="font-weight: bold;text-align: center"> NO EXISTEN ALUMNOS ASOCIADOS</h4>
+                                <h4 style="font-weight: bold;text-align: center"> NO EXISTEN ESTUDIANTES ASOCIADOS</h4>
                                 <br>
                             @else
                                 <br>
                                 <tr>
                                     <th style="border: transparent;text-align: left;font-weight: normal;width: 50%">
                                         <b>PUNTAJE PROMEDIO: </b> {{ $competencias[$i]['promedioPuntaje'] }} -
-                                        <b>Cantidad total de alumnos: </b>{{ count($competencias[$i]['alumnos']) }}
+                                        <b>Cantidad total de estudiantes: </b>{{ count($competencias[$i]['alumnos']) }}
                                     </th>
                                 </tr>
                                 <table

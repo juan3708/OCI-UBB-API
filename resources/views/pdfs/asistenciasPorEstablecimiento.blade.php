@@ -60,7 +60,7 @@
             </tr>
             <tr>
                 <td>Email Profesor: {{ $emailProfesor }}</td>
-                <td>Cantidad de alumnos: {{ $cantEstudiantes }}</td>
+                <td>Cantidad de estudiantes: {{ $cantEstudiantes }}</td>
 
             </tr>
         </table>
@@ -73,7 +73,7 @@
                 <caption>
                     <h3
                         style="font-weight: bold;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                        ALUMNOS</h3>
+                        ESTUDIANTES</h3>
                 </caption>
                 <thead>
                     <tr style="text-align: center;background-color: #f6f6f6;">

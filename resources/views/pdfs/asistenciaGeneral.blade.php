@@ -53,13 +53,13 @@
             <tr style="text-align: left;">
                 <td><b>Cantidad de establecimientos:</b> {{ $totalEstablecimientos }}</td>
 
-                <td><b>Total alumnos:</b> {{ $totalAlumnos }}</td>
+                <td><b>Total estudiantes:</b> {{ $totalAlumnos }}</td>
             </tr>
             <tr>
-                <td><b>Establecimiento con mas alumnos asistentes:</b>
+                <td><b>Establecimiento con mas estudiantes asistentes:</b>
                     {{ $establecimientoConMasEstudiantes['nombre'] }} con
                     {{ count($establecimientoConMasEstudiantes['alumnos']) }} alumnos</td>
-                <td><b>Establecimiento con menos alumnos asistentes:</b>
+                <td><b>Establecimiento con menos estudiantes asistentes:</b>
                     {{ $establecimientoConMenosEstudiantes['nombre'] }}
                     con {{ count($establecimientoConMenosEstudiantes['alumnos']) }} alumnos</td>
             </tr>
@@ -84,7 +84,7 @@
                         <tr style="background-color:white;">
                             <th style="border: transparent;text-align: left;font-weight: normal"><b>NOMBRE DEL
                                     ESTABLECIMIENTO:</b>
-                                {{ $establecimientos[$i]['nombre'] }} - <b>TOTAL ALUMNOS:</b>
+                                {{ $establecimientos[$i]['nombre'] }} - <b>TOTAL ESTUDIANTES:</b>
                                 {{ count($establecimientos[$i]['alumnos']) }}</th>
                         </tr>
                         @if (count($establecimientos[$i]['alumnos']) == 0 && $i == 0)
@@ -108,7 +108,7 @@
                                 <caption>
                                     <h3
                                         style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                        ALUMNOS</h3>
+                                        ESTUDIANTES</h3>
                                 </caption>
                                 <thead>
                                     <tr style="text-align: center;background-color: #f6f6f6;">
@@ -153,7 +153,7 @@
                             <caption>
                                 <h3
                                     style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                    ALUMNOS</h3>
+                                    ESTUDIANTES</h3>
                             </caption>
                             <thead>
                                 <tr style="text-align: center;background-color: #f6f6f6;">

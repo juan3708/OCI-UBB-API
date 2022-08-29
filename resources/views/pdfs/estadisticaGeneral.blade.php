@@ -107,7 +107,8 @@
             <tr style="text-align: left;">
                 <td><b>Establecimiento con mas estudiantes inscritos:</b> {{ $establecimientoMaxInscritos['nombre'] }}
                     con la cantidad de {{ $establecimientoMaxInscritos['Alumnos'] }} alumnos </td>
-                <td><b>Establecimiento con menos estudiantes inscritos:</b> {{ $establecimientoMinInscritos['nombre'] }}
+                <td><b>Establecimiento con menos estudiantes inscritos:</b>
+                    {{ $establecimientoMinInscritos['nombre'] }}
                     con la cantidad de {{ $establecimientoMinInscritos['Alumnos'] }} alumnos </td>
             </tr>
             <br>
@@ -424,6 +425,7 @@
             </tbody>
         @endif
     </table>
-</body>
+    <h6 style="float: right">Fecha de emisión: {{$fechaEmision}}</h6>
 
+</body>
 </html>

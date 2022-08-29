@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PdfController extends Controller
-{
+{    
     public function AssistancePerEstablishment(Request $request)
     {
         if (!empty($request ->all())) {
@@ -29,6 +29,7 @@ class PdfController extends Controller
                     ];
             } else {
                 $fileName = 'asistencia-alumnos-'.$request->nombreEstablecimiento.'.pdf';
+                date_default_timezone_set('America/Santiago'); 
                 $dataView = [
                     'nombreCiclo' => $request ->nombreCiclo,
                     'nombreEstablecimiento' => $request->nombreEstablecimiento,
@@ -36,6 +37,7 @@ class PdfController extends Controller
                     'emailProfesor' => $request->emailProfesor,
                     'cantEstudiantes' => count($request->students),
                     'students' => $request->students,
+                    'fechaEmision'=> date('d-m-Y h:i:s a', time())
                     
                 ];
                 $pdf = Pdf::loadView('pdfs.asistenciasPorEstablecimiento',$dataView )->setPaper('letter');
@@ -74,6 +76,7 @@ class PdfController extends Controller
                         'errors' => $validate ->errors()
                     ];
             } else {
+                date_default_timezone_set('America/Santiago'); 
                 $fileName = 'asistencia-general-'.$request->nombreCiclo.'.pdf';
                 $dataView = [
                     'establecimientos' => $request ->establecimientos,
@@ -81,6 +84,7 @@ class PdfController extends Controller
                     'establecimientoConMasEstudiantes' => $request->establecimientoConMasEstudiantes,
                     'totalAlumnos' => $request->totalAlumnos,
                     'totalEstablecimientos' => $request->totalEstablecimientos,
+                    'fechaEmision'=> date('d-m-Y h:i:s a', time()),
                     'nombreCiclo' => $request->nombreCiclo
                     
                 ];
@@ -120,6 +124,7 @@ class PdfController extends Controller
                         'errors' => $validate ->errors()
                     ];
             } else {
+                date_default_timezone_set('America/Santiago'); 
                 $fileName = 'informe-gastos-'.$request->nombreCiclo.'.pdf';
                 $parseFechaInicio = date("d/m/Y", strtotime($request->fecha_inicio));
                 $parseFechaFinal = date("d/m/Y", strtotime($request->fecha_final));
@@ -130,6 +135,7 @@ class PdfController extends Controller
                     'fecha_final' => $parseFechaFinal,
                     'gastos' => $request->gastos,
                     'totalGastado' => $request->totalGastado,
+                    'fechaEmision'=> date('d-m-Y h:i:s a', time()),
                     'presupuestoCiclo' => $request->presupuestoCiclo
                     
                 ];
@@ -180,6 +186,7 @@ class PdfController extends Controller
             } else {
                // dd($request->ciclo['nombre']);
                 $fileName = 'informe-general-'.$request->ciclo['nombre'].'.pdf';
+                date_default_timezone_set('America/Santiago'); 
 
                 $dataView = [
                     'cantEstablecimientos' => $request ->cantEstablecimientos,
@@ -197,6 +204,7 @@ class PdfController extends Controller
                     'establecimientos' => $request ->establecimientos,
                     'gastos' => $request->gastos,
                     'totalGastos' => $request->totalGastos,
+                    'fechaEmision'=> date('d-m-Y h:i:s a', time()),
                     'prespuestoRestante' => $request->prespuestoRestante,
                     'ciclo' => $request ->ciclo
                     

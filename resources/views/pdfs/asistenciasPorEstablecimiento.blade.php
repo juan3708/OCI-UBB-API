@@ -89,7 +89,8 @@
                 <tbody>
                     @for ($i = 0; $i < $cantEstudiantes; $i++)
                         <tr>
-                            <td style="border: 1px solid #999;text-align: center;width: 80px;">{{ $students[$i]['rut'] }}</td>
+                            <td style="border: 1px solid #999;text-align: center;width: 80px;">
+                                {{ $students[$i]['rut'] }}</td>
                             <td style="border: 1px solid #999;text-align: center;">{{ $students[$i]['nombre'] }}</td>
                             <td style="border: 1px solid #999;text-align: center;">{{ $students[$i]['apellidos'] }}</td>
                             <td style="border: 1px solid #999;text-align: center;width: 50px;">
@@ -99,7 +100,8 @@
                                 {{ $students[$i]['CantAsistenciasEInasistencias'][0]['asistencias'] }}</td>
                             <td style="border: 1px solid #999;text-align: center;">
                                 {{ $students[$i]['CantAsistenciasEInasistencias'][0]['inasistencias'] }}</td>
-                            <td style="border: 1px solid #999;text-align: center;">{{ count($students[$i]['Asistencias']) }}
+                            <td style="border: 1px solid #999;text-align: center;">
+                                {{ count($students[$i]['Asistencias']) }}
                             </td>
 
                         </tr>
@@ -108,6 +110,7 @@
             </table>
         </div>
     </div>
+    <h6 style="float: right">Fecha de emisión: {{ $fechaEmision }}</h6>
 </body>
 
 </html>

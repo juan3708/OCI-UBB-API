@@ -199,6 +199,6 @@
             </table>
         </div>
     </div>
+    <h6 style="float: right">Fecha de emisión: {{$fechaEmision}}</h6>
 </body>
-
 </html>

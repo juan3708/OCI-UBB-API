@@ -39,14 +39,14 @@
                 <span class="tinyMce-placeholder">
                     {{ $ciclo['nombre'] }}
                     <br>
-                    Informe estadistico del Ciclo.
+                    Informe estad&iacute;stico del Ciclo.
                 </span>
             </h2>
         </div>
     </div>
     <div>
         <h3 style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-            INFORMACION ASOCIADA CICLO</h3>
+            INFORMACI&Oacute;N ASOCIADA CICLO</h3>
         <table style="width: 100%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
             <tr style="text-align: left;">
                 <td><b>Nombre:</b> {{ $ciclo['nombre'] }}</td>
@@ -57,7 +57,7 @@
             <tr style="text-align: left;">
                 <td><b>Fecha de inicio:</b> {{ date('d/m/Y', strtotime($ciclo['fecha_inicio'])) }}</td>
 
-                <td><b>Fecha de termino:</b> {{ date('d/m/Y', strtotime($ciclo['fecha_termino'])) }}</td>
+                <td><b>Fecha de t&eacute;rmino:</b> {{ date('d/m/Y', strtotime($ciclo['fecha_termino'])) }}</td>
             </tr>
             <br>
             <tr style="text-align: left;">
@@ -67,58 +67,58 @@
                 @if (count($competencias) >= 1)
                     <td><b>Competencias totales:</b> {{ count($competencias) }}</td>
                 @else
-                    <td><b>Competencias totales:</b> NO EXISTEN COMPETENCIAS ASOCIADAS</td>
+                    <td><b>Competencias totales:</b> NO EXISTEN COMPETENCIAS ASOCIADAS.</td>
                 @endif
             </tr>
             <br>
             <tr style="text-align: left;">
                 <td><b>Establecimientos participantes:</b> {{ $cantEstablecimientos }}</td>
                 @if ($cicloAnterior != -1)
-                    <td><b>Diferencia en comparacion con la OCI anterior ({{ $cicloAnterior['nombre'] }}): </b>
+                    <td><b>Diferencia en comparaci&oacute;n con la OCI anterior ({{ $cicloAnterior['nombre'] }}): </b>
                         {{ $diferenciaEstablecimientos }}</td>
                 @else
-                    <td><b>Diferencia en comparacion con la OCI anterior: </b>
-                        NO EXISTE CICLO ANTERIOR</td>
+                    <td><b>Diferencia en comparaci&oacute;n con la OCI anterior: </b>
+                        NO EXISTE CICLO ANTERIOR.</td>
                 @endif
             </tr>
             <br>
             <tr style="text-align: left;">
                 <td><b>Cantidad de estudiantes inscritos:</b> {{ $cantidadAlumnosInscritos }}</td>
                 @if ($cicloAnterior != -1)
-                    <td><b>Diferencia en comparacion con la OCI anterior ({{ $cicloAnterior['nombre'] }}): </b>
+                    <td><b>Diferencia en comparaci&oacute;n con la OCI anterior ({{ $cicloAnterior['nombre'] }}): </b>
                         {{ $diferenciaAlumnosInscritos }}</td>
                 @else
-                    <td><b>Diferencia en comparacion con la OCI anterior: </b>
-                        NO EXISTE CICLO ANTERIOR</td>
+                    <td><b>Diferencia en comparaci&oacute;n con la OCI anterior: </b>
+                        NO EXISTE CICLO ANTERIOR.</td>
                 @endif
             </tr>
             <br>
             <tr style="text-align: left;">
                 <td><b>Cantidad de estudiantes participantes:</b> {{ $cantidadAlumnosParticipantes }}</td>
                 @if ($cicloAnterior != -1)
-                    <td><b>Diferencia en comparacion con la OCI anterior ({{ $cicloAnterior['nombre'] }}): </b>
+                    <td><b>Diferencia en comparaci&oacute;n con la OCI anterior ({{ $cicloAnterior['nombre'] }}): </b>
                         {{ $diferenciaAlumnosParticipantes }}</td>
                 @else
-                    <td><b>Diferencia en comparacion con la OCI anterior: </b>
-                        NO EXISTE CICLO ANTERIOR</td>
+                    <td><b>Diferencia en comparaci&oacute;n con la OCI anterior: </b>
+                        NO EXISTE CICLO ANTERIOR.</td>
                 @endif
             </tr>
             <br>
             <tr style="text-align: left;">
-                <td><b>Establecimiento con mas estudiantes inscritos:</b> {{ $establecimientoMaxInscritos['nombre'] }}
-                    con la cantidad de {{ $establecimientoMaxInscritos['Alumnos'] }} alumnos </td>
+                <td><b>Establecimiento con m&aacute;s estudiantes inscritos:</b> {{ $establecimientoMaxInscritos['nombre'] }}
+                    con la cantidad de {{ $establecimientoMaxInscritos['Alumnos'] }} estudiantes </td>
                 <td><b>Establecimiento con menos estudiantes inscritos:</b>
                     {{ $establecimientoMinInscritos['nombre'] }}
-                    con la cantidad de {{ $establecimientoMinInscritos['Alumnos'] }} alumnos </td>
+                    con la cantidad de {{ $establecimientoMinInscritos['Alumnos'] }} estudiantes </td>
             </tr>
             <br>
             <tr style="text-align: left;">
-                <td><b>Establecimiento con mas estudiantes participantes:</b>
+                <td><b>Establecimiento con m&aacute;s estudiantes participantes:</b>
                     {{ $establecimientoMaxParticipantes['nombre'] }} con la cantidad de
-                    {{ $establecimientoMaxParticipantes['Alumnos'] }} alumnos </td>
+                    {{ $establecimientoMaxParticipantes['Alumnos'] }} estudiantes </td>
                 <td><b>Establecimiento con menos estudiantes participantes:</b>
                     {{ $establecimientoMinParticipantes['nombre'] }} con la cantidad de
-                    {{ $establecimientoMinParticipantes['Alumnos'] }} alumnos </td>
+                    {{ $establecimientoMinParticipantes['Alumnos'] }} estudiantes </td>
             </tr>
         </table>
     </div>
@@ -139,7 +139,7 @@
                             <caption>
                                 <h3
                                     style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                    INFORMACION DEL ESTABLECIMIENTO</h3>
+                                    INFORMACI&Oacute;N DEL ESTABLECIMIENTO</h3>
                             </caption>
                             <tr style="background-color:white;">
                                 <th style="border: transparent;text-align: left;font-weight: normal"><b>NOMBRE DEL
@@ -149,20 +149,20 @@
                             </tr>
                             @if (count($establecimientos[$i]['alumnos']) == 0 && $i == 0)
                                 <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
-                                    ESTABLECIMIENTO</h4>
+                                    ESTABLECIMIENTO.</h4>
                             @elseif ($i < count($establecimientos) - 1 && count($establecimientos[$i]['alumnos']) == 0)
                                 @if (count($establecimientos[$i + 1]['alumnos']) == 0)
                                     <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
-                                        ESTABLECIMIENTO</h4>
+                                        ESTABLECIMIENTO.</h4>
                                 @elseif (count($establecimientos[$i + 1]['alumnos']) > 0)
                                     <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
-                                        ESTABLECIMIENTO</h4>
+                                        ESTABLECIMIENTO.</h4>
                                     <div style="page-break-after:always;"></div>
                                 @endif
                             @elseif ($i == count($establecimientos) - 1)
                                 @if (count($establecimientos[$i]['alumnos']) == 0)
                                     <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
-                                        ESTABLECIMIENTO</h4>
+                                        ESTABLECIMIENTO.</h4>
                                 @else
                                     <table
                                         style="width: 100%;border: 1px solid #999;border-collapse: collapse;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
@@ -284,7 +284,7 @@
                                 </th>
                             </tr>
                             @if (count($competencias[$i]['alumnos']) == 0)
-                                <h4 style="font-weight: bold;text-align: center"> NO EXISTEN ESTUDIANTES ASOCIADOS</h4>
+                                <h4 style="font-weight: bold;text-align: center"> NO EXISTEN ESTUDIANTES ASOCIADOS.</h4>
                                 <br>
                             @else
                                 <br>
@@ -343,7 +343,7 @@
         @if (count($gastos) == 0)
             <h4
                 style="font-weight: bold;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                NO EXISTEN GASTOS ASOCIADOS</h4>
+                NO EXISTEN GASTOS ASOCIADOS.</h4>
         @else
             <tr style="background-color:white;">
                 <th class="presupuestoActual" style="border: transparent;text-align: left;font-weight: normal">
@@ -367,7 +367,7 @@
                             <th style="border: transparent;text-align: left;font-weight: normal;">
                                 <b>FECHA:</b>
                                 {{ date('d/m/Y', strtotime($gastos[$i]['fecha'])) }} - <b>ASOCIADO CON :</b>
-                                NO ASOCIADO
+                                NO ASOCIADO.
                             </th>
                         </tr>
                     @elseif ($gastos[$i]['actividad'] != null && $gastos[$i]['competencia'] != null)

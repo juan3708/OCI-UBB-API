@@ -48,7 +48,7 @@
     </div>
     <div>
         <h3 style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-            INFORMACION ASOCIADA CICLO</h3>
+            INFORMACI&Oacute;N ASOCIADA CICLO</h3>
         <table style="width: 100%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
             <tr style="text-align: left;">
                 <td><b>Cantidad de establecimientos:</b> {{ $totalEstablecimientos }}</td>
@@ -56,12 +56,12 @@
                 <td><b>Total estudiantes:</b> {{ $totalAlumnos }}</td>
             </tr>
             <tr>
-                <td><b>Establecimiento con mas estudiantes asistentes:</b>
+                <td><b>Establecimiento con m&aacute;s estudiantes asistentes:</b>
                     {{ $establecimientoConMasEstudiantes['nombre'] }} con
-                    {{ count($establecimientoConMasEstudiantes['alumnos']) }} alumnos</td>
+                    {{ count($establecimientoConMasEstudiantes['alumnos']) }} estudiantes</td>
                 <td><b>Establecimiento con menos estudiantes asistentes:</b>
                     {{ $establecimientoConMenosEstudiantes['nombre'] }}
-                    con {{ count($establecimientoConMenosEstudiantes['alumnos']) }} alumnos</td>
+                    con {{ count($establecimientoConMenosEstudiantes['alumnos']) }} estudiantes</td>
             </tr>
         </table>
     </div>
@@ -79,7 +79,7 @@
                         <caption>
                             <h3
                                 style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-                                INFORMACION DEL ESTABLECIMIENTO</h3>
+                                INFORMACI&Oacute;N DEL ESTABLECIMIENTO</h3>
                         </caption>
                         <tr style="background-color:white;">
                             <th style="border: transparent;text-align: left;font-weight: normal"><b>NOMBRE DEL
@@ -89,20 +89,20 @@
                         </tr>
                         @if (count($establecimientos[$i]['alumnos']) == 0 && $i == 0)
                             <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
-                                ESTABLECIMIENTO</h4>
+                                ESTABLECIMIENTO.</h4>
                         @elseif ($i> count($establecimientos)-1 && count($establecimientos[$i]['alumnos']) == 0)
                             @if (count($establecimientos[$i + 1]['alumnos']) == 0 )
                                 <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
-                                    ESTABLECIMIENTO</h4>
+                                    ESTABLECIMIENTO.</h4>
                             @elseif (count($establecimientos[$i + 1]['alumnos']) > 0)
                                 <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
-                                    ESTABLECIMIENTO</h4>
+                                    ESTABLECIMIENTO.</h4>
                                 <div style="page-break-after:always;"></div>
                             @endif
                         @elseif ($i == count($establecimientos)-1)
                             @if (count($establecimientos[$i]['alumnos']) == 0)
                                 <h4 style="font-weight: bold;text-align: center">NO EXISTEN ASISTENCIAS ASOCIADAS AL
-                                ESTABLECIMIENTO</h4>
+                                ESTABLECIMIENTO.</h4>
                             @else
                                 <table style="width: 100%;border: 1px solid #999;border-collapse: collapse;text-align: center;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
                                 <caption>

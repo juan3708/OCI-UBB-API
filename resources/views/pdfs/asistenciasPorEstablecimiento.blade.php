@@ -50,7 +50,7 @@
     </div>
     <div>
         <h3 style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-            INFORMACION DEL ESTABLECIMIENTO</h3>
+            INFORMACI&Oacute;N DEL ESTABLECIMIENTO</h3>
         <table
             style="width: 100%;border-collapse: collapse;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
             <tr style="text-align: left;">

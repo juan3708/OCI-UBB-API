@@ -41,14 +41,13 @@
                     <br>
                     Informe de gastos desde {{ $fecha_inicio }} hasta {{ $fecha_final }} del ciclo.
 
-
                 </span>
             </h2>
         </div>
     </div>
     <div>
         <h3 style="font-weight: bold;text-align: left;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;">
-            INFORMACION ASOCIADA CICLO</h3>
+            INFORMACI&Oacute;N ASOCIADA CICLO</h3>
         <table style="width: 100%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; ">
             <tr style="text-align: left;">
                 <td><b>Presupuesto del ciclo:</b> ${{ number_format(intval($presupuestoCiclo), 0, ',', '.') }}</td>
@@ -66,7 +65,7 @@
                         GASTOS</h2>
                 </caption>
                 @if (count($gastos) == 0)
-                    <h4>NO EXISTEN GASTOS ASOCIADOS EN ESAS FECHAS</h4>
+                    <h4>NO EXISTEN GASTOS ASOCIADOS EN ESAS FECHAS.</h4>
                 @else
                     <tbody style="text-align: center">
                         @for ($i = 0; $i < count($gastos); $i++)
